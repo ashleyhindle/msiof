@@ -3,7 +3,7 @@
         "flint/flint": "~1.0",
 		"symfony/yaml" : "2.3.x",
 		"symfony/twig-bridge" : "~2.3",
-		"predis/service-provider": "dev-master",
+		"predis/service-provider": "dev-master"
     },
     "autoload" : {
 	"psr-0" : { "" : "src/" }
