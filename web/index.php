@@ -28,10 +28,16 @@ $app->register(new Predis\Silex\ClientServiceProvider(), [
 		],
 ]);
 
+$nextUserId = $app['predis']->incr('next_user_id');
+
+$app['predis']->set('apikey:cheese', $nextUserId);
+
 $app->get('/', function(Application $app, Request $request) {
 		$apiKey = $request->headers->get('X-Api-Key');
 		if(empty($apiKey)) {
-				return new Response(json_encode(['error' => 'Access Denied'], JSON_PRETTY_PRINT), 403);
+				return $app->json([
+						'error' => 'Access Denied'
+						], 403);
 		} else {
 				$app['predis']->hmset('dannyisadouche', [
 						'doucheLevel' => 9000,
