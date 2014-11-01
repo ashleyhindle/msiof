@@ -33,8 +33,8 @@ $nextUserId = $app['predis']->incr('next_user_id');
 $app['predis']->set('apikey:cheese', $nextUserId);
 
 $app->get('/', function(Application $app, Request $request) {
-		$apiKey = $request->headers->get('X-Api-Key');
-		if(empty($apiKey)) {
+		$serverKey = $request->headers->get('X-Server-Key');
+		if (empty($serverKey)) {
 				return $app->json([
 						'error' => 'Access Denied'
 						], 403);
@@ -45,16 +45,26 @@ $app->get('/', function(Application $app, Request $request) {
 						'cheese' => 'Yes',
 						'awesome' => 'No'
 						]);
-				return 'Your apiKey is: ' . $apiKey;
+
+				return 'Your serverKey is: ' . $serverKey;
 		}
-		
+
 		return $app['predis']->get('toys'). " ---- " . $nextServerId;
 });
 
 //Add server
 $app->post('/server', function(Application $app, Request $request) {
+		$serverKey = $request->headers->get('X-Server-Key');
+		if (empty($serverKey)) {
+				return $app->json([
+						'error' => 'Access Denied'
+						], 403);
+		}
 		$nextServerId = $app['predis']->incr('next_server_id');
-		return 'no';
+
+		return $app->json([
+				  'success' => 'Updated your server and stuff'
+		]);
 });
 
 $app->get('/{stockcode}', function (Application $app, $stockcode) {
@@ -62,6 +72,7 @@ $app->get('/{stockcode}', function (Application $app, $stockcode) {
     if (!isset($toys[$stockcode])) {
         $app->abort(404, "Stockcode {$stockcode} does not exist.");
     }
+
     return json_encode($toys[$stockcode]);
 });
 
