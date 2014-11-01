@@ -5,16 +5,10 @@ use Symfony\Component\HttpFoundation\Response;
 
 require_once __DIR__.'/../vendor/autoload.php';
 
-//apiKey to customerid mapping
-$apiKeys = [
-		'cheese' => 100
-];
+$userId = 100;
 
 $serverKeys = [
-		'ww1' => [
-				'hostname' => 'ww1',
-				'serverid' => 1
-		]
+		  sha1($hostname.'CHEESE_THIS_IS_JUST_A_TEST_SO_THIS_DOESNT_MATTER') => $userId
 ];
 
 $app = new Application();
@@ -60,7 +54,11 @@ $app->post('/server', function(Application $app, Request $request) {
 						'error' => 'Access Denied'
 						], 403);
 		}
-		$nextServerId = $app['predis']->incr('next_server_id');
+
+		//@TODO: Check if serverKey is actually valid
+
+		$predisResult = $app['predis']->set("server:{$serverKey}", $request->getContent());
+		//$nextServerId = $app['predis']->incr('next_server_id');
 
 		return $app->json([
 				  'success' => 'Updated your server and stuff'

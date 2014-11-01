@@ -46,24 +46,12 @@ while ($run) {
 		  $server['name'] = $hn;
 		  $server['load'] = $load;
 		  $server['loadavg'] = preg_replace('/[^0-9\.]/', '', $loadavg);
-		  echo "Before conns\n";
 		  $server['entropy'] = trim(`cat /proc/sys/kernel/random/entropy_avail`);
-		  $server['conns'] = file('http://localhost/action/admin_server_status?auto');
-		  $exploded = explode(':', $server['conns'][3]);
-		  $end = end($exploded);
-
-		  $server['conns'] = trim($end);
-		  echo "After conns\n";
-
+		  $server['conns'] = trim(`netstat -tapnl | grep ":80" | grep -c ESTABLI`); //file('http://localhost/action/admin_server_status?auto');
 		  $server['maindiskusage'] = trim(`df -h | grep "% /"$ | awk '{print $5}'`);
-		  echo "Disk\n";
-
-
 		  $server['time'] = `date +"%H:%M:%S"`;
-		  curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($postFields));
 
-
-		  echo "Loop 2\n";
+		  curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($server));
 
 		  $r = curl_exec($ch);
 
