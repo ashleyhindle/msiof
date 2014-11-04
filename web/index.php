@@ -26,24 +26,20 @@ $nextUserId = $app['predis']->incr('next_user_id');
 
 $app['predis']->set('apikey:cheese', $nextUserId);
 
+$app->get('/aaaa', function(Application $app, Request $request) use($serverKeys) {
+		  $app['predis']->lpush('user:100:servers', array_keys($serverKeys)[0]);
+});
+
 $app->get('/', function(Application $app, Request $request) {
-		$serverKey = $request->headers->get('X-Server-Key');
-		if (empty($serverKey)) {
-				return $app->json([
-						'error' => 'Access Denied'
-						], 403);
-		} else {
-				$app['predis']->hmset('dannyisadouche', [
-						'doucheLevel' => 9000,
-						'hairLevel' => 1,
-						'cheese' => 'Yes',
-						'awesome' => 'No'
-						]);
+		  $serverKeys = $app['predis']->lrange('user:100:servers', 0, -1);
+		  echo ' <meta http-equiv="refresh" content="3"><pre>';
+		  foreach ($serverKeys as $serverKey) {
+					 $lastServerUpdate = json_decode($app['predis']->get("server:{$serverKey}"), true);
+					 print_r($lastServerUpdate);
+		  }
+		  echo '</pre>';
 
-				return 'Your serverKey is: ' . $serverKey;
-		}
-
-		return $app['predis']->get('toys'). " ---- " . $nextServerId;
+		  return '';
 });
 
 //Add server

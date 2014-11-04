@@ -1,7 +1,7 @@
 #!/usr/bin/php
 <?php
 $hostname = php_uname('n');
-// @TODO: Get the server key rom a config file, or pass it on, or get it from an environment variable
+// @TODO: Get the server key from a config file, or pass it on, or get it from an environment variable
 $serverKey = sha1($hostname.'CHEESE_THIS_IS_JUST_A_TEST_SO_THIS_DOESNT_MATTER');
 $loopLength = 60;
 
@@ -49,7 +49,7 @@ while ($run) {
 		  $server['entropy'] = trim(`cat /proc/sys/kernel/random/entropy_avail`);
 		  $server['conns'] = trim(`netstat -tapnl | grep ":80" | grep -c ESTABLI`); //file('http://localhost/action/admin_server_status?auto');
 		  $server['maindiskusage'] = trim(`df -h | grep "% /"$ | awk '{print $5}'`);
-		  $server['time'] = `date +"%H:%M:%S"`;
+		  $server['time'] = trim(`date +"%H:%M:%S"`);
 
 		  curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($server));
 
