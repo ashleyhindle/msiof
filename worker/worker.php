@@ -25,7 +25,6 @@ while ($run) {
 		  file_put_contents($lockfile, $pid);
 
 		  $hostname = php_uname('n');
-		  $loadavg = current(explode(' ', trim(file_get_contents('/proc/loadavg'))));
 
 		  $ch = curl_init();
 		  curl_setopt($ch, CURLOPT_URL, "http://msiof.smellynose.com/server");
@@ -35,7 +34,6 @@ while ($run) {
 
 		  $server['workerversion'] = '0.01';
 		  $server['name'] = $hostname;
-		  $server['loadavg'] = $loadavg;
 		  $server['entropy'] = trim(file_get_contents('/proc/sys/kernel/random/entropy_avail'));
 		  $server['conns'] = getConnectionsByPort();
 		  $server['cpu'] = getCpuInfo();
@@ -167,6 +165,7 @@ function getSystemInfo()
 
 		  $system = array();
 		  $system['cores'] = count(preg_grep('/^(processor)/', file('/proc/cpuinfo')));
+		  $system['loadavg'] = current(explode(' ', trim(file_get_contents('/proc/loadavg'))));
 		  $system['sysname'] = $sysname;
 		  $system['hostname'] = $hostname;
 		  $system['release'] = $release;
