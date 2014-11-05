@@ -54,13 +54,19 @@ $app->post('/server', function(Application $app, Request $request) {
 		  //@TODO: Check if serverKey is actually valid
 
 		  $json = $request->getContent();
+		  $jsonDecoded = json_decode($json, true);
 		  $redisKey = "server:{$serverKey}";
 		  $currentResult = $app['predis']->get($redisKey);
 		  if (!empty($currentResult)) {
 					 $currentResult = json_decode($currentResult, true);
+					 $txDiff = $jsonDecode['network']['eth0']['txbytes'] - $currentResult['network']['eth0']['txbytes'];
+					 $tDiff = strtotime($jsonDecoded['time']) - strtotime($currentResult['time']);
+					 $bps = $txDiff / $tDiff;
+					 $megabitspersecond = ($bps*8)/(1000*1000);
+					 $jsonDecoded['network']['txMbps'] = $megabitspersecond;
 		  }
 
-		  $predisResult = $app['predis']->set($redisKey, $json);
+		  $predisResult = $app['predis']->set($redisKey, json_encode($jsonDecoded));
 		  //$nextServerId = $app['predis']->incr('next_server_id');
 
 		  return $app->json([

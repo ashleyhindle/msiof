@@ -41,7 +41,7 @@ while ($run) {
 		  $server['disk'] = getDiskInfo();
 		  $server['network'] = getNetworkInfo();
 		  $server['system'] = getSystemInfo();
-		  $server['time'] = date('H:i:s');
+		  $server['time'] = date('Y-m-d H:i:s');
 
 		  curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($server));
 
