@@ -60,8 +60,8 @@ $app->post('/server', function(Application $app, Request $request) {
 		  if (!empty($oldResult)) {
 					 $oldResult = json_decode($oldResult, true);
 					 $txDiff = $jsonDecoded['network']['eth0']['txbytes'] - $oldResult['network']['eth0']['txbytes'];
-					 $tDiff = strtotime($jsonDecoded['time']) - strtotime($oldResult['time']);
-					 $bps = $txDiff / $tDiff;
+					 $timeDiff = strtotime($jsonDecoded['time']) - strtotime($oldResult['time']);
+					 $bps = $txDiff / $timeDiff;
 					 $kilobitspersecond = ($bps*8)/1000;
 					 $jsonDecoded['network']['txkbps'] = $kilobitspersecond;
 		  }
