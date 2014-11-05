@@ -15,11 +15,11 @@ $app = new Application();
 // Please set to false in a production environment
 //$app['debug'] = true;
 $app->register(new Predis\Silex\ClientServiceProvider(), [
-		'predis.parameters' => 'tcp://127.0.0.1:6379',
-		'predis.options'    => [
-		'prefix'  => 'msiof:',
-		'profile' => '3.0',
-		],
+		  'predis.parameters' => 'tcp://127.0.0.1:6379',
+		  'predis.options'    => [
+					 'prefix'  => 'msiof:',
+					 'profile' => '3.0',
+		  ],
 ]);
 
 $nextUserId = $app['predis']->incr('next_user_id');
@@ -44,30 +44,37 @@ $app->get('/', function(Application $app, Request $request) {
 
 //Add server
 $app->post('/server', function(Application $app, Request $request) {
-		$serverKey = $request->headers->get('X-Server-Key');
-		if (empty($serverKey)) {
-				return $app->json([
-						'error' => 'Access Denied'
-						], 403);
-		}
+		  $serverKey = $request->headers->get('X-Server-Key');
+		  if (empty($serverKey)) {
+					 return $app->json([
+								'error' => 'Access Denied'
+					 ], 403);
+		  }
 
-		//@TODO: Check if serverKey is actually valid
+		  //@TODO: Check if serverKey is actually valid
 
-		$predisResult = $app['predis']->set("server:{$serverKey}", $request->getContent());
-		//$nextServerId = $app['predis']->incr('next_server_id');
+		  $json = $request->getContent();
+		  $redisKey = "server:{$serverKey}";
+		  $currentResult = $app['predis']->get($redisKey);
+		  if (!empty($currentResult)) {
+					 $currentResult = json_decode($currentResult, true);
+		  }
 
-		return $app->json([
-				  'success' => 'Updated your server and stuff'
-		]);
+		  $predisResult = $app['predis']->set($redisKey, $json);
+		  //$nextServerId = $app['predis']->incr('next_server_id');
+
+		  return $app->json([
+					 'success' => 'Updated your server and stuff'
+		  ]);
 });
 
 $app->get('/{stockcode}', function (Application $app, $stockcode) {
-    $toys = json_decode($app['predis']->get('toys'), true);
-    if (!isset($toys[$stockcode])) {
-        $app->abort(404, "Stockcode {$stockcode} does not exist.");
-    }
+		  $toys = json_decode($app['predis']->get('toys'), true);
+		  if (!isset($toys[$stockcode])) {
+					 $app->abort(404, "Stockcode {$stockcode} does not exist.");
+		  }
 
-    return json_encode($toys[$stockcode]);
+		  return json_encode($toys[$stockcode]);
 });
 
 $app->run();
