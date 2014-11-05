@@ -34,6 +34,7 @@ while ($run) {
 		  curl_setopt($ch, CURLOPT_POST, true);
 		  curl_setopt($ch, CURLOPT_HTTPHEADER, array('X-Server-Key: ' . $server['serverKey']));
 
+		  $server['workerversion'] = '0.01';
 		  $server['name'] = $hostname;
 		  $server['loadavg'] = $loadavg;
 		  $server['entropy'] = trim(file_get_contents('/proc/sys/kernel/random/entropy_avail'));
