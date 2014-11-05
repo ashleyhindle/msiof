@@ -193,14 +193,17 @@ function getDiskInfo()
 
 		  return $disk;
 
-		  $lines = file('/proc/diskstats');
+		  $lines = file('/proc/partitions');
+		  array_shift($lines);
+		  array_shift($lines);
 		  foreach ($lines as $l) {
-					 list($major, $minor, $device, $reads, $readsMerged, $readSectors, $readTime, $writes, $writesMerged, $writeSectors, $writeTime, $ioCount, $ioTime, $ioWeightedTime) = preg_split('/\s+/', $l);
-					 if ($writes == 0) {
-								continue;
-					 }
+					 list($major, $minor, $blocks, $name) = preg_split('/\s+/', $l);
+					 $blockSize = (int) trim(file_get_contents("/sys/block/{$name}/queue/hw_sector_size"));
+					 $diskSize = (int) trim(file_get_contents("/sys/block/{$name}/size"));
 
-					 $disk[$device] = 'waddup';
+					 $sizeInGb = ( ( ($diskSize / $blockSize) / 1024 ) / 1024 ) / 1024;
+					 echo "{$name} is {$sizeInGb}GB in size\n";
+					 $disk[$name] = 'waddup';
 		  }
 
 		  return $disk;
