@@ -166,8 +166,9 @@ function getSystemInfo()
 		  $system = array();
 		  $system['cpu'] = array(
 					 'cores' => count(preg_grep('/^(processor)/', file('/proc/cpuinfo'))),
-					 'type' => current(preg_grep('/model name/', file('/proc/cpuinfo')))
+					 'type' => trim(end(explode(':', trim(current(preg_grep('/model name/', file('/proc/cpuinfo')))))))
 		  );
+
 		  $system['loadavg'] = current(explode(' ', trim(file_get_contents('/proc/loadavg'))));
 		  $system['sysname'] = $sysname;
 		  $system['hostname'] = $hostname;
