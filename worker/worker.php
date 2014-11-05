@@ -23,7 +23,6 @@ $server['serverKey'] = $serverKey;
 while ($run) {
 		  $loopStartTime = time();
 		  file_put_contents($lockfile, $pid);
-		  echo "Loop\n";
 
 		  $hostname = php_uname('n');
 		  $loadavg = current(explode(' ', trim(file_get_contents('/proc/loadavg'))));
@@ -92,7 +91,6 @@ function getConnectionsByPort()
 								continue;
 					 }
 
-					 echo "Connection: {$localAddr}:{$localPort} <- {$remoteAddr}:{$remotePort} :- {$socketStatus}\n";
 
 					 if (!array_key_exists($localPort, $connections)) {
 								$connections[$localPort] = 0;
@@ -216,6 +214,7 @@ function getNetworkInfo()
 					 if (empty($rxBytes) && empty($txBytes)) {
 								continue;
 					 }
+
 					 $network[$interface] = array(
 								'rxbytes' => $rxBytes,
 								'txbytes' => $txBytes
