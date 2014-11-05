@@ -42,6 +42,7 @@ while ($run) {
 		  $server['cpu'] = getCpuInfo();
 		  $server['mem'] = getMemInfo();
 		  $server['disk'] = getDiskInfo();
+		  $server['network'] = getNetworkInfo();
 		  $server['system'] = getSystemInfo();
 		  $server['time'] = date('H:i:s');
 
@@ -192,4 +193,34 @@ function getDiskInfo()
 		  );
 
 		  return $disk;
+}
+
+/**
+ * getNetworkInfo
+ *
+ * @return array
+ */
+function getNetworkInfo()
+{
+		  $network = array();
+		  $lines = file('/proc/net/dev');
+		  array_shift($lines);
+		  array_shift($lines);
+
+		  foreach ($lines as $l) {
+					 $exploded = preg_split('/\s+/', preg_replace('/\s+/', ' ', trim($l)));
+					 $interface = substr($exploded[0], 0, -1);
+					 $rxBytes = $exploded[1];
+					 $txBytes = $exploded[9];
+					 //Not received or sent any data, don't bother with it
+					 if (empty($rxBytes) && empty($txBytes)) {
+								continue;
+					 }
+					 $network[$interface] = array(
+								'rxbytes' => $rxBytes,
+								'txbytes' => $txBytes
+					 );
+		  }
+
+		  return $network;
 }
