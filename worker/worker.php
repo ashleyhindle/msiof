@@ -22,18 +22,12 @@ $server['serverKey'] = $serverKey;
 
 while ($run) {
 		  $loopStartTime = time();
-
 		  file_put_contents($lockfile, $pid);
 		  echo "Loop\n";
-		  $hn = trim(`hostname -s`);
-		  $r = explode(" ", `uptime`);
-		  $loadavg = $r[count($r) - 3];
 
-		  echo "Load\n";
-		  $load = round(($loadavg * 10));
-		  if ($load > 100) {
-					 $load = 102; // 102 means no more traffic
-		  }
+		  $hn = php_uname('n');
+		  $loadavg = sys_getloadavg();
+		  $loadavg = $loadavg[0];
 
 		  $ch = curl_init();
 
@@ -44,12 +38,11 @@ while ($run) {
 
 
 		  $server['name'] = $hn;
-		  $server['load'] = $load;
-		  $server['loadavg'] = preg_replace('/[^0-9\.]/', '', $loadavg);
-		  $server['entropy'] = trim(`cat /proc/sys/kernel/random/entropy_avail`);
-		  $server['conns'] = trim(`netstat -tapnl | grep ":80" | grep -c ESTABLI`); //file('http://localhost/action/admin_server_status?auto');
+		  $server['loadavg'] = $loadavg;
+		  $server['entropy'] = trim(file_get_contents('/proc/sys/kernel/random/entropy_avail'));
+		  $server['conns'] = getConnectionsByPort();
 		  $server['maindiskusage'] = trim(`df -h | grep "% /"$ | awk '{print $5}'`);
-		  $server['time'] = trim(`date +"%H:%M:%S"`);
+		  $server['time'] = date('H:i:s');
 
 		  curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($server));
 

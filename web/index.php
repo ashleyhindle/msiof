@@ -32,7 +32,7 @@ $app->get('/aaaa', function(Application $app, Request $request) use($serverKeys)
 
 $app->get('/', function(Application $app, Request $request) {
 		  $serverKeys = $app['predis']->lrange('user:100:servers', 0, -1);
-		  echo ' <meta http-equiv="refresh" content="3"><pre>';
+		  echo ' <meta http-equiv="refresh" content="30"><pre>';
 		  foreach ($serverKeys as $serverKey) {
 					 $lastServerUpdate = json_decode($app['predis']->get("server:{$serverKey}"), true);
 					 print_r($lastServerUpdate);
