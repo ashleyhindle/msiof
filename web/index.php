@@ -59,11 +59,30 @@ $app->post('/server', function(Application $app, Request $request) {
 		  $oldResult = $app['predis']->get($redisKey);
 		  if (!empty($oldResult)) {
 					 $oldResult = json_decode($oldResult, true);
-					 $txDiff = $jsonDecoded['network']['eth0']['txbytes'] - $oldResult['network']['eth0']['txbytes'];
+					 foreach ($jsonDecoded['network'] as $interface => $info) {
+								if ($interface == 'lo') {
+										  continue;
+								}
+								$totalTxNew += $info['txbytes'];
+								$totalRxNew += $info['Rxbytes'];
+
+								$totalTxOld += $oldResult['network'][$interface]['txbytes'];
+								$totalRxOld += $oldResult['network'][$interface]['rxbytes'];
+					 }
+
+					 $txDiff = $totalTxNew - $totalTxOld;
+					 $rxDiff = $totalRxNew - $totalRxOld;
+
 					 $timeDiff = strtotime($jsonDecoded['time']) - strtotime($oldResult['time']);
-					 $bps = $txDiff / $timeDiff;
-					 $kilobitspersecond = ($bps*8)/1000;
+
+					 $txBps = $txDiff / $timeDiff;
+					 $rxBps = $rxDiff / $timeDiff;
+
+					 $kilobitspersecond = ($txbps*8)/1000;
 					 $jsonDecoded['network']['txkbps'] = $kilobitspersecond;
+
+					 $kilobitspersecond = ($rxbps*8)/1000;
+					 $jsonDecoded['network']['rxkbps'] = $kilobitspersecond;
 		  }
 
 		  $predisResult = $app['predis']->set($redisKey, json_encode($jsonDecoded));
