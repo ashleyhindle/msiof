@@ -25,22 +25,22 @@ while ($run) {
 		  file_put_contents($lockfile, $pid);
 		  echo "Loop\n";
 
-		  $hn = php_uname('n');
-		  $loadavg = sys_getloadavg();
-		  $loadavg = $loadavg[0];
+		  $hostname = php_uname('n');
+		  $loadavg = current(explode(' ', trim(file_get_contents('/proc/loadavg'))));
 
 		  $ch = curl_init();
-
 		  curl_setopt($ch, CURLOPT_URL, "http://msiof.smellynose.com/server");
 		  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		  curl_setopt($ch, CURLOPT_POST, true);
 		  curl_setopt($ch, CURLOPT_HTTPHEADER, array('X-Server-Key: ' . $server['serverKey']));
 
-
-		  $server['name'] = $hn;
+		  $server['name'] = $hostname;
 		  $server['loadavg'] = $loadavg;
 		  $server['entropy'] = trim(file_get_contents('/proc/sys/kernel/random/entropy_avail'));
 		  $server['conns'] = getConnectionsByPort();
+		  $server['cpu'] = getCpuInfo();
+		  $server['mem'] = getMemInfo();
+		  $server['system'] = getSystemInfo();
 		  $server['maindiskusage'] = trim(`df -h | grep "% /"$ | awk '{print $5}'`);
 		  $server['time'] = date('H:i:s');
 
@@ -60,4 +60,112 @@ while ($run) {
 					 echo "Sleeping so we hit every 60 seconds\n";
 					 sleep($loopLength - $loopTimeTook);
 		  }
+}
+
+/**
+ * Only supports TCP for now
+ * TODO: Support UDP and IPV6
+ *
+ * @return array
+ **/
+function getConnectionsByPort()
+{
+		  $lines = file('/proc/net/tcp');
+		  array_shift($lines);
+		  $connections = array();
+		  foreach ($lines as $l) {
+					 $exploded = preg_split('/\s+/', trim($l));
+
+					 $localExploded = explode(':', $exploded[1]);
+					 $localAddr = long2ip(hexdec(implode('', array_reverse(str_split($localExploded[0], 2)))));
+					 $localPort = hexdec($localExploded[1]);
+
+					 $remoteExploded = explode(':', $exploded[2]);
+					 $remoteAddr = long2ip(hexdec(implode('', array_reverse(str_split($remoteExploded[0], 2)))));
+					 $remotePort = hexdec($remoteExploded[1]);
+
+					 $socketStatus = $exploded[3];
+
+					 if ($socketStatus != '01') {
+								continue;
+					 }
+
+					 echo "Connection: {$localAddr}:{$localPort} <- {$remoteAddr}:{$remotePort} :- {$socketStatus}\n";
+
+					 if (!array_key_exists($localPort, $connections)) {
+								$connections[$localPort] = 0;
+					 }
+					 $connections[$localPort]++;
+		  }
+
+		  return $connections;
+}
+
+/**
+ * getCpuInfo
+ *
+ * @return array
+ */
+function getCpuInfo()
+{
+		  $lines = file('/proc/stat');
+		  array_shift($lines); // Don't use combined CPU info
+		  $cpus = array();
+
+		  foreach ($lines as $l) {
+					 if (strpos($l, 'cpu') === false) {
+								continue;
+					 }
+
+					 $cpu = preg_split('/\s+/', trim($l));
+					 $cpus[] = array(
+								'user' => $cpu[1],
+								'nice' => $cpu[2],
+								'system' => $cpu[3],
+								'idle' => $cpu[4],
+								'wait' => $cpu[5],
+								'iowait' => $cpu[6],
+								'irq' => $cpu[7],
+								'softirq' => $cpu[8],
+								'steal' => $cpu[9],
+								'guest' => $cpu[10],
+					 );
+		  }
+
+		  return $cpus;
+}
+
+/**
+ * getMemInfo
+ *
+ * @return array
+ */
+function getMemInfo()
+{
+		  $lines = file_get_contents('/proc/meminfo');
+		  preg_match_all('/([a-zA-Z0-9]+):\s+([0-9]+) kB/', $lines, $matches);
+		  array_walk(
+					 $matches[1],
+					 function(&$value) {
+								$value = strtolower($value);
+					 }
+		  );
+		  $mem = array_combine($matches[1], $matches[2]);
+
+		  return $mem;
+}
+
+function getSystemInfo()
+{
+		  $uname = php_uname();
+		  list($sysname, , $release, $version, $machine) = explode(' ', $uname);
+
+		  $system = array();
+		  $system['cores'] = preg_match_all('/^processor/', file_get_contents('/proc/cpuinfo'));
+		  $system['sysname'] = $sysname;
+		  $system['release'] = $release;
+		  $system['version'] = $version;
+		  $system['machine'] = $machine;
+
+		  return $system;
 }
