@@ -74,13 +74,4 @@ $app->post('/server', function(Application $app, Request $request) {
 		  ]);
 });
 
-$app->get('/{stockcode}', function (Application $app, $stockcode) {
-		  $toys = json_decode($app['predis']->get('toys'), true);
-		  if (!isset($toys[$stockcode])) {
-					 $app->abort(404, "Stockcode {$stockcode} does not exist.");
-		  }
-
-		  return json_encode($toys[$stockcode]);
-});
-
 $app->run();
