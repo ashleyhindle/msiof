@@ -161,11 +161,12 @@ function getSystemInfo()
 		  list($sysname, , $release, $version, $machine) = explode(' ', $uname);
 
 		  $system = array();
-		  $system['cores'] = preg_match_all('/^processor/', file_get_contents('/proc/cpuinfo'));
+		  $system['cores'] = count(preg_grep('/^(processor)/', file('/proc/cpuinfo')));
 		  $system['sysname'] = $sysname;
 		  $system['release'] = $release;
 		  $system['version'] = $version;
 		  $system['machine'] = $machine;
+		  $system['uptime'] = current(explode(' ', current(file('/proc/uptime'))));
 
 		  return $system;
 }
