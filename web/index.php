@@ -62,8 +62,8 @@ $app->post('/server', function(Application $app, Request $request) {
 					 $txDiff = $jsonDecoded['network']['eth0']['txbytes'] - $oldResult['network']['eth0']['txbytes'];
 					 $tDiff = strtotime($jsonDecoded['time']) - strtotime($oldResult['time']);
 					 $bps = $txDiff / $tDiff;
-					 $megabitspersecond = ($bps*8)/(1000*1000);
-					 $jsonDecoded['network']['txmbps'] = $megabitspersecond;
+					 $kilobitspersecond = ($bps*8)/1000;
+					 $jsonDecoded['network']['txkbps'] = $kilobitspersecond;
 		  }
 
 		  $predisResult = $app['predis']->set($redisKey, json_encode($jsonDecoded));
