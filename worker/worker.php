@@ -40,8 +40,8 @@ while ($run) {
 		  $server['conns'] = getConnectionsByPort();
 		  $server['cpu'] = getCpuInfo();
 		  $server['mem'] = getMemInfo();
+		  $server['disk'] = getDiskInfo();
 		  $server['system'] = getSystemInfo();
-		  $server['maindiskusage'] = trim(`df -h | grep "% /"$ | awk '{print $5}'`);
 		  $server['time'] = date('H:i:s');
 
 		  curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($server));
@@ -155,18 +155,52 @@ function getMemInfo()
 		  return $mem;
 }
 
+/**
+ * getSystemInfo
+ *
+ * @return array
+ */
 function getSystemInfo()
 {
 		  $uname = php_uname();
-		  list($sysname, , $release, $version, $machine) = explode(' ', $uname);
+		  list($sysname, $hostname, $release, $version, $machine) = explode(' ', $uname);
 
 		  $system = array();
 		  $system['cores'] = count(preg_grep('/^(processor)/', file('/proc/cpuinfo')));
 		  $system['sysname'] = $sysname;
+		  $system['hostname'] = $hostname;
 		  $system['release'] = $release;
 		  $system['version'] = $version;
 		  $system['machine'] = $machine;
 		  $system['uptime'] = current(explode(' ', current(file('/proc/uptime'))));
 
 		  return $system;
+}
+
+/**
+ * getDiskInfo
+ *
+ * @return array
+ */
+function getDiskInfo()
+{
+		  $disk = array();
+		  $disk['/'] = array(
+					 'total' => disk_total_space('/'),
+					 'free' => disk_free_space('/')
+		  );
+
+		  return $disk;
+
+		  $lines = file('/proc/diskstats');
+		  foreach ($lines as $l) {
+					 list($major, $minor, $device, $reads, $readsMerged, $readSectors, $readTime, $writes, $writesMerged, $writeSectors, $writeTime, $ioCount, $ioTime, $ioWeightedTime) = preg_split('/\s+/', $l);
+					 if ($writes == 0) {
+								continue;
+					 }
+
+					 $disk[$device] = 'waddup';
+		  }
+
+		  return $disk;
 }
