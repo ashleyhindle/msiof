@@ -81,11 +81,11 @@ $app->post('/server', function(Application $app, Request $request) {
 
 					 $kilobitspersecond = ($txBps*8)/1000;
 					 $jsonDecoded['network']['txkbps'] = $kilobitspersecond;
-					 $jsonDecoded['network']['totaltx'] = $totalTxNew;
+					 $jsonDecoded['network']['txtotal'] = $totalTxNew;
 
 					 $kilobitspersecond = ($rxBps*8)/1000;
 					 $jsonDecoded['network']['rxkbps'] = $kilobitspersecond;
-					 $jsonDecoded['network']['totalrx'] = $totalRxNew;
+					 $jsonDecoded['network']['rxtotal'] = $totalRxNew;
 		  }
 
 		  $predisResult = $app['predis']->set($redisKey, json_encode($jsonDecoded));
