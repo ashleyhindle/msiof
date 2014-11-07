@@ -34,7 +34,6 @@ $server['serverKey'] = $serverKey;
 
 while ($run) {
 		  $loopStartTime = time();
-		  file_put_contents($lockfile, $pid);
 
 		  $hostname = php_uname('n');
 
