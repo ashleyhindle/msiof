@@ -8,6 +8,10 @@ require_once __DIR__.'/../vendor/autoload.php';
 $userId = 100;
 
 $app = new Application();
+// Map api keys to userids
+$apiKeys = [
+		  'cheese' => 100
+];
 // Please set to false in a production environment
 //$app['debug'] = true;
 
@@ -23,24 +27,39 @@ $app->register(new Predis\Silex\ClientServiceProvider(), [
 		  ],
 ]);
 
-$protocol = (!empty($_SERVER['HTTPS'])) ? 'https://' : 'http://';
 
-$app->get('/', function(Application $app, Request $request) use ($protocol) {
-		  echo "curl -s {$protocol}{$_SERVER['SERVER_NAME']}/install | bash<hr>";
-		  $serverKeys = $app['predis']->lrange('user:100:servers', 0, -1);
-		  $servers = [];
-
-		  echo ' <meta http-equiv="refresh" content="30">';
-		  foreach ($serverKeys as $serverKey) {
-					 $server = json_decode($app['predis']->get("server:{$serverKey}"), true);
-					 $msiofTime = date('Y-m-d H:i:s', $server['lastupdated']);
-					 echo $app['twig']->render('server.twig', array(
-								'server' => $server,
-								'msiofTime' => $msiofTime
-					 ));
+$app->get('/servers/{apiKey}', function(Application $app, Request $request) use($apiKeys) {
+		  $apiKey = $request->get('apiKey');
+		  if (empty($apiKey)) {
+					 return $app->json([
+								'error' => 'Access Denied'
+					 ], 403);
 		  }
 
-		  return '';
+		  $userId = $apiKeys[$apiKey];
+		  if (empty($userId)) {
+					 return $app->json([
+								'error' => 'Invalid apiKey'
+					 ], 403);
+		  }
+
+		  $serverKeys = $app['predis']->lrange("user:{$userId}:servers", 0, -1);
+		  $servers = [];
+
+		  foreach ($serverKeys as $serverKey) {
+					 $server = json_decode($app['predis']->get("server:{$serverKey}"), true);
+					 $servers[] = $server;
+		  }
+
+		  return $app->json($servers);
+});
+
+$app->get('/', function(Application $app, Request $request) {
+		  $protocol = (!empty($_SERVER['HTTPS'])) ? 'https://' : 'http://';
+
+		  return $app['twig']->render('index.twig', [
+					 'installUrl' => "{$protocol}{$_SERVER['SERVER_NAME']}/install"
+		  ]);
 });
 
 $app->get('/install', function(Application $app) {
