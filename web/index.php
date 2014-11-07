@@ -10,6 +10,11 @@ $userId = 100;
 $app = new Application();
 // Please set to false in a production environment
 //$app['debug'] = true;
+
+$app->register(new Silex\Provider\TwigServiceProvider(), array(
+		  'twig.path' => __DIR__.'/views',
+));
+
 $app->register(new Predis\Silex\ClientServiceProvider(), [
 		  'predis.parameters' => 'tcp://127.0.0.1:6379',
 		  'predis.options'    => [
