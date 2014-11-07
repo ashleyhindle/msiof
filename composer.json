@@ -1,9 +1,10 @@
 {
-    "require": {
-        "silex/silex": "~1.0",
-		"predis/service-provider": "dev-master"
-    },
-    "autoload" : {
-	"psr-0" : { "" : "src/" }
-    }
+		  "require": {
+					 "silex/silex": "~1.0",
+					 "predis/service-provider": "dev-master",
+					 "twig/twig": ">=1.8,<2.0-dev"
+		  },
+		  "autoload" : {
+					 "psr-0" : { "" : "src/" }
+		  }
 }
