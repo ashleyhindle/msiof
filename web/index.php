@@ -12,7 +12,7 @@ $app = new Application();
 //$app['debug'] = true;
 
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
-		  'twig.path' => __DIR__.'/views',
+		  'twig.path' => '../views',
 ));
 
 $app->register(new Predis\Silex\ClientServiceProvider(), [
@@ -23,20 +23,22 @@ $app->register(new Predis\Silex\ClientServiceProvider(), [
 		  ],
 ]);
 
-//$nextUserId = $app['predis']->incr('next_user_id');
-
 $protocol = (stripos($_SERVER['SERVER_PROTOCOL'], 'https') !== false) ? 'https://' : 'http://';
 
 $app->get('/', function(Application $app, Request $request) use ($protocol) {
 		  echo "curl -s {$protocol}{$_SERVER['SERVER_NAME']}/install | bash<hr>";
 		  $serverKeys = $app['predis']->lrange('user:100:servers', 0, -1);
-		  echo ' <meta http-equiv="refresh" content="30"><pre>';
+		  $servers = [];
+
+		  echo ' <meta http-equiv="refresh" content="30">';
 		  foreach ($serverKeys as $serverKey) {
 					 $server = json_decode($app['predis']->get("server:{$serverKey}"), true);
 					 $msiofTime = date('Y-m-d H:i:s', $server['lastupdated']);
-					 echo "{$server['name']}<br>Load: {$server['system']['loadavg']} - Connections on port 80: {$server['conns'][80]} - Server Time: {$server['time']} - MSIOF Time: {$msiofTime}<hr>";
+					 echo $app['twig']->render('server.twig', array(
+								'server' => $server,
+								'msiofTime' => $msiofTime
+					 ));
 		  }
-		  echo '</pre>';
 
 		  return '';
 });
