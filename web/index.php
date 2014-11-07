@@ -26,7 +26,8 @@ $app->get('/', function(Application $app, Request $request) {
 		  echo ' <meta http-equiv="refresh" content="30"><pre>';
 		  foreach ($serverKeys as $serverKey) {
 					 $server = json_decode($app['predis']->get("server:{$serverKey}"), true);
-					 echo "{$server['name']}: Load: {$server['system']['loadavg']} - Connections on port 80: {$server['conns'][80]} @ {$server['time']}<hr>";
+					 $msiofTime = date('Y-m-d H:i:s', $server['lastupdated']);
+					 echo "{$server['name']}<br>Load: {$server['system']['loadavg']} - Connections on port 80: {$server['conns'][80]} - Server Time: {$server['time']} - MSIOF Time: {$msiofTime}<hr>";
 		  }
 		  echo '</pre>';
 
@@ -204,6 +205,7 @@ $app->post('/server', function(Application $app, Request $request) {
 					 $jsonDecoded['network']['rxkbps'] = $kilobitspersecond;
 					 $jsonDecoded['network']['rxtotal'] = $totalRxNew;
 		  }
+		  $jsonDecoded['lastupdated'] = time();
 
 		  $predisResult = $app['predis']->set($redisKey, json_encode($jsonDecoded));
 
