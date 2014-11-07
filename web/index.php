@@ -56,7 +56,7 @@ fi
 
 if [ ! -f /etc/msiof/msiof.conf ]; then
 		  echo "=== Config file doesn't exist, creating /etc/msiof/msiof.conf..."
-		  curl -o /etc/msiof/msiof.conf http://msiof.smellynose.com/key
+		  curl -s -o /etc/msiof/msiof.conf http://msiof.smellynose.com/key
 fi
 
 echo "=== Downloading worker to /etc/msiof/worker..."
