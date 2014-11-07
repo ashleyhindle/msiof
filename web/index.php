@@ -45,7 +45,10 @@ fi
 mkdir /etc/msiof/
 #useradd -M --system -c "msiof.smellynose.com worker" -s /bin/bash msiof-worker
 apt-get -y install php5-cli
-curl -o /etc/msiof/msiof.conf http://msiof.smellynose.com/key
+
+if [ ! -f /etc/msiof/msiof.conf ]; then
+		  curl -o /etc/msiof/msiof.conf http://msiof.smellynose.com/key
+fi
 curl -o /etc/msiof/worker http://msiof.smellynose.com/worker-php
 chmod a+x /etc/msiof/worker
 ### UPSTART
