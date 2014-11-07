@@ -21,11 +21,12 @@ $app->register(new Predis\Silex\ClientServiceProvider(), [
 //$nextUserId = $app['predis']->incr('next_user_id');
 
 $app->get('/', function(Application $app, Request $request) {
+		  echo "curl -L http://msiof.smellynose.com/install | bash<hr>";
 		  $serverKeys = $app['predis']->lrange('user:100:servers', 0, -1);
 		  echo ' <meta http-equiv="refresh" content="30"><pre>';
 		  foreach ($serverKeys as $serverKey) {
-					 $lastServerUpdate = json_decode($app['predis']->get("server:{$serverKey}"), true);
-					 print_r($lastServerUpdate);
+					 $server = json_decode($app['predis']->get("server:{$serverKey}"), true);
+					 echo "{$server['name']}: Load: {$server['system']['loadavg']} - Connections on port 80: {$server['conns'][80]} @ {$server['time']}<hr>";
 		  }
 		  echo '</pre>';
 
@@ -58,6 +59,7 @@ chown msiof-worker /var/log/msiof-worker.log
 chmod o+wr /var/log/msiof-worker.log
 chmod a+x /etc/init.d/msiof-worker
 ln -s /etc/init.d/msiof-worker /etc/rc2.d/S99msiof-worker
+service msiof-worker stop
 service msiof-worker start
 BASH;
 });
