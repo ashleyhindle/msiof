@@ -48,13 +48,10 @@ $app->get('/init', function() {
 		  return '';
 });
 
-
-$app->get('/worker-init', function() {
-		  return file_get_contents('../upstart/msiof-worker.conf');
-});
-
 $app->get('/worker-php', function() {
-		  return file_get_contents('../worker/worker.php');
+		  readfile('../worker/worker.php');
+
+		  return '';
 });
 
 $app->get('/key', function(Application $app, Request $request) use($userId) {
