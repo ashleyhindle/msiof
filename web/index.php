@@ -54,6 +54,8 @@ if [ -e "/etc/debian_version" ]; then
 		  apt-get -y install php5-cli
 fi
 
+hash php 2>/dev/null || { echo >&2 "I require PHP but it's not installed - attempted to install it above, but it must have failed.  Aborting."; exit 1; }
+
 if [ ! -f /etc/msiof/msiof.conf ]; then
 		  echo "=== Config file doesn't exist, creating /etc/msiof/msiof.conf..."
 		  curl -s -o /etc/msiof/msiof.conf http://msiof.smellynose.com/key
