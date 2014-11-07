@@ -45,14 +45,16 @@ fi
 echo "=== Creating /etc/msiof/"
 mkdir /etc/msiof/
 
-echo "=== Installing php-cli"
-if [ -e "/etc/redhat-release" ]; then
-		  yum install -y php-cli
-fi
+hash php 2>/dev/null || {
+		  echo "=== Installing php-cli"
+		  if [ -e "/etc/redhat-release" ]; then
+					 yum install -y php-cli
+		  fi
 
-if [ -e "/etc/debian_version" ]; then
-		  apt-get -y install php5-cli
-fi
+		  if [ -e "/etc/debian_version" ]; then
+					 apt-get -y install php5-cli
+		  fi
+}
 
 hash php 2>/dev/null || { echo >&2 "I require PHP but it's not installed - attempted to install it above, but it must have failed.  Aborting."; exit 1; }
 
