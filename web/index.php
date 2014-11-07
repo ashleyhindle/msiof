@@ -217,6 +217,7 @@ $app->post('/server', function(Application $app, Request $request) {
 					 $jsonDecoded['network']['rxtotal'] = $totalRxNew;
 		  }
 		  $jsonDecoded['lastupdated'] = time();
+		  $jsonDecoded['publicip'] = $_SERVER['REMOTE_ADDR'];
 
 		  $predisResult = $app['predis']->set($redisKey, json_encode($jsonDecoded));
 
