@@ -43,7 +43,7 @@ if [[ \$EUID -ne 0 ]]; then
 fi
 
 mkdir /etc/msiof/
-useradd -M --system -c "msiof.smellynose.com worker" -s /bin/bash msiof-worker
+#useradd -M --system -c "msiof.smellynose.com worker" -s /bin/bash msiof-worker
 apt-get -y install php5-cli
 curl -o /etc/msiof/msiof.conf http://msiof.smellynose.com/key
 curl -o /etc/msiof/worker http://msiof.smellynose.com/worker-php
@@ -78,7 +78,7 @@ $app->get('/init', function() {
 ### END INIT INFO
 
 SCRIPT=/etc/msiof/worker
-RUNAS=msiof-worker
+RUNAS=root
 NAME=msiof-worker
 
 PIDFILE=/var/run/\$NAME.pid
