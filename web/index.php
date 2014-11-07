@@ -20,8 +20,10 @@ $app->register(new Predis\Silex\ClientServiceProvider(), [
 
 //$nextUserId = $app['predis']->incr('next_user_id');
 
-$app->get('/', function(Application $app, Request $request) {
-		  echo "curl -s http://msiof.smellynose.com/install | bash<hr>";
+$protocol = (stripos($_SERVER['SERVER_PROTOCOL'], 'https') !== false) ? 'https://' : 'http://';
+
+$app->get('/', function(Application $app, Request $request) use ($protocol) {
+		  echo "curl -s {$protocol}{$_SERVER['SERVER_NAME']}/install | bash<hr>";
 		  $serverKeys = $app['predis']->lrange('user:100:servers', 0, -1);
 		  echo ' <meta http-equiv="refresh" content="30"><pre>';
 		  foreach ($serverKeys as $serverKey) {
