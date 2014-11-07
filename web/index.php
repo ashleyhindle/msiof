@@ -42,24 +42,37 @@ if [[ \$EUID -ne 0 ]]; then
    exit 1
 fi
 
-echo "This will only work on Ubuntu/Debian currently as it uses apt-get to install php5-cli\n\n"
+echo "=== Creating /etc/msiof/"
 mkdir /etc/msiof/
-apt-get -y install php5-cli
+
+echo "=== Installing php-cli"
+if [ -e "/etc/redhat-release" ]; then
+		  yum install -y php-cli
+fi
+
+if [ -e "/etc/debian_version" ]; then
+		  apt-get -y install php5-cli
+fi
 
 if [ ! -f /etc/msiof/msiof.conf ]; then
+		  echo "=== Config file doesn't exist, creating /etc/msiof/msiof.conf..."
 		  curl -o /etc/msiof/msiof.conf http://msiof.smellynose.com/key
 fi
 
-
+echo "=== Downloading worker to /etc/msiof/worker..."
 curl -s -o /etc/msiof/worker http://msiof.smellynose.com/worker-php
 chmod a+x /etc/msiof/worker
 
+echo "=== Installing init"
 ### INIT
 curl -s -o /etc/init.d/msiof-worker http://msiof.smellynose.com/init
 chmod a+x /etc/init.d/msiof-worker
 ln -s /etc/init.d/msiof-worker /etc/rc2.d/S99msiof-worker
 service msiof-worker stop
 service msiof-worker start
+
+echo
+echo "=== Done ==="
 BASH;
 });
 
