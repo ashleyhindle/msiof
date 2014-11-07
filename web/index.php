@@ -23,7 +23,7 @@ $app->register(new Predis\Silex\ClientServiceProvider(), [
 		  ],
 ]);
 
-$protocol = (stripos($_SERVER['SERVER_PROTOCOL'], 'https') !== false) ? 'https://' : 'http://';
+$protocol = (!empty($_SERVER['HTTPS'])) ? 'https://' : 'http://';
 
 $app->get('/', function(Application $app, Request $request) use ($protocol) {
 		  echo "curl -s {$protocol}{$_SERVER['SERVER_NAME']}/install | bash<hr>";
@@ -65,6 +65,7 @@ $app->get('/key', function(Application $app, Request $request) use($userId) {
 		  $nextServerId = $app['predis']->incr('next_server_id');
 		  $key = sha1($nextServerId.$userId);
 		  $app['predis']->lpush("user:{$userId}:servers", $key);
+		  $app['predis']->set('server:'.$key, true);
 
 		  return "key={$key}";
 });
@@ -86,7 +87,15 @@ $app->post('/server', function(Application $app, Request $request) {
 		  $oldResult = $app['predis']->get($redisKey);
 		  if (!empty($oldResult)) {
 					 $oldResult = json_decode($oldResult, true);
+					 if ($oldResult === false) {
+								$oldResult = [];
+					 }
+
 					 $timeDiff = strtotime($jsonDecoded['time']) - strtotime($oldResult['time']);
+					 $totalTxNew = 0;
+					 $totalRxNew = 0;
+					 $totalTxOld = 0;
+					 $totalRxOld = 0;
 
 					 foreach ($jsonDecoded['network'] as $interface => $info) {
 								if ($interface == 'lo') {
@@ -100,20 +109,26 @@ $app->post('/server', function(Application $app, Request $request) {
 								$totalRxOld += $oldResult['network'][$interface]['rxbytes'];
 					 }
 
-					 $txDiff = $totalTxNew - $totalTxOld;
-					 $rxDiff = $totalRxNew - $totalRxOld;
 
-					 $txBps = $txDiff / $timeDiff;
-					 $rxBps = $rxDiff / $timeDiff;
+					 if ($totalTxNew) {
+								$txDiff = $totalTxNew - $totalTxOld;
+								$rxDiff = $totalRxNew - $totalRxOld;
 
-					 $kilobitspersecond = ($txBps*8)/1000;
-					 $jsonDecoded['network']['txkbps'] = $kilobitspersecond;
-					 $jsonDecoded['network']['txtotal'] = $totalTxNew;
+								$txBps = $txDiff / $timeDiff;
+								$rxBps = $rxDiff / $timeDiff;
 
-					 $kilobitspersecond = ($rxBps*8)/1000;
-					 $jsonDecoded['network']['rxkbps'] = $kilobitspersecond;
-					 $jsonDecoded['network']['rxtotal'] = $totalRxNew;
+								$txKbps = ($txBps*8)/1000;
+								$rxKbps = ($rxBps*8)/1000;
+
+								$jsonDecoded['network']['total'] = [
+										  'txbytes' => $totalTxNew,
+										  'rxbytes' => $totalRxNew,
+										  'rxkbps' => $rxKbps,
+										  'txkbps' => $txKbps
+										  ];
+					 }
 		  }
+
 		  $jsonDecoded['lastupdated'] = time();
 		  $jsonDecoded['publicip'] = $_SERVER['REMOTE_ADDR'];
 
