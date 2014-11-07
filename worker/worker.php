@@ -1,8 +1,30 @@
 #!/usr/bin/php
 <?php
+$configExample = <<<CONFIG
+key=784b78e8582b5cad2af3f2411c8a9e2474c15844
+CONFIG;
+
+$configFile = '/etc/msiof.conf';
+if (!file_exists($configFile)) {
+		  echo "Config file doesn't exist: {$configFile}\n";
+		  exit(1);
+}
+
+$config = parse_ini_file($configFile);
+if (empty($config)) {
+		  echo "Config file can't be read, or is empty or invalid: {$configFile}\n";
+		  exit(1);
+}
+
+if (empty($config['key'])) {
+		  echo "key isn't set in config file: {$configFile}\n";
+		  exit(1);
+}
+
 $hostname = php_uname('n');
 // @TODO: Get the server key from a config file, or pass it on, or get it from an environment variable
-$serverKey = sha1($hostname.'CHEESE_THIS_IS_JUST_A_TEST_SO_THIS_DOESNT_MATTER');
+$serverKey = trim($config['key']);
+echo "Key from configFile is {$serverKey}\n";
 $loopLength = 60;
 
 $lockfile = '/tmp/serverupdatelock';
