@@ -1,0 +1,41 @@
+#!/bin/bash
+if [[ $EUID -ne 0 ]]; then
+   echo "This script must be run as root" 1>&2
+   exit 1
+fi
+
+echo "=== Creating /etc/msiof/"
+mkdir /etc/msiof/
+
+hash php 2>/dev/null || {
+		  echo "=== Installing php-cli"
+		  if [ -e "/etc/redhat-release" ]; then
+					 yum install -y php-cli
+		  fi
+
+		  if [ -e "/etc/debian_version" ]; then
+					 apt-get -y install php5-cli
+		  fi
+}
+
+hash php 2>/dev/null || { echo >&2 "I require PHP but it's not installed - attempted to install it above, but it must have failed.  Aborting."; exit 1; }
+
+if [ ! -f /etc/msiof/msiof.conf ]; then
+		  echo "=== Config file doesn't exist, creating /etc/msiof/msiof.conf..."
+		  curl -s -o /etc/msiof/msiof.conf http://msiof.smellynose.com/key
+fi
+
+echo "=== Downloading worker to /etc/msiof/worker..."
+curl -s -o /etc/msiof/worker http://msiof.smellynose.com/worker-php
+chmod a+x /etc/msiof/worker
+
+echo "=== Installing init"
+### INIT
+curl -s -o /etc/init.d/msiof-worker http://msiof.smellynose.com/init
+chmod a+x /etc/init.d/msiof-worker
+ln -s /etc/init.d/msiof-worker /etc/rc2.d/S99msiof-worker
+service msiof-worker stop
+service msiof-worker start
+
+echo
+echo "=== Done ==="

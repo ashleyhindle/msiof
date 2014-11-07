@@ -37,127 +37,15 @@ $app->get('/', function(Application $app, Request $request) use ($protocol) {
 });
 
 $app->get('/install', function(Application $app) {
-		  return <<<BASH
-#!/bin/bash
-if [[ \$EUID -ne 0 ]]; then
-   echo "This script must be run as root" 1>&2
-   exit 1
-fi
+		  readfile('../worker/install');
 
-echo "=== Creating /etc/msiof/"
-mkdir /etc/msiof/
-
-hash php 2>/dev/null || {
-		  echo "=== Installing php-cli"
-		  if [ -e "/etc/redhat-release" ]; then
-					 yum install -y php-cli
-		  fi
-
-		  if [ -e "/etc/debian_version" ]; then
-					 apt-get -y install php5-cli
-		  fi
-}
-
-hash php 2>/dev/null || { echo >&2 "I require PHP but it's not installed - attempted to install it above, but it must have failed.  Aborting."; exit 1; }
-
-if [ ! -f /etc/msiof/msiof.conf ]; then
-		  echo "=== Config file doesn't exist, creating /etc/msiof/msiof.conf..."
-		  curl -s -o /etc/msiof/msiof.conf http://msiof.smellynose.com/key
-fi
-
-echo "=== Downloading worker to /etc/msiof/worker..."
-curl -s -o /etc/msiof/worker http://msiof.smellynose.com/worker-php
-chmod a+x /etc/msiof/worker
-
-echo "=== Installing init"
-### INIT
-curl -s -o /etc/init.d/msiof-worker http://msiof.smellynose.com/init
-chmod a+x /etc/init.d/msiof-worker
-ln -s /etc/init.d/msiof-worker /etc/rc2.d/S99msiof-worker
-service msiof-worker stop
-service msiof-worker start
-
-echo
-echo "=== Done ==="
-BASH;
+		  return '';
 });
 
 $app->get('/init', function() {
-		  return <<<INIT
-#!/bin/sh
-### BEGIN INIT INFO
-# Provides:          msiof-worker
-# Required-Start:    \$local_fs \$network \$named \$time \$syslog
-# Required-Stop:     \$local_fs \$network \$named \$time \$syslog
-# Default-Start:     2 3 4 5
-# Default-Stop:      0 1 6
-# Description:       msiof.smellynose.com worker
-### END INIT INFO
+		  readfile('../worker/init');
 
-SCRIPT=/etc/msiof/worker
-RUNAS=root
-NAME=msiof-worker
-
-PIDFILE=/var/run/\$NAME.pid
-LOGFILE=/var/log/\$NAME.log
-
-start() {
-  if [ -f \$PIDFILE ] && kill -0 $(cat \$PIDFILE); then
-    echo 'Service already running' >&2
-    return 1
-  fi
-  echo 'Starting service…' >&2
-  local CMD="\$SCRIPT &> \"\$LOGFILE\" & echo \\\$!"
-  su -c "\$CMD" \$RUNAS > "\$PIDFILE"
-  echo 'Service started' >&2
-}
-
-stop() {
-  if [ ! -f "\$PIDFILE" ] || ! kill -0 $(cat "\$PIDFILE"); then
-    echo 'Service not running' >&2
-    return 1
-  fi
-  echo 'Stopping service…' >&2
-  kill -15 $(cat "\$PIDFILE") && rm -f "\$PIDFILE"
-  echo 'Service stopped' >&2
-}
-
-status() {
-        printf "%-50s" "Checking \$NAME..."
-    if [ -f \$PIDFILE ]; then
-        PID=\$(cat \$PIDFILE)
-            if [ -z "\$(ps axf | grep \${PID} | grep -v grep)" ]; then
-                printf "%s\n" "The process appears to be dead but pidfile still exists"
-            else    
-                echo "Running, the PID is \$PID"
-            fi
-    else
-        printf "%s\n" "Service not running"
-    fi
-}
-
-
-case "\$1" in
-  start)
-    start
-    ;;
-  stop)
-    stop
-    ;;
-  status)
-    status
-    ;;
-  uninstall)
-    uninstall
-    ;;
-  restart)
-    stop
-    start
-    ;;
-  *)
-    echo "Usage: \$0 {start|stop|status|restart}"
-esac
-INIT;
+		  return '';
 });
 
 
