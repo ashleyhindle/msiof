@@ -4,7 +4,7 @@ $configExample = <<<CONFIG
 key=784b78e8582b5cad2af3f2411c8a9e2474c15844
 CONFIG;
 
-$configFile = '/etc/msiof.conf';
+$configFile = '/etc/msiof/msiof.conf';
 if (!file_exists($configFile)) {
 		  echo "Config file doesn't exist: {$configFile}\n";
 		  exit(1);
@@ -26,16 +26,6 @@ $hostname = php_uname('n');
 $serverKey = trim($config['key']);
 echo "Key from configFile is {$serverKey}\n";
 $loopLength = 60;
-
-$lockfile = '/tmp/serverupdatelock';
-$pid = getmypid();
-echo "My PID is {$pid}\n";
-
-if (file_exists($lockfile) && (time() - filemtime($lockfile)) < 300) {
-		  exit('Somebody got a lock, me no run. Its this old in seconds:' . (time() - filemtime($lockfile)));
-}
-
-touch($lockfile);
 
 $run = true;
 $loopStartTime = time();

@@ -7,10 +7,6 @@ require_once __DIR__.'/../vendor/autoload.php';
 
 $userId = 100;
 
-$serverKeys = [
-		  sha1($hostname.'CHEESE_THIS_IS_JUST_A_TEST_SO_THIS_DOESNT_MATTER') => $userId
-];
-
 $app = new Application();
 // Please set to false in a production environment
 //$app['debug'] = true;
@@ -22,13 +18,7 @@ $app->register(new Predis\Silex\ClientServiceProvider(), [
 		  ],
 ]);
 
-$nextUserId = $app['predis']->incr('next_user_id');
-
-$app['predis']->set('apikey:cheese', $nextUserId);
-
-$app->get('/aaaa', function(Application $app, Request $request) use($serverKeys) {
-		  $app['predis']->lpush('user:100:servers', array_keys($serverKeys)[0]);
-});
+//$nextUserId = $app['predis']->incr('next_user_id');
 
 $app->get('/', function(Application $app, Request $request) {
 		  $serverKeys = $app['predis']->lrange('user:100:servers', 0, -1);
@@ -40,6 +30,131 @@ $app->get('/', function(Application $app, Request $request) {
 		  echo '</pre>';
 
 		  return '';
+});
+
+$app->get('/install', function(Application $app) {
+		  return <<<BASH
+#!/bin/bash
+if [[ \$EUID -ne 0 ]]; then
+   echo "This script must be run as root" 1>&2
+   exit 1
+fi
+
+mkdir /etc/msiof/
+useradd -M --system -c "msiof.smellynose.com worker" -s /bin/bash msiof-worker
+apt-get -y install php5-cli
+curl -o /etc/msiof/msiof.conf http://msiof.smellynose.com/key
+curl -o /etc/msiof/worker http://msiof.smellynose.com/worker-php
+chmod a+x /etc/msiof/worker
+### UPSTART
+#curl -o /etc/init/msiof-worker.conf http://msiof.smellynose.com/worker-init
+#initctl reload-configuration
+#start msiof-worker
+
+### INIT
+curl -o /etc/init.d/msiof-worker http://msiof.smellynose.com/init
+touch /var/log/msiof-worker.log
+chown msiof-worker /var/log/msiof-worker.log
+chmod o+wr /var/log/msiof-worker.log
+chmod a+x /etc/init.d/msiof-worker
+ln -s /etc/init.d/msiof-worker /etc/rc2.d/S99msiof-worker
+service msiof-worker start
+BASH;
+});
+
+$app->get('/init', function() {
+		  return <<<INIT
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          msiof-worker
+# Required-Start:    \$local_fs \$network \$named \$time \$syslog
+# Required-Stop:     \$local_fs \$network \$named \$time \$syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Description:       msiof.smellynose.com worker
+### END INIT INFO
+
+SCRIPT=/etc/msiof/worker
+RUNAS=msiof-worker
+NAME=msiof-worker
+
+PIDFILE=/var/run/\$NAME.pid
+LOGFILE=/var/log/\$NAME.log
+
+start() {
+  if [ -f \$PIDFILE ] && kill -0 $(cat \$PIDFILE); then
+    echo 'Service already running' >&2
+    return 1
+  fi
+  echo 'Starting service…' >&2
+  local CMD="\$SCRIPT &> \"\$LOGFILE\" & echo \\\$!"
+  su -c "\$CMD" \$RUNAS > "\$PIDFILE"
+  echo 'Service started' >&2
+}
+
+stop() {
+  if [ ! -f "\$PIDFILE" ] || ! kill -0 $(cat "\$PIDFILE"); then
+    echo 'Service not running' >&2
+    return 1
+  fi
+  echo 'Stopping service…' >&2
+  kill -15 $(cat "\$PIDFILE") && rm -f "\$PIDFILE"
+  echo 'Service stopped' >&2
+}
+
+status() {
+        printf "%-50s" "Checking \$NAME..."
+    if [ -f \$PIDFILE ]; then
+        PID=\$(cat \$PIDFILE)
+            if [ -z "\$(ps axf | grep \${PID} | grep -v grep)" ]; then
+                printf "%s\n" "The process appears to be dead but pidfile still exists"
+            else    
+                echo "Running, the PID is \$PID"
+            fi
+    else
+        printf "%s\n" "Service not running"
+    fi
+}
+
+
+case "\$1" in
+  start)
+    start
+    ;;
+  stop)
+    stop
+    ;;
+  status)
+    status
+    ;;
+  uninstall)
+    uninstall
+    ;;
+  restart)
+    stop
+    start
+    ;;
+  *)
+    echo "Usage: \$0 {start|stop|status|restart}"
+esac
+INIT;
+});
+
+
+$app->get('/worker-init', function() {
+		  return file_get_contents('../upstart/msiof-worker.conf');
+});
+
+$app->get('/worker-php', function() {
+		  return file_get_contents('../worker/worker.php');
+});
+
+$app->get('/key', function(Application $app, Request $request) use($userId) {
+		  $nextServerId = $app['predis']->incr('next_server_id');
+		  $key = sha1($nextServerId.$userId);
+		  $app['predis']->lpush("user:{$userId}:servers", $key);
+
+		  return "key={$key}";
 });
 
 //Add server
@@ -89,7 +204,6 @@ $app->post('/server', function(Application $app, Request $request) {
 		  }
 
 		  $predisResult = $app['predis']->set($redisKey, json_encode($jsonDecoded));
-		  //$nextServerId = $app['predis']->incr('next_server_id');
 
 		  return $app->json([
 					 'success' => 'Updated your server and stuff'
