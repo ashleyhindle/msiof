@@ -114,7 +114,6 @@ function getConnectionsByPort()
 function getCpuInfo()
 {
 		  $lines = file('/proc/stat');
-		  array_shift($lines); // Don't use combined CPU info
 		  $cpus = array();
 
 		  foreach ($lines as $l) {
@@ -123,7 +122,7 @@ function getCpuInfo()
 					 }
 
 					 $cpu = preg_split('/\s+/', trim($l));
-					 $cpus[] = array(
+					 $cpus[$cpu[0]] = array(
 								'user' => $cpu[1],
 								'nice' => $cpu[2],
 								'system' => $cpu[3],
