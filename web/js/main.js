@@ -7,7 +7,6 @@ var msiofApp = angular.module('msiofApp', []).config(function($interpolateProvid
 
 msiofApp.controller('HomeCtrl', function ($scope, $http, $interval) {
 		  $scope.servers = {};
-		  console.log($scope.testVar);
 
 		  $scope.updateServers = function() {
 					 $http({
@@ -16,7 +15,6 @@ msiofApp.controller('HomeCtrl', function ($scope, $http, $interval) {
 					 }).then(function(response){
 								var data = response.data;
 								$scope.servers = data;
-								console.log($scope.servers);
 					 });
 		  };
 
