@@ -28,7 +28,7 @@
 
 <tr>
 <td><strong>Mem Usage:</strong></td>
-<td>{[{ ( (server.mem.memtotal - server.mem.memfree - server.mem.cached) / server.mem.memtotal ) * 100 | number:1 }]}%</td>
+<td>{[{ ( (server.mem.memtotal - server.mem.memfree - server.mem.cached - server.mem.buffers) / server.mem.memtotal ) * 100 | number:1 }]}%</td>
 </tr>
 
 <tr>
