@@ -10,6 +10,16 @@
     <script src='//ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular.min.js'></script>
     <script src='/js/ui-bootstrap.min.js'></script>
     <script src='/js/main.js'></script>
+    <style type='text/css'>
+		  .table-no-border>thead>tr>th, 
+		  .table-no-border>tbody>tr>th, 
+		  .table-no-border>tfoot>tr>th, 
+		  .table-no-border>thead>tr>td, 
+		  .table-no-border>tbody>tr>td, 
+		  .table-no-border>tfoot>tr>td {
+					   border-top: none; 
+		  }
+    </style>
 </head>
 <body>
 <div class="container-fluid" ng-app='msiofApp' ng-controller='HomeCtrl' ng-init='apiKey="{{apiKey}}";'>
