@@ -2,7 +2,9 @@
 <div class='panel' ng-class="{'panel-danger': server.hasIssues, 'panel-success': (!server.hasIssues && !server.outOfDate), 'panel-warning' : server.outOfDate}">
 
 <div class="panel-heading">
-<h3 class="panel-title" style='overflow:auto;'>{[{ server.name }]}</h3>
+<h3 class="panel-title" style='overflow:auto;'>
+<span data-toggle="tooltip" data-placement="bottom" title="Worker out of date, run install again t update" ng-show='server.outOfDate' alt="Worker out of date, run install again to update" title="Worker out of date, run install again to update" class="glyphicon glyphicon-info-sign"></span>
+{[{ server.name }]}
 </div>
 <div class='panel-body'>
 <table>
