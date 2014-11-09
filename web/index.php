@@ -49,6 +49,11 @@ $app->get('/servers/{apiKey}', function(Application $app, Request $request) use(
 		  foreach ($serverKeys as $serverKey) {
 					 $server = json_decode($app['predis']->get("server:{$serverKey}"), true);
 					 $server['msiofTime'] = date('H:i:s', $server['lastupdated']);
+					 $server['hasIssues'] = (
+								$server['loadavg'] >= $server['system']['cpu']['cores'] ||
+								$server['disk']['/']['free'] <= ($server['disk']['/']['total']*0.15) ||
+								(($server['network']['total']['txkbps'] + $server['network']['total']['rxkbps']) / 1000) > 100
+					 );
 					 $servers[] = $server;
 		  }
 
@@ -59,8 +64,7 @@ $app->get('/', function(Application $app, Request $request) {
 		  $protocol = (!empty($_SERVER['HTTPS'])) ? 'https://' : 'http://';
 
 		  return $app['twig']->render('index.twig', [
-					 'installUrl' => "{$protocol}{$_SERVER['SERVER_NAME']}/install",
-					 'installUrl' => "http://msiof.smellynose.com/install"
+					 'installUrl' => "{$protocol}{$_SERVER['SERVER_NAME']}/install"
 		  ]);
 });
 
