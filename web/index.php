@@ -6,7 +6,7 @@ use Symfony\Component\HttpFoundation\Response;
 require_once __DIR__.'/../vendor/autoload.php';
 
 $userId = 100;
-$latestWorkerVersion = 1.0;
+$latestWorkerVersion = 1.1;
 
 $app = new Application();
 // Map api keys to userids
