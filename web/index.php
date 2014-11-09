@@ -31,7 +31,7 @@ $app->register(new Predis\Silex\ClientServiceProvider(), [
 ]);
 
 
-$app->get('/servers/{apiKey}', function(Application $app, Request $request) use($apiKeys) {
+$app->get('/servers/{apiKey}', function(Application $app, Request $request) use($apiKeys, $latestWorkerVersion) {
 		  $apiKey = $request->get('apiKey');
 		  if (empty($apiKey)) {
 					 return $app->json([
@@ -57,7 +57,7 @@ $app->get('/servers/{apiKey}', function(Application $app, Request $request) use(
 								$server['disk']['/']['free'] <= ($server['disk']['/']['total']*0.15) ||
 								(($server['network']['total']['txkbps'] + $server['network']['total']['rxkbps']) / 1000) > 100
 					 );
-					 $servers['outOfDate'] = ($server['workerversion'] < $latestWorkerVersion);
+					 $server['outOfDate'] = ($server['workerversion'] < $latestWorkerVersion);
 					 $servers[] = $server;
 		  }
 
