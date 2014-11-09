@@ -86,12 +86,11 @@ $app->post('/', function(Application $app, Request $request) {
 		  return $app->redirect('/'.$request->get('apiKey'));
 });
 
-$app->get('/', function(Application $app, Request $request) use($latestWorkerVersion) {
+$app->get('/', function(Application $app, Request $request) {
 		  $protocol = (!empty($_SERVER['HTTPS'])) ? 'https://' : 'http://';
 
 		  return $app['twig']->render('indexNoKey.twig', [
-					 'installUrl' => "{$protocol}{$_SERVER['SERVER_NAME']}/install",
-					 'latestWorkerVersion' => $latestWorkerVersion
+					 'installUrl' => "{$protocol}{$_SERVER['SERVER_NAME']}/install"
 		  ]);
 });
 
@@ -124,12 +123,13 @@ $app->get('/key', function(Application $app, Request $request) use($userId) {
 		  return "key={$key}";
 });
 
-$app->get('/{apiKey}', function(Application $app, Request $request) {
+$app->get('/{apiKey}', function(Application $app, Request $request) use($latestWorkerVersion) {
 		  $protocol = (!empty($_SERVER['HTTPS'])) ? 'https://' : 'http://';
 
 		  return $app['twig']->render('index.twig', [
 					 'installUrl' => "{$protocol}{$_SERVER['SERVER_NAME']}/install",
-					 'apiKey' => $request->get('apiKey')
+					 'apiKey' => $request->get('apiKey'),
+					 'latestWorkerVersion' => $latestWorkerVersion
 		  ]);
 });
 
