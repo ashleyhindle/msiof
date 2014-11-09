@@ -39,7 +39,7 @@ while ($run) {
 		  curl_setopt($ch, CURLOPT_POST, true);
 		  curl_setopt($ch, CURLOPT_HTTPHEADER, array('X-Server-Key: ' . $server['serverKey']));
 
-		  $server['workerversion'] = 1.0;
+		  $server['workerversion'] = 1.1;
 		  $server['name'] = $hostname;
 		  $server['entropy'] = trim(file_get_contents('/proc/sys/kernel/random/entropy_avail'));
 		  $server['conns'] = getConnectionsByPort();
