@@ -34,7 +34,7 @@ while ($run) {
 		  $hostname = php_uname('n');
 
 		  $ch = curl_init();
-		  curl_setopt($ch, CURLOPT_URL, "http://msiof.smellynose.com/server");
+		  curl_setopt($ch, CURLOPT_URL, (empty($config['api_url'])) ? "http://msiof.smellynose.com/server" : $config['api_url']);
 		  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		  curl_setopt($ch, CURLOPT_POST, true);
 		  curl_setopt($ch, CURLOPT_HTTPHEADER, array('X-Server-Key: ' . $server['serverKey']));
