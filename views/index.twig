@@ -20,7 +20,7 @@
 <div class="container-fluid" ng-app='msiofApp' ng-controller='HomeCtrl'>
 		  <b>Install as root:</b>
 		  curl -s {{ installUrl }} | bash
-		  <div class='server' ng-repeat="server in servers">
+		  <div class='server' ng-repeat="server in servers | orderBy:'name'">
 			  {% include "server.twig" %}
 		  </div>
 </div>
