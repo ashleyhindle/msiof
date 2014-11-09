@@ -27,6 +27,11 @@
 </tr>
 
 <tr>
+<td><strong>Mem Usage:</strong></td>
+<td>{[{ ( (server.mem.memtotal - server.mem.memfree - server.mem.cached) / server.mem.memtotal ) * 100 | number:1 }]}%</td>
+</tr>
+
+<tr>
 <td><strong>/ Usage:</strong></td>
 <td>{[{ ( (server.disk['/'].total - server.disk['/'].free) / server.disk['/'].total ) * 100 | number:1 }]}%</td>
 </tr>
