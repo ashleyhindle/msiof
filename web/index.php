@@ -127,8 +127,18 @@ $app->post('/server', function(Application $app, Request $request) {
 
 								$totalTxOld += $oldResult['network'][$interface]['txbytes'];
 								$totalRxOld += $oldResult['network'][$interface]['rxbytes'];
-								$jsonDecoded['network'][$interface]['txkbps'] = ($info['txbytes']*8)/1000;
-								$jsonDecoded['network'][$interface]['rxkbps'] = ($info['rxbytes']*8)/1000;
+
+								$txDiff = $info['txbytes'] - $oldResult['network'][$interface]['txbytes'];
+								$rxDiff = $info['rxbytes'] - $oldResult['network'][$interface]['rxbytes'];
+
+								$txBps = $txDiff / $timeDiff;
+								$rxBps = $rxDiff / $timeDiff;
+
+								$txKbps = ($txBps*8)/1000;
+								$rxKbps = ($rxBps*8)/1000;
+
+								$jsonDecoded['network'][$interface]['txkbps'] = $txKbps;
+								$jsonDecoded['network'][$interface]['rxkbps'] = $rxKbps;
 					 }
 
 

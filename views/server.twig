@@ -1,13 +1,21 @@
 <div class='col-md-2'>
-<h5>{[{server.name}]}</h5>
-<strong>Load:</strong> {[{server.system.loadavg}]}<br>
-<strong>Conns: port 80:</strong> {[{server.conns[80]}]} <small><a href='#' ng-click="server.showAllConnections = (!server.showAllConnections)">Show All</a></small>
+<h5>{[{ server.name }]}</h5>
+<strong>Load:</strong> {[{ server.system.loadavg }]}<br>
+<strong>Conns: port 80:</strong> {[{ server.conns[80] ? server.conns[80] : 0 }]} <small><a href='#' ng-click="server.showAllConnections = (!server.showAllConnections)">Show All</a></small>
 <div ng-show='server.showAllConnections'>
 		  <div ng-repeat='(port, count) in server.conns' ng-if="port < 30000">
 		  {[{ port }]} => {[{ count }]}
 		  </div>
 </div>
 <br>
-<strong>Server Time:</strong> {[{server.time}]}<br>
-<strong>MSIOF Time:</strong> {[{server.msiofTime}]}
+<strong>Disk Usage:</strong> {[{ ( (server.disk['/'].total - server.disk['/'].free) / server.disk['/'].total ) * 100 | number:1 }]}%
+<br>
+<strong>Server Time:</strong> {[{ server.time }]}<br>
+<strong>MSIOF Time:</strong> {[{ server.msiofTime }]}
+<strong>Network:</strong> {[{ (server.network.total.rxkbps + server.network.total.txkbps)/1000 | number: 2}]}Mb/s <a href='#' ng-click="server.showAllNetwork = (!server.showAllNetwork)">Details</a>
+<div ng-show='server.showAllNetwork'>
+		  <div ng-repeat='(interface, net) in server.network' ng-if="interface != 'total' && (net.rxkbps > 0 || net.txkbps > 0)">
+					 <strong>{[{ interface }]} </strong>: In: {[{ net.rxkbps/1000 | number:2 }]} / Out: {[{ net.txkbps/1000 | number:2 }]}
+		  </div>
+</div>
 </div>

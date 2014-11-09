@@ -18,10 +18,8 @@
 </head>
 <body>
 <div class="container-fluid" ng-app='msiofApp' ng-controller='HomeCtrl'>
-    <b>As root:</b>
-    curl -s {{ installUrl }} | bash
-    {[{ testVar }]}
-
+		  <b>Install as root:</b>
+		  curl -s {{ installUrl }} | bash
 		  <div class='server' ng-repeat="server in servers">
 			  {% include "server.twig" %}
 		  </div>
