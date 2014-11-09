@@ -17,7 +17,7 @@
     <script src='/js/main.js'></script>
 </head>
 <body>
-<div class="container-fluid" ng-app='msiofApp' ng-controller='HomeCtrl' ng-init='apiKey="cheese";'>
+<div class="container-fluid" ng-app='msiofApp' ng-controller='HomeCtrl' ng-init='apiKey="{{apiKey}}";'>
 		  <b>Install as root:</b>
 		  curl -s {{ installUrl }} | bash
 		  <div class='server' ng-repeat="server in servers | orderBy:'name'">
