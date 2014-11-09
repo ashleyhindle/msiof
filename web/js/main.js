@@ -1,6 +1,8 @@
 /**
  * Created by ahindle on 08/11/14.
  */
+$('.tooltip').tooltip(options)
+
 var msiofApp = angular.module('msiofApp', []).config(function($interpolateProvider){
 		  $interpolateProvider.startSymbol('{[{').endSymbol('}]}');
 });
