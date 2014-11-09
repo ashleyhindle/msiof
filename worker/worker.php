@@ -221,10 +221,12 @@ function getNetworkInfo()
 		  array_shift($lines);
 
 		  foreach ($lines as $l) {
-					 $exploded = preg_split('/\s+/', preg_replace('/\s+/', ' ', trim($l)));
-					 $interface = substr($exploded[0], 0, -1);
-					 $rxBytes = $exploded[1];
-					 $txBytes = $exploded[9];
+					 $exploded = explode(':', preg_replace('/\s+/', ' ', trim($l)), 2);
+					 $interface = trim($exploded[0]);
+
+					 $exploded = preg_split('/\s+/', trim($exploded[1]));
+					 $rxBytes = $exploded[0];
+					 $txBytes = $exploded[8];
 					 //Not received or sent any data, don't bother with it
 					 if (empty($rxBytes) && empty($txBytes)) {
 								continue;
