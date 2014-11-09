@@ -36,7 +36,11 @@ echo "=== Installing init"
 ### INIT
 curl -s -o /etc/init.d/msiof-worker http://msiof.smellynose.com/init
 chmod a+x /etc/init.d/msiof-worker
-ln -s /etc/init.d/msiof-worker /etc/rc2.d/S99msiof-worker
+
+if [ ! -f /etc/rc2.d/S99msiof-worker ]; then
+		  ln -s /etc/init.d/msiof-worker /etc/rc2.d/S99msiof-worker
+fi
+
 service msiof-worker stop
 service msiof-worker start
 
