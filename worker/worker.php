@@ -1,9 +1,5 @@
 #!/usr/bin/php
 <?php
-$configExample = <<<CONFIG
-key=784b78e8582b5cad2af3f2411c8a9e2474c15844
-CONFIG;
-
 $configFile = '/etc/msiof/msiof.conf';
 if (!file_exists($configFile)) {
 		  echo "Config file doesn't exist: {$configFile}\n";
