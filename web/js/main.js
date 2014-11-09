@@ -2,7 +2,7 @@
  * Created by ahindle on 08/11/14.
  */
 
-var msiofApp = angular.module('msiofApp', []).config(function($interpolateProvider){
+var msiofApp = angular.module('msiofApp', ['ui-bootstrap']).config(function($interpolateProvider){
 		  $interpolateProvider.startSymbol('{[{').endSymbol('}]}');
 });
 
