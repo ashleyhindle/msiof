@@ -50,7 +50,7 @@ CPU
 
 <tr><td><strong>Server Time:</strong></td><td>{[{ server.time }]}</td></tr>
 </table>
-<small>Updated (UTC):</small>{[{ server.lastupdated*1000 | date:'HH:mm:ss':'UTC' }]}
+<small>Last Updated (UTC): </small>{[{ server.lastupdated*1000 | date:'HH:mm:ss':'UTC' }]}
 </div> <!-- panel-body -->
 <div class="panel-footer">
 		  <strong>Network:</strong> {[{ (server.network.total.rxkbps + server.network.total.txkbps)/1000 | number: 2}]}Mb/s
