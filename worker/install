@@ -21,7 +21,7 @@ hash php 2>/dev/null || {
 hash php 2>/dev/null || { echo >&2 "I require PHP but it's not installed - attempted to install it above, but it must have failed.  Aborting."; exit 1; }
 
 echo "=== Creating /etc/msiof/"
-mkdir /etc/msiof/
+mkdir -p /etc/msiof/
 
 if [ ! -f /etc/msiof/msiof.conf ]; then
 		  echo "=== Config file doesn't exist, creating /etc/msiof/msiof.conf..."
