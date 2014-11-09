@@ -140,6 +140,9 @@ function getCpuInfo()
 		  return $cpus;
 }
 
+function arrayWalkStrToLower(&$value) {
+		  $value = strtolower($value);
+}
 /**
  * getMemInfo
  *
@@ -151,9 +154,7 @@ function getMemInfo()
 		  preg_match_all('/([a-zA-Z0-9]+):\s+([0-9]+) kB/', $lines, $matches);
 		  array_walk(
 					 $matches[1],
-					 function(&$value) {
-								$value = strtolower($value);
-					 }
+					 'arrayWalkStrToLower'
 		  );
 		  $mem = array_combine($matches[1], $matches[2]);
 
