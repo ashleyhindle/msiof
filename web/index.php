@@ -51,7 +51,6 @@ $app->get('/servers/{apiKey}', function(Application $app, Request $request) use(
 
 		  foreach ($serverKeys as $serverKey) {
 					 $server = json_decode($app['predis']->get("server:{$serverKey}"), true);
-					 $server['msiofTime'] = date('H:i:s', $server['lastupdated']);
 					 $server['issues'] = [
 								'loadavg' => ( $server['loadavg'] >= $server['system']['cpu']['cores'] ),
 								'disk' => ( $server['disk']['/']['free'] <= ($server['disk']['/']['total']*0.15) ),
