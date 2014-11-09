@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\Response;
 require_once __DIR__.'/../vendor/autoload.php';
 
 $userId = 100;
+$latestWorkerVersion = 1.0;
 
 $app = new Application();
 // Map api keys to userids
@@ -56,6 +57,7 @@ $app->get('/servers/{apiKey}', function(Application $app, Request $request) use(
 								$server['disk']['/']['free'] <= ($server['disk']['/']['total']*0.15) ||
 								(($server['network']['total']['txkbps'] + $server['network']['total']['rxkbps']) / 1000) > 100
 					 );
+					 $servers['outOfDate'] = ($server['workerversion'] < $latestWorkerVersion);
 					 $servers[] = $server;
 		  }
 
