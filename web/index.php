@@ -10,7 +10,8 @@ $userId = 100;
 $app = new Application();
 // Map api keys to userids
 $apiKeys = [
-		  'cheese' => 100
+		  'cheese' => 100,
+		  'anomander' => 101
 ];
 // Please set to false in a production environment
 //$app['debug'] = true;
@@ -60,11 +61,24 @@ $app->get('/servers/{apiKey}', function(Application $app, Request $request) use(
 		  return $app->json($servers);
 });
 
+$app->post('/', function(Application $app, Request $request) {
+		  return $app->redirect('/'.$request->get('apiKey'));
+});
+
 $app->get('/', function(Application $app, Request $request) {
 		  $protocol = (!empty($_SERVER['HTTPS'])) ? 'https://' : 'http://';
 
-		  return $app['twig']->render('index.twig', [
+		  return $app['twig']->render('indexNoKey.twig', [
 					 'installUrl' => "{$protocol}{$_SERVER['SERVER_NAME']}/install"
+		  ]);
+});
+
+$app->get('/{apiKey}', function(Application $app, Request $request) {
+		  $protocol = (!empty($_SERVER['HTTPS'])) ? 'https://' : 'http://';
+
+		  return $app['twig']->render('index.twig', [
+					 'installUrl' => "{$protocol}{$_SERVER['SERVER_NAME']}/install",
+					 'apiKey' => $request->get('apiKey')
 		  ]);
 });
 
