@@ -1,4 +1,4 @@
-<div class='col-md-2'>
+<div class='col-md-3'>
 <div class='panel' ng-class="{'panel-danger': server.hasIssues, 'panel-success': (!server.hasIssues && !server.outOfDate), 'panel-warning' : server.outOfDate}">
 
 <div class="panel-heading">
@@ -7,9 +7,9 @@
 {[{ server.name }]}
 </div>
 <div class='panel-body'>
-<table>
+<table class='table table-condensed'>
 
-<tr>
+<tr ng-class="{'danger': server.issues.load}">
 <td><strong>Load</strong></td>
 <td>{[{ server.system.loadavg }]}</td>
 </tr>
@@ -33,17 +33,17 @@ CPU
 </td>
 </tr>
 
-		  <tr ng-show='server.showAllConnections' ng-repeat='(port, count) in server.conns' ng-if="port < 30000">
-		  <td>:{[{ port }]}</td><td>{[{ count }]}</td>
-		  </tr>
+<tr ng-show='server.showAllConnections' ng-repeat='(port, count) in server.conns' ng-if="port < 30000">
+<td>:{[{ port }]}</td><td>{[{ count }]}</td>
+</tr>
 
-<tr>
+<tr ng-class="{'danger': server.issues.mem}">
 <td>
 <strong tooltip-placement="right" tooltip="Total Memory: {[{(server.mem.memtotal/1000)/1000 | number:0}]}GB">Mem usage:</strong>
 <td>{[{ ( (server.mem.memtotal - server.mem.memfree - server.mem.cached - server.mem.buffers) / server.mem.memtotal ) * 100 | number:1 }]}%</td>
 </tr>
 
-<tr>
+<tr ng-class="{'danger': server.issues.disk}">
 <td><strong tooltip-placement="right" tooltip="Size: {[{ ((server.disk['/'].total/1024)/1024)/1024 | number: 2}]}GB">/ Usage:</strong></td>
 <td>{[{ ( (server.disk['/'].total - server.disk['/'].free) / server.disk['/'].total ) * 100 | number:1 }]}%</td>
 </tr>

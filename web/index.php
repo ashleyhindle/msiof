@@ -52,11 +52,12 @@ $app->get('/servers/{apiKey}', function(Application $app, Request $request) use(
 		  foreach ($serverKeys as $serverKey) {
 					 $server = json_decode($app['predis']->get("server:{$serverKey}"), true);
 					 $server['msiofTime'] = date('H:i:s', $server['lastupdated']);
-					 $server['hasIssues'] = (
-								$server['loadavg'] >= $server['system']['cpu']['cores'] ||
-								$server['disk']['/']['free'] <= ($server['disk']['/']['total']*0.15) ||
-								( ( ($server['mem']['memtotal'] - $server['mem']['memfree'] - $server['mem']['cached'] - $server['mem']['buffers']) / $server['mem']['memtotal'] ) * 100 ) >= 85
-					 );
+					 $server['issues'] = [
+								'loadavg' => ( $server['loadavg'] >= $server['system']['cpu']['cores'] ),
+								'disk' => ( $server['disk']['/']['free'] <= ($server['disk']['/']['total']*0.15) ),
+								'mem' => ( ( ( ($server['mem']['memtotal'] - $server['mem']['memfree'] - $server['mem']['cached'] - $server['mem']['buffers']) / $server['mem']['memtotal'] ) * 100 ) >= 85 )
+					 ];
+					 $server['hasIssues'] = array_sum($server['issues']);
 					 $server['outOfDate'] = ($server['workerversion'] < $latestWorkerVersion);
 					 $servers[] = $server;
 		  }
