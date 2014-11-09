@@ -86,11 +86,12 @@ $app->post('/', function(Application $app, Request $request) {
 		  return $app->redirect('/'.$request->get('apiKey'));
 });
 
-$app->get('/', function(Application $app, Request $request) {
+$app->get('/', function(Application $app, Request $request) use($latestWorkerVersion) {
 		  $protocol = (!empty($_SERVER['HTTPS'])) ? 'https://' : 'http://';
 
 		  return $app['twig']->render('indexNoKey.twig', [
-					 'installUrl' => "{$protocol}{$_SERVER['SERVER_NAME']}/install"
+					 'installUrl' => "{$protocol}{$_SERVER['SERVER_NAME']}/install",
+					 'latestWorkerVersion' => $latestWorkerVersion
 		  ]);
 });
 
