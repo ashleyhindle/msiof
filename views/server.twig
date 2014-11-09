@@ -2,7 +2,7 @@
 <div class='panel' ng-class="{'panel-danger': server.hasIssues, 'panel-success': (!server.hasIssues && !server.outOfDate), 'panel-warning' : server.outOfDate}">
 
 <div class="panel-heading">
-<h3 class="panel-title" style='overflow:auto;'>
+<h3 class="panel-title" style='overflow:auto;overflow-y: hidden;'>
 <span tooltip-placement="right" tooltip="Worker out of date ({[{server.workerversion}]} < {{latestWorkerVersion}}), run install again to update" ng-show='server.outOfDate' class="glyphicon glyphicon-info-sign"></span>
 {[{ server.name }]}
 </div>
@@ -15,8 +15,14 @@
 </tr>
 
 <tr>
-<td><strong>CPU</strong></td>
-<td>{[{ server.cpu.percentage.usage }]}%</td>
+<td>
+<strong tooltip-placement="right" tooltip-html-unsafe="CPU Type: {[{server.system.cpu.type}]}<hr>CPU Cores: {[{server.system.cpu.cores}]}">
+CPU
+</strong>
+</td>
+<td>
+{[{ server.cpu.percentage.usage }]}%
+</td>
 </tr>
 
 <tr>
@@ -24,20 +30,21 @@
 <td>{[{ server.conns[80] ? server.conns[80] : 0 }]}
 <span ng-click="server.showAllConnections = (!server.showAllConnections)" class="glyphicon glyphicon-collapse-down"></span>
 
-<div ng-show='server.showAllConnections'>
-		  <div ng-repeat='(port, count) in server.conns' ng-if="port < 30000">
-		  {[{ port }]} => {[{ count }]}
-		  </div>
-</div>
+</td>
 </tr>
 
+		  <tr ng-show='server.showAllConnections' ng-repeat='(port, count) in server.conns' ng-if="port < 30000">
+		  <td>:{[{ port }]}</td><td>{[{ count }]}</td>
+		  </tr>
+
 <tr>
-<td><strong>Mem Usage:</strong></td>
+<td>
+<strong tooltip-placement="right" tooltip="Total Memory: {[{(server.mem.memtotal/1000)/1000 | number:0}]}GB">Mem usage:</strong>
 <td>{[{ ( (server.mem.memtotal - server.mem.memfree - server.mem.cached - server.mem.buffers) / server.mem.memtotal ) * 100 | number:1 }]}%</td>
 </tr>
 
 <tr>
-<td><strong>/ Usage:</strong></td>
+<td><strong tooltip-placement="right" tooltip="Size: {[{ ((server.disk['/'].total/1024)/1024)/1024 | number: 2}]}GB">/ Usage:</strong></td>
 <td>{[{ ( (server.disk['/'].total - server.disk['/'].free) / server.disk['/'].total ) * 100 | number:1 }]}%</td>
 </tr>
 
@@ -47,6 +54,7 @@
 </div> <!-- panel-body -->
 <div class="panel-footer">
 		  <strong>Network:</strong> {[{ (server.network.total.rxkbps + server.network.total.txkbps)/1000 | number: 2}]}Mb/s
+
 		  <span ng-click="server.showAllNetwork = (!server.showAllNetwork)" class="glyphicon glyphicon-collapse-down"></span>
 		  <div ng-show='server.showAllNetwork'>
 					 <div ng-repeat='(interface, net) in server.network' ng-if="interface != 'total' && (net.rxkbps > 0 || net.txkbps > 0)">
