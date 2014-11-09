@@ -5,16 +5,23 @@ var msiofApp = angular.module('msiofApp', []).config(function($interpolateProvid
 		  $interpolateProvider.startSymbol('{[{').endSymbol('}]}');
 });
 
-msiofApp.controller('HomeCtrl', function ($scope, $http) {
+msiofApp.controller('HomeCtrl', function ($scope, $http, $interval) {
 		  $scope.servers = {};
 		  console.log($scope.testVar);
-		  $http({
-					 method: 'GET',
-					 url: '/servers/cheese',
-		  }).then(function(response){
-					 var data = response.data;
-					 $scope.servers = data;
-					 console.log($scope.servers);
-		  });
 
+		  $scope.updateServers = function() {
+					 $http({
+								method: 'GET',
+								url: '/servers/cheese',
+					 }).then(function(response){
+								var data = response.data;
+								$scope.servers = data;
+								console.log($scope.servers);
+					 });
+		  };
+
+		  $scope.updateServers();
+		  $interval(function() {
+					 $scope.updateServers();
+		  }, 30000);
 });

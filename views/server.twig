@@ -1,3 +1,13 @@
+<div class='col-md-2'>
 <h5>{[{server.name}]}</h5>
-Load: {[{server.system.loadavg}]} - Connections on port 80: {[{server.conns[80]}]} - Server Time: {[{server.time}]} - MSIOF Time: {[{server.msiofTime}]}
-<hr>
+<strong>Load:</strong> {[{server.system.loadavg}]}<br>
+<strong>Conns: port 80:</strong> {[{server.conns[80]}]} <small><a href='#' ng-click="server.showAllConnections = (!server.showAllConnections)">Show All</a></small>
+<div ng-show='server.showAllConnections'>
+		  <div ng-repeat='(port, count) in server.conns' ng-if="port < 30000">
+		  {[{ port }]} => {[{ count }]}
+		  </div>
+</div>
+<br>
+<strong>Server Time:</strong> {[{server.time}]}<br>
+<strong>MSIOF Time:</strong> {[{server.msiofTime}]}
+</div>
