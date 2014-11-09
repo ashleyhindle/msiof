@@ -8,7 +8,7 @@
 		  </div>
 </div>
 <br>
-<strong>Disk Usage:</strong> {[{ ( (server.disk['/'].total - server.disk['/'].free) / server.disk['/'].total ) * 100 | number:1 }]}%
+<strong>/ Usage:</strong> {[{ ( (server.disk['/'].total - server.disk['/'].free) / server.disk['/'].total ) * 100 | number:1 }]}%
 <br>
 <strong>Server Time:</strong> {[{ server.time }]}<br>
 <strong>MSIOF Time:</strong> {[{ server.msiofTime }]}

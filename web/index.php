@@ -59,7 +59,8 @@ $app->get('/', function(Application $app, Request $request) {
 		  $protocol = (!empty($_SERVER['HTTPS'])) ? 'https://' : 'http://';
 
 		  return $app['twig']->render('index.twig', [
-					 'installUrl' => "{$protocol}{$_SERVER['SERVER_NAME']}/install"
+					 'installUrl' => "{$protocol}{$_SERVER['SERVER_NAME']}/install",
+					 'installUrl' => "http://msiof.smellynose.com/install"
 		  ]);
 });
 
