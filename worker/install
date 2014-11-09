@@ -25,16 +25,16 @@ mkdir /etc/msiof/
 
 if [ ! -f /etc/msiof/msiof.conf ]; then
 		  echo "=== Config file doesn't exist, creating /etc/msiof/msiof.conf..."
-		  curl -s -o /etc/msiof/msiof.conf https://myserverisonfire.com/key
+		  curl -s -o /etc/msiof/msiof.conf http://msiof.smellynose.com/key
 fi
 
 echo "=== Downloading worker to /etc/msiof/worker..."
-curl -s -o /etc/msiof/worker https://myserverisonfire.com/worker-php
+curl -s -o /etc/msiof/worker http://msiof.smellynose.com/worker-php
 chmod a+x /etc/msiof/worker
 
 echo "=== Installing init"
 ### INIT
-curl -s -o /etc/init.d/msiof-worker https://myserverisonfire.com/init
+curl -s -o /etc/init.d/msiof-worker http://msiof.smellynose.com/init
 chmod a+x /etc/init.d/msiof-worker
 ln -s /etc/init.d/msiof-worker /etc/rc2.d/S99msiof-worker
 service msiof-worker stop
