@@ -1,11 +1,30 @@
-<html>
-		  <head>
-					 <title>MyServerIsOnFire.com</title>
-		  </head>
-		  <body>
-					 <div>
-					 <b>As root:</b>
-					 curl -s {{installUrl}} | bash
-					 </div>
-		  </body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyServerIsOnFire.com</title>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    <style>
+        textarea {
+            width: 100%;
+        }
+    </style>
+
+    <script src='//ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular.min.js'></script>
+    <script src='/js/main.js'></script>
+</head>
+<body>
+<div class="container-fluid" ng-app='msiofApp' ng-controller='HomeCtrl'>
+    <b>As root:</b>
+    curl -s {{ installUrl }} | bash
+    {[{ testVar }]}
+
+		  <div class='server' ng-repeat="server in servers">
+			  {% include "server.twig" %}
+		  </div>
+</div>
+</body>
 </html>
