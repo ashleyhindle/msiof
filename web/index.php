@@ -11,7 +11,8 @@ $app = new Application();
 // Map api keys to userids
 $apiKeys = [
 		  'cheese' => 100,
-		  'anomander' => 101
+		  'anomander' => 101,
+		  'demo' => 102
 ];
 // Please set to false in a production environment
 //$app['debug'] = true;
@@ -59,6 +60,24 @@ $app->get('/servers/{apiKey}', function(Application $app, Request $request) use(
 		  }
 
 		  return $app->json($servers);
+});
+
+/** Get servers for user 100, and add some of them to the demo user too **/
+$app->get('/setdemo', function(Application $app) use ($apiKeys) {
+		  $serverKeys = $app['predis']->lrange("user:100:servers", 0, -1);
+		  $servers = [];
+		  $app['predis']->del([
+					 'user:102:servers'
+		  ]);
+
+		  foreach ($serverKeys as $serverKey) {
+					 $server = json_decode($app['predis']->get("server:{$serverKey}"), true);
+					 if (substr($server['name'], 0, 2) == 'ww') {
+								$app['predis']->lpush('user:102:servers', $serverKey);
+					 }
+		  }
+
+		 return 'Done';
 });
 
 $app->post('/', function(Application $app, Request $request) {
