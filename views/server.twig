@@ -7,11 +7,19 @@
 {[{ server.name }]}
 </div>
 <div class='panel-body'>
+<div ng-repeat='(type, percent) in server.cpu.percentage'>
+{[{type}]} => {[{percent}]}%
+</div>
 <table>
 
 <tr>
 <td><strong>Load</strong></td>
 <td>{[{ server.system.loadavg }]}</td>
+</tr>
+
+<tr>
+<td><strong>CPU</strong></td>
+<td>{[{ server.cpu.percentage.usage }]}%</td>
 </tr>
 
 <tr>
