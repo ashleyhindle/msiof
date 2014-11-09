@@ -196,9 +196,13 @@ function getSystemInfo()
 function getDiskInfo()
 {
 		  $disk = array();
+		  $rootTotal = disk_total_space('/');
+		  $rootFree = disk_free_space('/');
+		  $rootUsed = $rootTotal - $rootFree;
 		  $disk['/'] = array(
-					 'total' => disk_total_space('/'),
-					 'free' => disk_free_space('/')
+					 'total' => $rootTotal,
+					 'free' => $rootFree,
+					 'used' => $rootUsed
 		  );
 
 		  return $disk;
