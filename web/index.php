@@ -48,7 +48,7 @@ $app->get('/servers/{apiKey}', function(Application $app, Request $request) use(
 
 		  foreach ($serverKeys as $serverKey) {
 					 $server = json_decode($app['predis']->get("server:{$serverKey}"), true);
-					 $server['msiofTime'] = date('Y-m-d H:i:s', $server['lastupdated']);
+					 $server['msiofTime'] = date('H:i:s', $server['lastupdated']);
 					 $servers[] = $server;
 		  }
 
