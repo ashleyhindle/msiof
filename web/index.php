@@ -73,14 +73,7 @@ $app->get('/', function(Application $app, Request $request) {
 		  ]);
 });
 
-$app->get('/{apiKey}', function(Application $app, Request $request) {
-		  $protocol = (!empty($_SERVER['HTTPS'])) ? 'https://' : 'http://';
-
-		  return $app['twig']->render('index.twig', [
-					 'installUrl' => "{$protocol}{$_SERVER['SERVER_NAME']}/install",
-					 'apiKey' => $request->get('apiKey')
-		  ]);
-});
+//Add server
 
 $app->get('/install', function(Application $app) {
 		  readfile('../worker/install');
@@ -109,7 +102,16 @@ $app->get('/key', function(Application $app, Request $request) use($userId) {
 		  return "key={$key}";
 });
 
-//Add server
+$app->get('/{apiKey}', function(Application $app, Request $request) {
+		  $protocol = (!empty($_SERVER['HTTPS'])) ? 'https://' : 'http://';
+
+		  return $app['twig']->render('index.twig', [
+					 'installUrl' => "{$protocol}{$_SERVER['SERVER_NAME']}/install",
+					 'apiKey' => $request->get('apiKey')
+		  ]);
+});
+
+
 $app->post('/server', function(Application $app, Request $request) {
 		  $serverKey = $request->headers->get('X-Server-Key');
 		  if (empty($serverKey)) {
