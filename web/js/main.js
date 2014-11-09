@@ -11,15 +11,17 @@ msiofApp.controller('HomeCtrl', function ($scope, $http, $interval) {
 		  $scope.updateServers = function() {
 					 $http({
 								method: 'GET',
-								url: '/servers/cheese',
+								url: '/servers/' + $scope.apiKey,
 					 }).then(function(response){
 								var data = response.data;
 								$scope.servers = data;
 					 });
 		  };
 
-		  $scope.updateServers();
-		  $interval(function() {
+		  $scope.$watch("apiKey", function(){
 					 $scope.updateServers();
-		  }, 30000);
+					 $interval(function() {
+								$scope.updateServers();
+					 }, 30000);
+		  });
 });
