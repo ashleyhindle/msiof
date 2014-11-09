@@ -55,7 +55,6 @@ $app->get('/servers/{apiKey}', function(Application $app, Request $request) use(
 					 $server['hasIssues'] = (
 								$server['loadavg'] >= $server['system']['cpu']['cores'] ||
 								$server['disk']['/']['free'] <= ($server['disk']['/']['total']*0.15) ||
-								(($server['network']['total']['txkbps'] + $server['network']['total']['rxkbps']) / 1000) > 100 ||
 								( ( ($server['mem']['memtotal'] - $server['mem']['memfree'] - $server['mem']['cached'] - $server['mem']['buffers']) / $server['mem']['memtotal'] ) * 100 ) >= 85
 					 );
 					 $server['outOfDate'] = ($server['workerversion'] < $latestWorkerVersion);
