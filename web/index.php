@@ -160,6 +160,20 @@ $app->post('/server', function(Application $app, Request $request) {
 					 $totalTxOld = 0;
 					 $totalRxOld = 0;
 
+					 $oldCpu = $oldResult['cpu'];
+					 $newCpu = $jsonDecoded['cpu'];
+					 $cpuDiff = [
+								'user' => $newCpu['user'] - $oldCpu['user'],
+								'nice' => $newCpu['nice'] - $oldCpu['nice'],
+								'system' => $newCpu['system'] - $oldCpu['system'],
+								'idle' => $newCpu['idle'] - $oldCpu['idle']
+					 ];
+
+					 $total = array_sum($cpuDiff);
+					 foreach ($cpuDiff as $type => $diff) {
+								$jsonDecoded['cpu']['percentage'][$type] = round($diff / $total * 100, 1);
+					 }
+
 					 foreach ($jsonDecoded['network'] as $interface => $info) {
 								if ($interface == 'lo') {
 										  continue;
