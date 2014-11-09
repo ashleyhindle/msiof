@@ -3,6 +3,9 @@ www.myserverisonfire.com
 
 Server dashboard that gives an easy to read overview of your infrastructure
 
+##Screenshot (possibly old):
+![Image of MyServerIsOnFire](https://raw.githubusercontent.com/theahindle/msiof/master/web/images/screenshot.png)
+
 
 ## Requirements:
 
