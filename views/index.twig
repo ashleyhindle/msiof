@@ -44,7 +44,7 @@
 
 		  <div ng-hide='loaded' class="alert alert-info" role="alert">Loading server fires...</div>
 
-		  <div class='server' ng-repeat="server in servers | orderBy:'name'">
+		  <div class='col-md-3' ng-repeat="server in servers | orderBy:'name'">
 			  {% include "server.twig" %}
 		  </div>
 </div>
