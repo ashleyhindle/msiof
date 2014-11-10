@@ -97,21 +97,15 @@ $app->get('/', function(Application $app, Request $request) {
 //Add server
 
 $app->get('/install', function(Application $app) {
-		  readfile('../worker/install');
-
-		  return '';
+		  return $app->sendFile('../worker/install');
 });
 
 $app->get('/init', function() {
-		  readfile('../worker/init');
-
-		  return '';
+		  return $app->sendFile('../worker/init');
 });
 
 $app->get('/worker-php', function() {
-		  readfile('../worker/worker.php');
-
-		  return '';
+		  return $app->sendFile('../worker/worker.php');
 });
 
 $app->get('/key', function(Application $app, Request $request) use($userId) {
