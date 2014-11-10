@@ -1,7 +1,7 @@
 <div class='panel' ng-class="{'panel-danger': server.hasIssues, 'panel-success': (!server.hasIssues && !server.outOfDate), 'panel-warning' : server.outOfDate}">
 
 		  <div class="panel-heading">
-					 <h3 class="panel-title" style='overflow:auto;overflow-y: hidden;'>
+					 <h3 class="panel-title" style='overflow:hidden;'>
 								{[{ server.name }]}
 								<span tooltip-animation="false" tooltip-placement="right" tooltip="Worker out of date ({[{server.workerversion}]} < {{latestWorkerVersion}}), run install again to update" ng-show='server.outOfDate'><small>Worker out of date</small></span>
 					 </h3>
