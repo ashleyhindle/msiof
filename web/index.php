@@ -100,11 +100,11 @@ $app->get('/install', function(Application $app) {
 		  return $app->sendFile('../worker/install');
 });
 
-$app->get('/init', function() {
+$app->get('/init', function(Application $app) {
 		  return $app->sendFile('../worker/init');
 });
 
-$app->get('/worker-php', function() {
+$app->get('/worker-php', function(Application $app) {
 		  return $app->sendFile('../worker/worker.php');
 });
 
