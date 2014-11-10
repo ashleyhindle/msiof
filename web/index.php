@@ -54,7 +54,8 @@ $app->get('/servers/{apiKey}', function(Application $app, Request $request) use(
 					 $server['issues'] = [
 								'loadavg' => ( $server['loadavg'] >= $server['system']['cpu']['cores'] ),
 								'disk' => ( $server['disk']['/']['free'] <= ($server['disk']['/']['total']*0.15) ),
-								'mem' => ( ( ( ($server['mem']['memtotal'] - $server['mem']['memfree'] - $server['mem']['cached'] - $server['mem']['buffers']) / $server['mem']['memtotal'] ) * 100 ) >= 85 )
+								'mem' => ( ( ( ($server['mem']['memtotal'] - $server['mem']['memfree'] - $server['mem']['cached'] - $server['mem']['buffers']) / $server['mem']['memtotal'] ) * 100 ) >= 85 ),
+								'lastupdated' => ( $server['lastupdated'] < time() - (60*5) )
 					 ];
 					 $server['hasIssues'] = array_sum($server['issues']);
 					 $server['outOfDate'] = ($server['workerversion'] < $latestWorkerVersion);
