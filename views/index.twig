@@ -26,6 +26,9 @@
 		  <b>Install as root: <a href='/install'>View Install Source</a></b>
 		  <button ng-click="expandAll = (!expandAll)" class='btn btn-default btn-xs'>Expand All</button>
 		  <pre>curl -s {{ installUrl }} | bash</pre>
+
+		  <div ng-hide='loaded' class="alert alert-info" role="alert">Loading server fires...</div>
+
 		  <div class='server' ng-repeat="server in servers | orderBy:'name'">
 			  {% include "server.twig" %}
 		  </div>

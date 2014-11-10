@@ -8,6 +8,7 @@ var msiofApp = angular.module('msiofApp', ['ui.bootstrap']).config(function($int
 
 msiofApp.controller('HomeCtrl', function ($scope, $http, $interval) {
 		  $scope.servers = {};
+		  $scope.loaded = false;
 
 		  $scope.updateServers = function() {
 					 $http({
@@ -16,6 +17,7 @@ msiofApp.controller('HomeCtrl', function ($scope, $http, $interval) {
 					 }).then(function(response){
 								var data = response.data;
 								$scope.servers = data;
+								$scope.loaded = true;
 					 });
 		  };
 
