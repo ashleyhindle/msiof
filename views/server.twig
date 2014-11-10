@@ -51,7 +51,9 @@
 													 <td>{[{ ( (server.disk['/'].total - server.disk['/'].free) / server.disk['/'].total ) * 100 | number:1 }]}%</td>
 										  </tr>
 								</table>
-								<small nr-class="{'danger': server.issues.lastupdated}">Last Updated (UTC): </small>{[{ server.lastupdated*1000 | date:'HH:mm:ss':'UTC' }]}
+								<small nr-class="{'danger': server.issues.lastupdated}">Last updated: 
+								<span am-time-ago="server.lastupdated" am-preprocess="unix"></span>
+								</small>
 					 </div> <!-- panel-body -->
 					 <div class="panel-footer">
 								<strong>Network:</strong> {[{ (server.network.total.rxkbps + server.network.total.txkbps)/1000 | number: 2}]}Mb/s
