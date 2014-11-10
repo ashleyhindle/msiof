@@ -140,6 +140,11 @@ $app->post('/server', function(Application $app, Request $request) {
 
 		  $json = $request->getContent();
 		  $jsonDecoded = json_decode($json, true);
+
+		  $jsonDecoded['mem']['percentage'] = [
+					 'usage' => round(( ( $jsonDecoded['mem']['memtotal'] - $jsonDecoded['mem']['memfree'] - $jsonDecoded['mem']['cached'] - $jsonDecoded['mem']['buffers']) / $jsonDecoded['mem']['memtotal'] ) * 100, 1)
+		  ];
+
 		  $redisKey = "server:{$serverKey}";
 		  $oldResult = $app['predis']->get($redisKey);
 		  if (!empty($oldResult)) {
@@ -169,7 +174,6 @@ $app->post('/server', function(Application $app, Request $request) {
 								$jsonDecoded['cpu']['percentage'][$type] = round($diff / $total * 100, 1);
 					 }
 					 $jsonDecoded['cpu']['percentage']['usage'] = round((($cpuDiff['user'] + $cpuDiff['nice'] + $cpuDiff['system']) / $total) * 100, 1);
-
 
 					 foreach ($jsonDecoded['network'] as $interface => $info) {
 								if ($interface == 'lo') {
