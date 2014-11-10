@@ -24,7 +24,7 @@
 <body>
 <div class="container-fluid" ng-app='msiofApp' ng-controller='HomeCtrl' ng-init='apiKey="{{apiKey}}";'>
 		  <b>Install as root: <a href='/install'>View Install Source</a></b>
-		  <button ng-click="expandAll = (!expandAll)" class='btn btn-default btn-xs'>Expand All</button>
+		  <button ng-click="expandAll = (!expandAll)" class='btn btn-default btn-xs'>Toggle Expansion</button>
 		  <pre>curl -s {{ installUrl }} | bash</pre>
 
 		  <div ng-hide='loaded' class="alert alert-info" role="alert">Loading server fires...</div>
