@@ -19,10 +19,11 @@ msiofApp.controller('HomeCtrl', function ($scope, $http, $interval) {
 					 });
 		  };
 
-		  $scope.$watch("apiKey", function(){
+		  $scope.apiKeyWatcher = $scope.$watch("apiKey", function(){
 					 $scope.updateServers();
 					 $interval(function() {
 								$scope.updateServers();
 					 }, 30000);
+					 $scope.apiKeyWatcher();
 		  });
 });
