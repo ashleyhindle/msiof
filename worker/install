@@ -18,7 +18,20 @@ hash php 2>/dev/null || {
 		  fi
 }
 
+php -m | grep curl 2>/dev/null || {
+		  echo "=== Installing php-curl"
+		  if [ -e "/etc/redhat-relase" ]; then
+					 yum install -y php-curl
+		  fi
+
+
+		  if [ -e "/etc/debian_version" ]; then
+					 apt-get -y install php5-curl
+		  fi
+}
+
 hash php 2>/dev/null || { echo >&2 "I require PHP but it's not installed - attempted to install it above, but it must have failed.  Aborting."; exit 1; }
+php -m | grep curl 2>/dev/null || { echo >&2 "I require php5-curl module but it's not installed. Please install it and try again;  apt-get -y install php5-curl | yum install -y php-curl Aborting."; exit 1; }
 
 echo "=== Creating /etc/msiof/"
 mkdir -p /etc/msiof/
