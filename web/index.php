@@ -227,10 +227,7 @@ $app->post('/server', function(Application $app, Request $request) {
 
 		  $jsonDecoded['lastupdated'] = time();
 		  $jsonDecoded['publicip'] = $_SERVER['REMOTE_ADDR'];
-		  $jsonDecoded['conns']['total'] = 0;
-		  foreach ($jsonDecoded['conns'] as $v) {
-					 $jsonDecoded['conns']['total'] += $v;
-		  }
+		  $jsonDecoded['conns']['total'] = array_sum($jsonDecoded['conns']);
 
 		  $jsonDecoded['system']['loadavg'] = floatval($jsonDecoded['system']['loadavg']);
 		  $jsonDecoded['cpu']['percentage']['usage'] = floatval($jsonDecoded['cpu']['percentage']['usage']);
