@@ -49,10 +49,6 @@ msiofApp.controller('HomeCtrl', function ($scope, $http, $interval) {
 					 $scope.sortBy = sortValue;
 		  }
 
-		  $scope.getConnectionCount = function(server) {
-					 return Object.keys(server.conns).length;
-		  };
-
 		  $scope.updateServers = function() {
 					 $http({
 								method: 'GET',
