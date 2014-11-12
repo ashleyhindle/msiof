@@ -219,7 +219,8 @@ $app->post('/server', function(Application $app, Request $request) {
 										  'txbytes' => $totalTxNew,
 										  'rxbytes' => $totalRxNew,
 										  'rxkbps' => $rxKbps,
-										  'txkbps' => $txKbps
+										  'txkbps' => $txKbps,
+										  'totalkbps' => $rxKbps + $txKbps
 										  ];
 					 }
 		  }
