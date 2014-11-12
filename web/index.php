@@ -176,6 +176,10 @@ $app->post('/server', function(Application $app, Request $request) {
 					 }
 					 $jsonDecoded['cpu']['percentage']['usage'] = round((($cpuDiff['user'] + $cpuDiff['nice'] + $cpuDiff['system']) / $total) * 100, 1);
 
+					 $jsonDecoded['disk']['percentage'] = [
+								'usage' => round((($server['disk']['/']['total'] - $server['disk']['/']['free']) / $server['disk']['/']['total'] ) * 100, 1)
+					 ];
+
 					 foreach ($jsonDecoded['network'] as $interface => $info) {
 								if ($interface == 'lo') {
 										  continue;
