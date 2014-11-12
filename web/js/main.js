@@ -9,6 +9,21 @@ var msiofApp = angular.module('msiofApp', ['ui.bootstrap', 'angularMoment']).con
 msiofApp.controller('HomeCtrl', function ($scope, $http, $interval) {
 		  $scope.servers = {};
 		  $scope.loaded = false;
+		  $scope.sortBy = '-mem.percentage.usage';
+		  $scope.sortOptions = {
+					 'Name': '+name',
+					 'Memory Usage': '-mem.percentage.usage',
+					 'CPU Usage': '-cpu.percentage.usage',
+					 'Load Average': '-system.loadavg'
+		  };
+
+		  $scope.setSort = function(sortValue) {
+					 $scope.sortBy = sortValue;
+		  }
+
+		  $scope.getConnectionCount = function(server) {
+					 return Object.keys(server.conns).length;
+		  };
 
 		  $scope.updateServers = function() {
 					 $http({

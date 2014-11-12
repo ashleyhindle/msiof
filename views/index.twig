@@ -39,12 +39,15 @@
 		  <pre>curl -s {{ installUrl }} | bash</pre>
 
 		  <h5>
-					 Servers: {[{servers.length}]} &bull; <button ng-click="expandAll = (!expandAll)" class='btn btn-default btn-xs'>Toggle Expansion</button>
+					 Servers: {[{servers.length}]} &bull; <button ng-click="expandAll = (!expandAll)" class='btn btn-default btn-xs'>Toggle Expansion</button> &bull;
+					 Sory By: <button class='btn btn-default btn-xs' ng-click="setSort(sortValue)" ng-repeat="(sortDisplay, sortValue) in sortOptions">
+								{[{ sortDisplay }]}
+					 </button>
 		  </h5>
 
 		  <div ng-hide='loaded' class="alert alert-info" role="alert">Loading server fires...</div>
 
-		  <div class='col-md-3' ng-repeat="server in servers | orderBy:'name'">
+		  <div class='col-md-3' ng-repeat="server in servers | orderBy:sortBy">
 			  {% include "server.twig" %}
 		  </div>
 </div>

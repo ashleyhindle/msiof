@@ -26,8 +26,8 @@
 								</tr>
 
 								<tr>
-										  <td><strong>Conns <small>(port 80)</small>:</strong></td>
-										  <td>{[{ server.conns[80] ? server.conns[80] : 0 }]}
+										  <td><strong>TCP Connections:</strong></td>
+										  <td>{[{ getConnectionCount(server) }]}
 													 <span ng-click="showAllConnections[server.serverKey] = (!showAllConnections[server.serverKey])" class="glyphicon glyphicon-collapse-down"></span>
 										  </td>
 								</tr>
