@@ -16,6 +16,7 @@ msiofApp.controller('HomeCtrl', function ($scope, $http, $interval) {
 					 'Memory Usage': '-mem.percentage.usage',
 					 'CPU Usage': '-cpu.percentage.usage',
 					 'Disk Usage': '-disk.percentage.usage',
+					 'TCP Connections': '-conns.total',
 					 'Network Usage': '-network.total.totalkbps',
 					 'Load Average': '-system.loadavg',
 		  };
