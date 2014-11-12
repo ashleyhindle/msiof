@@ -9,7 +9,7 @@ var msiofApp = angular.module('msiofApp', ['ui.bootstrap', 'angularMoment']).con
 msiofApp.controller('HomeCtrl', function ($scope, $http, $interval) {
 		  $scope.servers = {};
 		  $scope.loaded = false;
-		  $scope.sortBy = '-mem.percentage.usage';
+		  $scope.sortBy = '+name';
 		  $scope.sortOptions = {
 					 'Name': '+name',
 					 'Memory Usage': '-mem.percentage.usage',

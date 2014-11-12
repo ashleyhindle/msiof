@@ -40,9 +40,12 @@
 
 		  <h5>
 					 Servers: {[{servers.length}]} &bull; <button ng-click="expandAll = (!expandAll)" class='btn btn-default btn-xs'>Toggle Expansion</button> &bull;
-					 Sory By: <button class='btn btn-default btn-xs' ng-click="setSort(sortValue)" ng-repeat="(sortDisplay, sortValue) in sortOptions">
-								{[{ sortDisplay }]}
-					 </button>
+					 Sort By:
+					 <div class="btn-group">
+								<label class='btn btn-success btn-xs' ng-click="setSort(sortValue)" ng-repeat="(sortDisplay, sortValue) in sortOptions" ng-model="sortBy" btn-radio="sortValue">
+										  {[{ sortDisplay }]}
+								</label>
+					 </div>
 		  </h5>
 
 		  <div ng-hide='loaded' class="alert alert-info" role="alert">Loading server fires...</div>
