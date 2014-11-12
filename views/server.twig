@@ -55,7 +55,7 @@
 					 </small>
 		  </div> <!-- panel-body -->
 		  <div class="panel-footer">
-					 <strong>Network:</strong> {[{ (server.network.total.rxkbps + server.network.total.txkbps)/1000 | number: 2}]}Mb/s
+					 <strong>Network:</strong> {[{ server.network.total.totalkbps/1000 | number: 2}]}Mb/s
 
 					 <span ng-click="server.showAllNetwork = (!server.showAllNetwork)" class="glyphicon glyphicon-collapse-down"></span>
 					 <div ng-show='server.showAllNetwork'>
