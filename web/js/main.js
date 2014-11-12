@@ -12,9 +12,11 @@ msiofApp.controller('HomeCtrl', function ($scope, $http, $interval) {
 		  $scope.sortBy = '+name';
 		  $scope.sortOptions = {
 					 'Name': '+name',
+					 'Issues': '-hasIssues',
 					 'Memory Usage': '-mem.percentage.usage',
 					 'CPU Usage': '-cpu.percentage.usage',
-					 'Load Average': '-system.loadavg'
+					 'Disk Usage': '-disk.percentage.usage',
+					 'Load Average': '-system.loadavg',
 		  };
 
 		  $scope.setSort = function(sortValue) {
