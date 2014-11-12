@@ -39,13 +39,14 @@
 		  <pre>curl -s {{ installUrl }} | bash</pre>
 
 		  <h5>
-					 Servers: {[{servers.length}]} &bull; <button ng-click="expandAll = (!expandAll)" class='btn btn-default btn-xs'>Toggle Expansion</button> &bull;
+					 Servers: {[{servers.length}]} &bull; 
 					 Sort By:
 					 <div class="btn-group">
-								<label class='btn btn-success btn-xs' ng-click="setSort(sortValue)" ng-repeat="(sortDisplay, sortValue) in sortOptions" ng-model="sortBy" btn-radio="sortValue">
-										  {[{ sortDisplay }]}
+								<label class='btn btn-success btn-xs' ng-click="setSort(sort.value)" ng-repeat="sort in sortOptions" ng-model="sortBy" btn-radio="sort.value">
+										  {[{ sort.display }]}
 								</label>
 					 </div>
+					 <button ng-click="expandAll = (!expandAll)" class='btn btn-default btn-xs'>Toggle Expansion</button>
 		  </h5>
 
 		  <div ng-hide='loaded' class="alert alert-info" role="alert">Loading server fires...</div>

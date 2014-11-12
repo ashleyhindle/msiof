@@ -10,16 +10,40 @@ msiofApp.controller('HomeCtrl', function ($scope, $http, $interval) {
 		  $scope.servers = {};
 		  $scope.loaded = false;
 		  $scope.sortBy = '+name';
-		  $scope.sortOptions = {
-					 'Name': '+name',
-					 'Issues': '-hasIssues',
-					 'Memory Usage': '-mem.percentage.usage',
-					 'CPU Usage': '-cpu.percentage.usage',
-					 'Disk Usage': '-disk.percentage.usage',
-					 'TCP Connections': '-conns.total',
-					 'Network Usage': '-network.total.totalkbps',
-					 'Load Average': '-system.loadavg',
-		  };
+		  $scope.sortOptions = [
+					 { 
+								'display': 'Name',
+								'value': '+name'
+					 },
+					 { 
+								'display': 'Issues',
+								'value': '-hasIssues'
+					 },
+					 { 
+								'display': 'Memory Usage',
+								'value': '-mem.percentage.usage'
+					 },
+					 { 
+								'display': 'CPU Usage',
+								'value': '-cpu.percentage.usage'
+					 },
+					 { 
+								'display': 'Disk Usage',
+								'value': '-disk.percentage.usage'
+					 },
+					 { 
+								'display': 'TCP Connections',
+								'value': '-conns.total'
+					 },
+					 { 
+								'display': 'Network Usage',
+								'value': '-network.total.totalkbps'
+					 },
+					 { 
+								'display': 'Load Average',
+								'value': '-system.loadavg'
+					 },
+		  ];
 
 		  $scope.setSort = function(sortValue) {
 					 $scope.sortBy = sortValue;
