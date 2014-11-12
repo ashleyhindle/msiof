@@ -230,8 +230,6 @@ $app->post('/server', function(Application $app, Request $request) {
 		  $jsonDecoded['conns']['total'] = array_sum($jsonDecoded['conns']);
 
 		  $jsonDecoded['system']['loadavg'] = floatval($jsonDecoded['system']['loadavg']);
-		  $jsonDecoded['cpu']['percentage']['usage'] = floatval($jsonDecoded['cpu']['percentage']['usage']);
-		  $jsonDecoded['mem']['percentage']['usage'] = floatval($jsonDecoded['mem']['percentage']['usage']);
 
 		  $predisResult = $app['predis']->set($redisKey, json_encode($jsonDecoded));
 
