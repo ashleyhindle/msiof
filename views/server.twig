@@ -27,12 +27,12 @@
 
 								<tr>
 										  <td><strong>TCP Connections:</strong></td>
-										  <td>{[{ getConnectionCount(server) }]}
+										  <td>{[{ server.conns.total }]}
 													 <span ng-click="showAllConnections[server.serverKey] = (!showAllConnections[server.serverKey])" class="glyphicon glyphicon-collapse-down"></span>
 										  </td>
 								</tr>
 
-								<tr ng-show='showAllConnections[server.serverKey]' ng-repeat='(port, count) in server.conns' ng-if="port < 30000">
+								<tr ng-show='showAllConnections[server.serverKey]' ng-repeat="(port, count) in server.conns | orderBy:'-count'" ng-if="port < 30000">
 										  <td>:{[{ port }]}</td><td>{[{ count }]}</td>
 								</tr>
 
