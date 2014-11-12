@@ -1,5 +1,4 @@
 <div class='panel' ng-class="{'panel-danger': server.hasIssues, 'panel-success': (!server.hasIssues && !server.outOfDate), 'panel-warning' : server.outOfDate}">
-
 		  <div class="panel-heading">
 					 <h3 class="panel-title" style='overflow:hidden;'>
 								{[{ server.name }]}
@@ -22,13 +21,6 @@
 										  </td>
 										  <td>
 													 {[{ server.cpu.percentage.usage }]}%
-										  </td>
-								</tr>
-
-								<tr>
-										  <td><strong>TCP Connections:</strong></td>
-										  <td>{[{ server.conns.total }]}
-													 <span ng-click="showAllConnections[server.serverKey] = (!showAllConnections[server.serverKey])" class="glyphicon glyphicon-collapse-down"></span>
 										  </td>
 								</tr>
 

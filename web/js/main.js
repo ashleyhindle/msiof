@@ -32,10 +32,6 @@ msiofApp.controller('HomeCtrl', function ($scope, $http, $interval) {
 								'value': '-disk.percentage.usage'
 					 },
 					 { 
-								'display': 'TCP Connections',
-								'value': '-conns.total'
-					 },
-					 { 
 								'display': 'Network Usage',
 								'value': '-network.total.totalkbps'
 					 },
