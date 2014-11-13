@@ -283,14 +283,35 @@ $app['security.firewalls'] = [
 		  'login' => [
 					 'pattern' => '^/account/login$',
 		  ],
-		  'register' => [
-					 'pattern' => '^/account/register$',
+		  'index' => [
+					 'pattern' => '^/$',
 		  ],
-		  'forgot' => [
-					 'pattern' => '^/account/forgot-password$',
+		  'demo' => [
+					 'pattern' => '^/demo$',
+		  ],
+		  'api' => [
+					 'pattern' => '^/servers/.*$',
+		  ],
+		  'install' => [
+					 'pattern' => '^/install$',
+		  ],
+		  'init' => [
+					 'pattern' => '^/init$',
+		  ],
+		  'key' => [
+					 'pattern' => '^/key$',
+		  ],
+		  'workerphp' => [
+					 'pattern' => '^/worker-php$',
+		  ],
+		  'workerapi' => [
+					 'pattern' => '^/server$',
+		  ],
+		  'setdemo' => [
+					 'pattern' => '^/setdemo$',
 		  ],
 		  'secured_area' => [
-					 'pattern' => '^/account/.*$',
+					 'pattern' => '^.*$',
 					 'remember_me' => [],
 					 'form' => [
 								'login_path' => '/account/login',
