@@ -35,6 +35,22 @@
 										  <span class="icon-bar"></span>
 								</button>
 								<a class="navbar-brand" href="/">Home</a>
+								{% if app.user %}
+								<form action="" method="POST">
+								  <script
+									 src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+									 data-key="pk_test_2bpghGfYvZb4cS2rYIhpcC31"
+									 data-amount="2000"
+									 data-name="Unlimited MSIOF"
+									 data-description="Unlimited (&pound; 20/month)"
+									 data-image="/128x128.png"
+								    data-currency="GBP"
+								    data-allowrememberme="false"
+								    data-email="{{ app.user.email }}"
+								    >
+								  </script>
+								</form>
+								{% endif %}
 					 </div>
 
 					 <!-- Collect the nav links, forms, and other content for toggling -->

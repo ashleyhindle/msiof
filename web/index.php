@@ -17,7 +17,7 @@ $apiKeys = [
 		  'demo' => 102
 ];
 // Please set to false in a production environment
-$app['debug'] = true;
+//$app['debug'] = true;
 
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
 		  'twig.path' => '../views',
