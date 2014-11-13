@@ -9,6 +9,7 @@ var msiofApp = angular.module('msiofApp', ['ui.bootstrap', 'angularMoment']).con
 msiofApp.controller('HomeCtrl', function ($scope, $http, $interval) {
 		  $scope.servers = {};
 		  $scope.loaded = false;
+		  $scope.showInstallInstructions = false;
 		  $scope.sortBy = '+name';
 		  $scope.sortOptions = [
 					 { 
