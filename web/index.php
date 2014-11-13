@@ -44,7 +44,15 @@ $simpleUserProvider = new SimpleUser\UserServiceProvider();
 $app->register($simpleUserProvider);
 $app->mount('/account', $simpleUserProvider);
 
-$app['user.options'] = [];
+$app['user.options'] = [
+		  'mailer' => [
+					 'enabled' => true,
+		  ],
+		  'emailConfirmation' => [
+					 'required' => true,
+		  ]
+];
+
 $app['security.firewalls'] = [
 		  'login' => [
 					 'pattern' => '^/account/login$',
