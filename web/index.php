@@ -1,5 +1,6 @@
 <?php
 use Silex\Application;
+use Silex\Provider;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -22,6 +23,13 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
 		  'twig.path' => '../views',
 ));
 
+$app->register(new Provider\DoctrineServiceProvider());
+$app->register(new Provider\SecurityServiceProvider());
+$app->register(new Provider\RememberMeServiceProvider());
+$app->register(new Provider\SessionServiceProvider());
+$app->register(new Provider\ServiceControllerServiceProvider());
+$app->register(new Provider\UrlGeneratorServiceProvider());
+$app->register(new Provider\SwiftmailerServiceProvider());
 $app->register(new Predis\Silex\ClientServiceProvider(), [
 		  'predis.parameters' => 'tcp://127.0.0.1:6379',
 		  'predis.options'    => [
@@ -29,6 +37,54 @@ $app->register(new Predis\Silex\ClientServiceProvider(), [
 					 'profile' => '3.0',
 		  ],
 ]);
+
+
+
+$simpleUserProvider = new SimpleUser\UserServiceProvider();
+$app->register($simpleUserProvider);
+$app->mount('/account', $simpleUserProvider);
+
+$app['user.options'] = [];
+$app['security.firewalls'] = [
+		  'login' => [
+					 'pattern' => '^/account/login$',
+		  ],
+		  'index' => [
+					 'pattern' => '/',
+		  ],
+		  'secured_area' => [
+					 'pattern' => '^.*$',
+					 'anonymous' => true,
+					 'remember_me' => [],
+					 'form' => [
+								'login_path' => '/account/login',
+								'check_path' => '/account/login_check',
+					 ],
+					 'logout' => [
+								'logout_path' => '/account/logout',
+					 ],
+					 'users' => $app->share(function($app) {
+								return $app['user.manager'];
+					 })
+		  ],
+];
+
+$app['swiftmailer.options'] = [
+		  'host' => 'smtp.mandrillapp.com',
+		  'port' => '587',
+		  'username' => 'ashley@smellynose.com',
+		  'password' => 'UTHbmYygpJu4L7yazGIufQ', // This is only allowed from my server IP, so not using a gitignored config file for now (hello github)
+		  'encryption' => 'ssl',
+		  'auth_mode' => null
+];
+
+$app['db.options'] = [
+		  'driver' => 'pdo_mysql',
+		  'host' => 'localhost',
+		  'dbname' => 'msiof',
+		  'user' => 'msiof',
+		  'password' => 'notarealpassword'
+];
 
 
 $app->get('/servers/{apiKey}', function(Application $app, Request $request) use($apiKeys, $latestWorkerVersion) {
