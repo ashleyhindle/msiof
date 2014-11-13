@@ -17,7 +17,7 @@ $apiKeys = [
 		  'demo' => 102
 ];
 // Please set to false in a production environment
-//$app['debug'] = true;
+$app['debug'] = true;
 
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
 		  'twig.path' => '../views',
@@ -43,56 +43,6 @@ $app->register(new Predis\Silex\ClientServiceProvider(), [
 $simpleUserProvider = new SimpleUser\UserServiceProvider();
 $app->register($simpleUserProvider);
 $app->mount('/account', $simpleUserProvider);
-
-$app['user.options'] = [
-		  'mailer' => [
-					 'enabled' => true,
-		  ],
-		  'emailConfirmation' => [
-					 'required' => true,
-		  ]
-];
-
-$app['security.firewalls'] = [
-		  'login' => [
-					 'pattern' => '^/account/login$',
-		  ],
-		  'index' => [
-					 'pattern' => '/',
-		  ],
-		  'secured_area' => [
-					 'pattern' => '^.*$',
-					 'anonymous' => true,
-					 'remember_me' => [],
-					 'form' => [
-								'login_path' => '/account/login',
-								'check_path' => '/account/login_check',
-					 ],
-					 'logout' => [
-								'logout_path' => '/account/logout',
-					 ],
-					 'users' => $app->share(function($app) {
-								return $app['user.manager'];
-					 })
-		  ],
-];
-
-$app['swiftmailer.options'] = [
-		  'host' => 'smtp.mandrillapp.com',
-		  'port' => '587',
-		  'username' => 'ashley@smellynose.com',
-		  'password' => 'UTHbmYygpJu4L7yazGIufQ', // This is only allowed from my server IP, so not using a gitignored config file for now (hello github)
-		  'encryption' => 'ssl',
-		  'auth_mode' => null
-];
-
-$app['db.options'] = [
-		  'driver' => 'pdo_mysql',
-		  'host' => 'localhost',
-		  'dbname' => 'msiof',
-		  'user' => 'msiof',
-		  'password' => 'notarealpassword'
-];
 
 
 $app->get('/servers/{apiKey}', function(Application $app, Request $request) use($apiKeys, $latestWorkerVersion) {
@@ -155,7 +105,7 @@ $app->post('/', function(Application $app, Request $request) {
 $app->get('/', function(Application $app, Request $request) {
 		  $protocol = (!empty($_SERVER['HTTPS'])) ? 'https://' : 'http://';
 
-		  return $app['twig']->render('indexNoKey.twig', [
+		  return $app['twig']->render('index.twig', [
 					 'installUrl' => "{$protocol}{$_SERVER['SERVER_NAME']}/install"
 		  ]);
 });
@@ -186,7 +136,7 @@ $app->get('/key', function(Application $app, Request $request) use($userId) {
 $app->get('/{apiKey}', function(Application $app, Request $request) use($latestWorkerVersion) {
 		  $protocol = (!empty($_SERVER['HTTPS'])) ? 'https://' : 'http://';
 
-		  return $app['twig']->render('index.twig', [
+		  return $app['twig']->render('dashboard.twig', [
 					 'installUrl' => "{$protocol}{$_SERVER['SERVER_NAME']}/install",
 					 'apiKey' => $request->get('apiKey'),
 					 'latestWorkerVersion' => $latestWorkerVersion
@@ -302,5 +252,66 @@ $app->post('/server', function(Application $app, Request $request) {
 					 'success' => 'Updated your server and stuff'
 		  ]);
 });
+
+
+$app['user.options'] = [
+		  'templates' => [
+					 'layout' => 'layout.twig',
+					 'register' => '/account/register.twig',
+					 'register-confirmation-sent' => '/account/register-confirmation-sent.twig',
+					 'login' => '/account/login.twig',
+					 'login-confirmation-needed' => '/account/login-confirmation-needed.twig',
+					 'forgot-password' => '/account/forgot-password.twig',
+					 'reset-password' => '/account/reset-password.twig',
+					 'view' => '/account/view.twig',
+					 'edit' => '/account/edit.twig',
+					 'list' => '/account/list.twig',
+		  ],
+		  'mailer' => [
+					 'enabled' => true,
+					 'fromEmail' => [
+								'address' => 'noreply@' . (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : gethostname()),
+								'name' => null,
+					 ]
+		  ],
+		  'emailConfirmation' => [
+					 'required' => true,
+		  ]
+];
+
+$app['security.firewalls'] = [
+		  'secured_area' => [
+					 'pattern' => '^.*$',
+					 'anonymous' => true,
+					 'remember_me' => [],
+					 'form' => [
+								'login_path' => '/account/login',
+								'check_path' => '/account/login_check',
+					 ],
+					 'logout' => [
+								'logout_path' => '/account/logout',
+					 ],
+					 'users' => $app->share(function($app) {
+								return $app['user.manager'];
+					 })
+		  ],
+];
+
+$app['swiftmailer.options'] = [
+		  'host' => 'smtp.mandrillapp.com',
+		  'port' => '465',
+		  'username' => 'ashley@smellynose.com',
+		  'password' => 'UTHbmYygpJu4L7yazGIufQ', // This is only allowed from my server IP, so not using a gitignored config file for now (hello github)
+		  'encryption' => 'ssl',
+		  'auth_mode' => null
+];
+
+$app['db.options'] = [
+		  'driver' => 'pdo_mysql',
+		  'host' => 'localhost',
+		  'dbname' => 'msiof',
+		  'user' => 'msiof',
+		  'password' => 'notarealpassword'
+];
 
 $app->run();
