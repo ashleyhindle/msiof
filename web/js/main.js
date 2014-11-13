@@ -1,7 +1,3 @@
-/**
- * Created by ahindle on 08/11/14.
- */
-
 var msiofApp = angular.module('msiofApp', ['ui.bootstrap', 'angularMoment']).config(function($interpolateProvider){
 		  $interpolateProvider.startSymbol('{[{').endSymbol('}]}');
 });
