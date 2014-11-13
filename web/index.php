@@ -280,9 +280,17 @@ $app['user.options'] = [
 ];
 
 $app['security.firewalls'] = [
+		  'login' => [
+					 'pattern' => '^/account/login$',
+		  ],
+		  'index' => [
+					 'pattern' => '^/$',
+		  ],
+		  'demo' => [
+					 'pattern' => '^/demo$',
+		  ],
 		  'secured_area' => [
 					 'pattern' => '^.*$',
-					 'anonymous' => true,
 					 'remember_me' => [],
 					 'form' => [
 								'login_path' => '/account/login',
