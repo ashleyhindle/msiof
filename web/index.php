@@ -301,11 +301,14 @@ $app['security.firewalls'] = [
 		  'key' => [
 					 'pattern' => '^/key$',
 		  ],
-		  'worker' => [
-					 'pattern' => '^/worker$',
-		  ],
 		  'workerphp' => [
 					 'pattern' => '^/worker-php$',
+		  ],
+		  'workerapi' => [
+					 'pattern' => '^/server$',
+		  ],
+		  'setdemo' => [
+					 'pattern' => '^/setdemo$',
 		  ],
 		  'secured_area' => [
 					 'pattern' => '^.*$',
