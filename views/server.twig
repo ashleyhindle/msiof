@@ -41,10 +41,11 @@
 										  <td><strong tooltip-animation="false" tooltip-placement="right" tooltip="Size: {[{ ((server.disk['/'].total/1024)/1024)/1024 | number: 2}]}GB">/ Usage:</strong></td>
 										  <td>{[{ server.disk.percentage.usage }]}%</td>
 								</tr>
+
+								<tr ng-class="{'danger': server.issues.lastupdated}">
+										  <td colspan=2><small>Last updated: <span am-time-ago="server.lastupdated" am-preprocess="unix"></span></small></td>
+								</tr>
 					 </table>
-					 <small ng-class="{'danger': server.issues.lastupdated}">Last updated: 
-								<span am-time-ago="server.lastupdated" am-preprocess="unix"></span>
-					 </small>
 		  </div> <!-- panel-body -->
 		  <div class="panel-footer">
 					 <strong>Network:</strong> {[{ server.network.total.totalkbps/1000 | number: 2}]}Mb/s
