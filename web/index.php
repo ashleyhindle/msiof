@@ -289,6 +289,24 @@ $app['security.firewalls'] = [
 		  'demo' => [
 					 'pattern' => '^/demo$',
 		  ],
+		  'api' => [
+					 'pattern' => '^/servers/.*$',
+		  ],
+		  'install' => [
+					 'pattern' => '^/install$',
+		  ],
+		  'init' => [
+					 'pattern' => '^/init$',
+		  ],
+		  'key' => [
+					 'pattern' => '^/key$',
+		  ],
+		  'worker' => [
+					 'pattern' => '^/worker$',
+		  ],
+		  'workerphp' => [
+					 'pattern' => '^/worker-php$',
+		  ],
 		  'secured_area' => [
 					 'pattern' => '^.*$',
 					 'remember_me' => [],
