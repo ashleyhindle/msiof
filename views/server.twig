@@ -42,7 +42,7 @@
 										  <td>{[{ server.disk.percentage.usage }]}%</td>
 								</tr>
 					 </table>
-					 <small nr-class="{'danger': server.issues.lastupdated}">Last updated: 
+					 <small ng-class="{'danger': server.issues.lastupdated}">Last updated: 
 								<span am-time-ago="server.lastupdated" am-preprocess="unix"></span>
 					 </small>
 		  </div> <!-- panel-body -->
