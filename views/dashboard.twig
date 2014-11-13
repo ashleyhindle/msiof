@@ -1,0 +1,30 @@
+{% extends "layout.twig" %}
+{% block content %}
+<div class="container-fluid" ng-app='msiofApp' ng-controller='HomeCtrl' ng-init='apiKey="{{apiKey}}";'>
+		  <div ng-show="showInstallInstructions" class='jumbotron'>
+					 <h1>Install as root: </h1>
+					 <p>curl -s {{ installUrl }} | bash</p>
+
+					 <button ng-click="showInstallInstructions = false" class='btn btn-primary'>Close install instructions</button>
+					 <a href='/install'>View Install Source</a>
+		  </div>
+
+		  <h5>
+					 Servers: {[{servers.length}]} &bull; 
+					 Sort By:
+					 <div class="btn-group">
+								<label class='btn btn-success btn-xs' ng-click="setSort(sort.value)" ng-repeat="sort in sortOptions" ng-model="sortBy" btn-radio="sort.value">
+										  {[{ sort.display }]}
+								</label>
+					 </div>
+					 <button ng-click="expandAll = (!expandAll)" class='btn btn-default btn-xs'>Toggle Expansion</button>
+					 <button ng-click="showInstallInstructions = (!showInstallInstructions)" class='pull-right btn btn-success btn-xs'><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add new server</button>
+		  </h5>
+
+		  <div ng-hide='loaded' class="alert alert-info" role="alert">Loading server fires...</div>
+
+		  <div class='col-sm-6 col-md-3 col-lg-2' ng-repeat="server in servers | orderBy:sortBy">
+			  {% include "server.twig" %}
+		  </div>
+</div>
+{% endblock %}
