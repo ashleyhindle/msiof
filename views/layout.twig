@@ -57,19 +57,9 @@
 					 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 								<ul class="nav navbar-nav navbar-right">
 										  {% if app.user %}
-													 <li dropdown>
-													 <a href="#" class="dropdown-toggle">
-																Hey there!
-																<span class="caret"></span>
-													 </a>
-													 <ul class="dropdown-menu" role="menu">
-																<li><a href="{{ path('user') }}"><span class="glyphicon glyphicon-user"></span> View your profile</a></li>
-																<li><a href="{{ path('user.edit', { id: app.user.id }) }}"><span class="glyphicon glyphicon-edit"></span> Edit your profile</a></li>
-																<li><a href="{{ path('user.logout') }}"><span class="glyphicon glyphicon-off"></span> Sign out</a></li>
-													 </ul>
-													 </li>
+													 <li><a href="{{ path('user.logout') }}"><span class="glyphicon glyphicon-off"></span> Sign out</a></li>
 										  {% else %}
-													 {% if (app.msiof.registrationEnabled) and (app.msiof.showEarlyAccessPage == false) %}
+													 {% if app.msiof.registrationEnabled %}
 																<li><a href="{{ path('user.login') }}">Sign in</a></li>
 																<li><a href="{{ path('user.register') }}">Create account</a></li>
 													 {% endif %}
