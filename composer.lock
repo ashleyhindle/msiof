@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "324e6c67531e307db4ba64c8881e1838",
+    "hash": "0d8329454d6062a202d600eda1553de9",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -467,6 +467,62 @@
                 "parser"
             ],
             "time": "2013-01-12 18:59:04"
+        },
+        {
+            "name": "igorw/config-service-provider",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/igorw/ConfigServiceProvider.git",
+                "reference": "502cffe49f136443f2059803f2e7192d1ac066cd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/igorw/ConfigServiceProvider/zipball/502cffe49f136443f2059803f2e7192d1ac066cd",
+                "reference": "502cffe49f136443f2059803f2e7192d1ac066cd",
+                "shasum": ""
+            },
+            "require": {
+                "silex/silex": "~1.0"
+            },
+            "require-dev": {
+                "jamesmoss/toml": "~0.1",
+                "symfony/yaml": "~2.1"
+            },
+            "suggest": {
+                "jamesmoss/toml": "~0.1",
+                "symfony/yaml": "~2.1"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.2-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Igorw\\Silex": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Contributors",
+                    "homepage": "https://github.com/igorw/ConfigServiceProvider/contributors"
+                },
+                {
+                    "name": "Igor Wiedler",
+                    "email": "igor@wiedler.ch"
+                }
+            ],
+            "description": "A config ServiceProvider for Silex with support for php, json and yaml.",
+            "keywords": [
+                "silex"
+            ],
+            "time": "2014-07-23 21:09:35"
         },
         {
             "name": "jasongrimes/paginator",
@@ -1407,7 +1463,8 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "predis/service-provider": 20,
-        "jasongrimes/silex-simpleuser": 20
+        "jasongrimes/silex-simpleuser": 20,
+        "igorw/config-service-provider": 20
     },
     "prefer-stable": false,
     "platform": [
