@@ -342,10 +342,9 @@ $app['security.firewalls'] = [
 		  ],
 ];
 
-$app['dispatcher']->addListener(UserEvents::AFTER_INSERT, function(UserEvent $event) use ($app) {
+$app['dispatcher']->addListener(UserEvents::BEFORE_INSERT, function(UserEvent $event) use ($app) {
 		  $user = $event->getUser();
 		  $user->setCustomField('apikey', Uuid::uuid4()->toString());
-		  $app['user.manager']->update($user);
 });
 
 $app->register(new Igorw\Silex\ConfigServiceProvider(__DIR__."/../config/{$env}.json"));
