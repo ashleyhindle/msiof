@@ -281,7 +281,7 @@ $app['user.options'] = [
 		  'mailer' => [
 					 'enabled' => true,
 					 'fromEmail' => [
-								'address' => 'noreply@' . (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : gethostname()),
+								'address' => 'noreply@myserverisonfire.com',
 								'name' => null,
 					 ]
 		  ],
@@ -346,6 +346,7 @@ $app['security.firewalls'] = [
 $app['dispatcher']->addListener(UserEvents::AFTER_INSERT, function(UserEvent $event) use ($app) {
 		  $user = $event->getUser();
 		  $user->setCustomField('apikey', Uuid::uuid4()->toString());
+		  $app['user.manager']->update($user);
 });
 
 $app->register(new Igorw\Silex\ConfigServiceProvider(__DIR__."/../config/{$env}.json"));
