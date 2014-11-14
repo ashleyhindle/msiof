@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Rhumsaa\Uuid\Uuid;
 use Rhumsaa\Uuid\Exception\UnsatisfiedDependencyException;
 use SimpleUser\UserEvents;
+use SimpleUser\UserEvent;
 
 require_once __DIR__.'/../vendor/autoload.php';
 
@@ -292,6 +293,12 @@ $app['user.options'] = [
 $app['security.firewalls'] = [
 		  'login' => [
 					 'pattern' => '^/account/login$',
+		  ],
+		  'forgot' => [
+					 'pattern' => '^/account/forgot-password$',
+		  ],
+		  'register' => [
+					 'pattern' => '^/account/register$',
 		  ],
 		  'index' => [
 					 'pattern' => '^/$',
