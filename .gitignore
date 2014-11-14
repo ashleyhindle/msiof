@@ -1,3 +1,5 @@
 vendor
 *.swp
 .idea
+config/dev.json
+config/prod.json
