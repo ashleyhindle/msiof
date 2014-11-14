@@ -3,3 +3,5 @@ vendor
 .idea
 config/dev.json
 config/prod.json
+dev.json
+prod.json
