@@ -29,13 +29,7 @@ $app->register(new Provider\SessionServiceProvider());
 $app->register(new Provider\ServiceControllerServiceProvider());
 $app->register(new Provider\UrlGeneratorServiceProvider());
 $app->register(new Provider\SwiftmailerServiceProvider());
-$app->register(new Predis\Silex\ClientServiceProvider(), [
-		  'predis.parameters' => 'tcp://127.0.0.1:6379',
-		  'predis.options'    => [
-					 'prefix'  => 'msiof:',
-					 'profile' => '3.0',
-		  ],
-]);
+$app->register(new Predis\Silex\ClientServiceProvider());
 
 
 
