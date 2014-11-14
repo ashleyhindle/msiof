@@ -135,8 +135,7 @@ $app->get('/dashboard', function(Application $app, Request $request) use($latest
 					 'latestWorkerVersion' => $latestWorkerVersion,
 					 'apiKey' => (!empty($app['user']) && !empty($app['user']->getCustomField('apikey'))) ? $app['user']->getCustomField('apikey') : ''
 		  ]);
-});
-
+})->bind('dashboard');
 
 $app->get('/demo', function(Application $app, Request $request) use($latestWorkerVersion) {
 		  $protocol = (!empty($_SERVER['HTTPS'])) ? 'https://' : 'http://';

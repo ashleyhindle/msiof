@@ -57,6 +57,7 @@
 					 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 								<ul class="nav navbar-nav navbar-right">
 										  {% if app.user %}
+													 <li><a href="{{ path('dashboard') }}">Dashboard</a></li>
 													 <li><a href="{{ path('user.logout') }}"><span class="glyphicon glyphicon-off"></span> Sign out</a></li>
 										  {% else %}
 													 {% if app.msiof.registrationEnabled %}
