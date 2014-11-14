@@ -3,6 +3,9 @@ use Silex\Application;
 use Silex\Provider;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Rhumsaa\Uuid\Uuid;
+use Rhumsaa\Uuid\Exception\UnsatisfiedDependencyException;
+use SimpleUser\UserEvents;
 
 require_once __DIR__.'/../vendor/autoload.php';
 
@@ -123,13 +126,24 @@ $app->get('/key', function(Application $app, Request $request) use($userId) {
 		  return "key={$key}";
 });
 
-$app->get('/{apiKey}', function(Application $app, Request $request) use($latestWorkerVersion) {
+$app->get('/dashboard', function(Application $app, Request $request) use($latestWorkerVersion) {
 		  $protocol = (!empty($_SERVER['HTTPS'])) ? 'https://' : 'http://';
 
 		  return $app['twig']->render('dashboard.twig', [
 					 'installUrl' => "{$protocol}{$_SERVER['SERVER_NAME']}/install",
-					 'apiKey' => $request->get('apiKey'),
-					 'latestWorkerVersion' => $latestWorkerVersion
+					 'latestWorkerVersion' => $latestWorkerVersion,
+					 'apiKey' => (!empty($app['user']) && !empty($app['user']->getCustomField('apikey'))) ? $app['user']->getCustomField('apikey') : ''
+		  ]);
+});
+
+
+$app->get('/demo', function(Application $app, Request $request) use($latestWorkerVersion) {
+		  $protocol = (!empty($_SERVER['HTTPS'])) ? 'https://' : 'http://';
+
+		  return $app['twig']->render('dashboard.twig', [
+					 'installUrl' => "{$protocol}{$_SERVER['SERVER_NAME']}/install",
+					 'apiKey' => 'demo',
+					 'latestWorkerVersion' => $latestWorkerVersion,
 		  ]);
 });
 
@@ -322,6 +336,10 @@ $app['security.firewalls'] = [
 		  ],
 ];
 
+$app['dispatcher']->addListener(UserEvents::AFTER_INSERT, function(UserEvent $event) use ($app) {
+		  $user = $event->getUser();
+		  $user->setCustomField('apikey', Uuid::uuid4()->toString());
+});
 
 $app->register(new Igorw\Silex\ConfigServiceProvider(__DIR__."/../config/{$env}.json"));
 

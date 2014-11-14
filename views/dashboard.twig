@@ -1,5 +1,6 @@
 {% extends "layout.twig" %}
 {% block content %}
+<h4>{{apikeyfromdb}}</h4>
 <div class="container-fluid" ng-app='msiofApp' ng-controller='HomeCtrl' ng-init='apiKey="{{apiKey}}";'>
 		  <div ng-show="showInstallInstructions" class='jumbotron'>
 					 <h1>Install as root: </h1>
