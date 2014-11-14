@@ -1,0 +1,20 @@
+{
+		  "msiof.registrationEnabled": true,
+		  "msiof.paymentEnabled": true,
+		  "app.debug": true,
+		  "db.options": {
+					 "driver": "pdo_mysql",
+					 "host": "localhost",
+					 "dbname": "msiof",
+					 "user": "msiof",
+					 "password": "msiof"
+		  },
+		  "swiftmailer.options": {
+					 "host": "smtp.mandrillapp.com",
+					 "port": "465",
+					 "username": "mandrillEmailAddress@gmail.com",
+					 "password": "AnApiKeyFromMandrill",
+					 "encryption": "ssl",
+					 "auth_mode": null
+		  }
+}
