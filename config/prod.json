@@ -1,7 +1,10 @@
 {
-		  "msiof.registrationEnabled": true,
-		  "msiof.paymentEnabled": true,
-		  "app.debug": false,
+		  "msiof": {
+					 "showEarlyAccessPage": true,
+					 "registrationEnabled": true,
+					 "paymentEnabled": true
+		  },
+		  "debug": false,
 		  "db.options": {
 					 "driver": "pdo_mysql",
 					 "host": "localhost",
