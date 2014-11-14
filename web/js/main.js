@@ -8,6 +8,7 @@ msiofApp.controller('HomeCtrl', function ($scope, $http, $interval) {
 		  $scope.loaded = false;
 		  $scope.showInstallInstructions = false;
 		  $scope.sortBy = '+name';
+		  $scope.expandAll = false;
 		  $scope.sortOptions = [
 					 { 
 								'display': 'Name',
