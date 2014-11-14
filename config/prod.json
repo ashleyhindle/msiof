@@ -7,13 +7,13 @@
 					 "host": "localhost",
 					 "dbname": "msiof",
 					 "user": "msiof",
-					 "password": "msiof"
+					 "password": "notarealpassword"
 		  },
 		  "swiftmailer.options": {
 					 "host": "smtp.mandrillapp.com",
 					 "port": "465",
-					 "username": "mandrillEmailAddress@gmail.com",
-					 "password": "AnApiKeyFromMandrill",
+					 "username": "ashley@smellynose.com",
+					 "password": "UTHbmYygpJu4L7yazGIufQ",
 					 "encryption": "ssl",
 					 "auth_mode": null
 		  }

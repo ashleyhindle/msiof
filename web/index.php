@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 require_once __DIR__.'/../vendor/autoload.php';
 
+$env = getenv('APP_ENV') ?: 'prod';
 $userId = 100;
 $latestWorkerVersion = 1.1;
 
@@ -16,8 +17,6 @@ $apiKeys = [
 		  'anomander' => 101,
 		  'demo' => 102
 ];
-// Please set to false in a production environment
-//$app['debug'] = true;
 
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
 		  'twig.path' => '../views',
@@ -326,21 +325,7 @@ $app['security.firewalls'] = [
 		  ],
 ];
 
-$app['swiftmailer.options'] = [
-		  'host' => 'smtp.mandrillapp.com',
-		  'port' => '465',
-		  'username' => 'ashley@smellynose.com',
-		  'password' => 'UTHbmYygpJu4L7yazGIufQ', // This is only allowed from my server IP, so not using a gitignored config file for now (hello github)
-		  'encryption' => 'ssl',
-		  'auth_mode' => null
-];
 
-$app['db.options'] = [
-		  'driver' => 'pdo_mysql',
-		  'host' => 'localhost',
-		  'dbname' => 'msiof',
-		  'user' => 'msiof',
-		  'password' => 'notarealpassword'
-];
+$app->register(new Igorw\Silex\ConfigServiceProvider(__DIR__."/../config/{$env}.json"));
 
 $app->run();
