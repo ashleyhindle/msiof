@@ -1,6 +1,6 @@
 {
 		  "msiof": {
-					 "siteEnabled": false,
+					 "showEarlyAccessPage": true,
 					 "registrationEnabled": true,
 					 "paymentEnabled": true
 		  },
