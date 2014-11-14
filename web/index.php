@@ -30,7 +30,6 @@ $app->register(new Predis\Silex\ClientServiceProvider());
 // Predis config should go in config/dev.json and config/prod.json
 
 
-
 $simpleUserProvider = new SimpleUser\UserServiceProvider();
 $app->register($simpleUserProvider);
 $app->mount('/account', $simpleUserProvider);
@@ -166,21 +165,27 @@ $app->post('/server', function(Application $app, Request $request) {
 					 $totalTxOld = 0;
 					 $totalRxOld = 0;
 
-					 $oldCpu = $oldResult['cpu']['cpu'];
-					 $newCpu = $jsonDecoded['cpu']['cpu'];
+					 //Using old worker, so they don't send combined CPU info
+					 if (!array_key_exists('cpu', $oldResult['cpu'])) {
+								$jsonDecoded['cpu']['percentage']['usage'] = 0;
+					 } else {
+								$oldCpu = $oldResult['cpu']['cpu'];
+								$newCpu = $jsonDecoded['cpu']['cpu'];
 
-					 $cpuDiff = [
-								'user' => $newCpu['user'] - $oldCpu['user'],
-								'nice' => $newCpu['nice'] - $oldCpu['nice'],
-								'system' => $newCpu['system'] - $oldCpu['system'],
-								'idle' => $newCpu['idle'] - $oldCpu['idle']
-					 ];
+								$cpuDiff = [
+										  'user' => $newCpu['user'] - $oldCpu['user'],
+										  'nice' => $newCpu['nice'] - $oldCpu['nice'],
+										  'system' => $newCpu['system'] - $oldCpu['system'],
+										  'idle' => $newCpu['idle'] - $oldCpu['idle']
+								];
 
-					 $total = array_sum($cpuDiff);
-					 foreach ($cpuDiff as $type => $diff) {
-								$jsonDecoded['cpu']['percentage'][$type] = round($diff / $total * 100, 1);
+								$total = array_sum($cpuDiff);
+								foreach ($cpuDiff as $type => $diff) {
+										  $jsonDecoded['cpu']['percentage'][$type] = round($diff / $total * 100, 1);
+								}
+
+								$jsonDecoded['cpu']['percentage']['usage'] = round((($cpuDiff['user'] + $cpuDiff['nice'] + $cpuDiff['system']) / $total) * 100, 1);
 					 }
-					 $jsonDecoded['cpu']['percentage']['usage'] = round((($cpuDiff['user'] + $cpuDiff['nice'] + $cpuDiff['system']) / $total) * 100, 1);
 
 					 $jsonDecoded['disk']['percentage'] = [
 								'usage' => round((($jsonDecoded['disk']['/']['total'] - $jsonDecoded['disk']['/']['free']) / $jsonDecoded['disk']['/']['total'] ) * 100, 1)
