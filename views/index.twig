@@ -1,12 +1,16 @@
 {% extends "layout.twig" %}
 
 {% block content %}
-		  <b>Install as root:</b>
-		  curl -s {{ installUrl }} | bash
-		  <form method='POST' action='/'>
-					 <label for='apiKey'>Api Key</label>
-					 <input name='apiKey' placeolder='Api Key'>
-					 <input type='submit'>
-		  </form>
-		  <a type="button" class="btn btn-primary btn-lg" href='/demo'>View Demo</a>
+		  {% if app.msiof.showEarlyAccessPage %}
+					 {% include "earlyaccess.twig" %}
+		  {% else %}
+					 <b>Install as root:</b>
+					 curl -s {{ installUrl }} | bash
+					 <form method='POST' action='/'>
+								<label for='apiKey'>Api Key</label>
+								<input name='apiKey' placeolder='Api Key'>
+								<input type='submit'>
+					 </form>
+					 <a type="button" class="btn btn-primary btn-lg" href='/demo'>View Demo</a>
+		  {% endif %}
 {% endblock %}

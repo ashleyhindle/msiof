@@ -35,7 +35,7 @@
 										  <span class="icon-bar"></span>
 								</button>
 								<a class="navbar-brand" href="/">Home</a>
-								{% if app.user %}
+								{% if (app.user) and (app.msiof.paymentEnabled) %}
 								<form action="" method="POST">
 								  <script
 									 src="https://checkout.stripe.com/checkout.js" class="stripe-button"
@@ -69,8 +69,10 @@
 													 </ul>
 													 </li>
 										  {% else %}
-													 <li><a href="{{ path('user.login') }}">Sign in</a></li>
-													 <li><a href="{{ path('user.register') }}">Create account</a></li>
+													 {% if (app.msiof.registrationEnabled) and (app.msiof.showEarlyAccessPage == false) %}
+																<li><a href="{{ path('user.login') }}">Sign in</a></li>
+																<li><a href="{{ path('user.register') }}">Create account</a></li>
+													 {% endif %}
 										  {% endif %}
 								</ul>
 					 </div><!-- /.navbar-collapse -->
