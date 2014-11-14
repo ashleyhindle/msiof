@@ -30,6 +30,7 @@ $app->register(new Provider\ServiceControllerServiceProvider());
 $app->register(new Provider\UrlGeneratorServiceProvider());
 $app->register(new Provider\SwiftmailerServiceProvider());
 $app->register(new Predis\Silex\ClientServiceProvider());
+// Predis config should go in config/dev.json and config/prod.json
 
 
 
