@@ -18,10 +18,7 @@ $apiKeys = [
 		  'demo' => 102
 ];
 
-$app->register(new Silex\Provider\TwigServiceProvider(), array(
-		  'twig.path' => '../views',
-));
-
+$app->register(new Silex\Provider\TwigServiceProvider());
 $app->register(new Provider\DoctrineServiceProvider());
 $app->register(new Provider\SecurityServiceProvider());
 $app->register(new Provider\RememberMeServiceProvider());
