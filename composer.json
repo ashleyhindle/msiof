@@ -3,7 +3,8 @@
 					 "silex/silex": "~1.0",
 					 "predis/service-provider": "dev-master",
 					 "twig/twig": ">=1.8,<2.0-dev",
-					 "jasongrimes/silex-simpleuser": "dev-master"
+					 "jasongrimes/silex-simpleuser": "dev-master",
+					 "igorw/config-service-provider": "1.2.*@dev"
 		  },
 		  "autoload" : {
 					 "psr-0" : { "" : "src/" }
