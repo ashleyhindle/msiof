@@ -30,7 +30,7 @@
 
 								<tr ng-class="{'danger': server.issues.mem}">
 										  <td>
-													 <strong tooltip-animation="false" tooltip-placement="right" tooltip="Total Memory: {[{(server.mem.memtotal/1000)/1000 | number:0}]}GB">Mem usage:</strong>
+													 <strong tooltip-animation="false" tooltip-placement="right" tooltip="Total Memory: {[{(server.mem.memtotal/1000)/1000 | number:0}]}GB">RAM</strong>
 										  </td>
 										  <td>
 													 {[{ server.mem.percentage.usage }]} %
@@ -38,7 +38,7 @@
 								</tr>
 
 								<tr ng-class="{'danger': server.issues.disk}">
-										  <td><strong tooltip-animation="false" tooltip-placement="right" tooltip="Size: {[{ ((server.disk['/'].total/1024)/1024)/1024 | number: 2}]}GB">/ Usage:</strong></td>
+										  <td><strong tooltip-animation="false" tooltip-placement="right" tooltip="Size: {[{ ((server.disk['/'].total/1024)/1024)/1024 | number: 2}]}GB">Disk</strong></td>
 										  <td>{[{ server.disk.percentage.usage }]}%</td>
 								</tr>
 
