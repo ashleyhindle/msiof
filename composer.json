@@ -5,8 +5,9 @@
 					 "twig/twig": ">=1.8,<2.0-dev",
 					 "jasongrimes/silex-simpleuser": "dev-master",
 					 "igorw/config-service-provider": "1.2.*@dev",
-		  		  "rhumsaa/uuid": "~2.8",
-		  		  "moontoast/math": "~1.1"
+					 "rhumsaa/uuid": "~2.8",
+					 "symfony/twig-bridge": "3.0.*@dev",
+					 "moontoast/math": "~1.1"
 		  },
 		  "autoload" : {
 					 "psr-0" : { "" : "src/" }
