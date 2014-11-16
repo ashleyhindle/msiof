@@ -15,12 +15,6 @@ $userId = 100;
 $latestWorkerVersion = 1.1;
 
 $app = new Application();
-// Map api keys to userids
-$apiKeys = [
-		  'cheese' => 100,
-		  'anomander' => 101,
-		  'demo' => 102
-];
 
 $app->register(new Silex\Provider\TwigServiceProvider());
 $app->register(new Provider\DoctrineServiceProvider());
@@ -88,7 +82,7 @@ $app->get('/servers/{apiKey}', function(Application $app, Request $request) use(
 });
 
 /** Get servers for user 100, and add some of them to the demo user too **/
-$app->get('/setdemo', function(Application $app) use ($apiKeys) {
+$app->get('/setdemo', function(Application $app) {
 		  $serverKeys = $app['predis']->lrange("user:1:servers", 0, -1);
 		  $servers = [];
 		  $app['predis']->del([
