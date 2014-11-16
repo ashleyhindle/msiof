@@ -330,6 +330,7 @@ $app['security.firewalls'] = [
 					 'pattern' => '^.*$',
 					 'remember_me' => [],
 					 'form' => [
+								'default_target_path' =>  'dashboard',
 								'login_path' => '/account/login',
 								'check_path' => '/account/login_check',
 					 ],
