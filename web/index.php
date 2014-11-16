@@ -47,7 +47,7 @@ $app->get('/servers/{apiKey}', function(Application $app, Request $request) use(
 										  'apikey' => $apiKey
 								]
 					 ]);
-		  } catch(Exception $e) {
+		  } catch (Exception $e) {
 					 return $app->json([
 								'error' => 'Invalid apiKey'
 					 ], 403);
@@ -86,7 +86,7 @@ $app->get('/setdemo', function(Application $app) {
 		  $serverKeys = $app['predis']->lrange("user:1:servers", 0, -1);
 		  $servers = [];
 		  $app['predis']->del([
-					 'user:102:servers'
+					 'user:8:servers'
 		  ]);
 
 		  foreach ($serverKeys as $serverKey) {
@@ -97,10 +97,6 @@ $app->get('/setdemo', function(Application $app) {
 		  }
 
 		 return 'Done';
-});
-
-$app->post('/', function(Application $app, Request $request) {
-		  return $app->redirect('/'.$request->get('apiKey'));
 });
 
 $app->get('/', function(Application $app, Request $request) {
