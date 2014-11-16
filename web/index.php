@@ -299,6 +299,12 @@ $app['security.firewalls'] = [
 		  'register' => [
 					 'pattern' => '^/account/register$',
 		  ],
+		  'reset' => [
+					 'pattern' => '^/account/reset-password/.*$',
+		  ],
+		  'emailverify' => [
+					 'pattern' => '^/account/confirm-email/.*$',
+		  ],
 		  'index' => [
 					 'pattern' => '^/$',
 		  ],
