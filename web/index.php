@@ -47,12 +47,25 @@ $app->get('/servers/{apiKey}', function(Application $app, Request $request) use(
 					 ], 403);
 		  }
 
-		  $userId = $apiKeys[$apiKey];
-		  if (empty($userId)) {
+		  try {
+					 $userFromApiKey = $app['user.manager']->findOneBy([
+								'customFields' => [
+										  'apikey' => $apiKey
+								]
+					 ]);
+		  } catch(Exception $e) {
 					 return $app->json([
 								'error' => 'Invalid apiKey'
 					 ], 403);
 		  }
+
+		  if(empty($userFromApiKey)) {
+					 return $app->json([
+								'error' => 'Invalid apiKey'
+					 ], 403);
+		  }
+
+		  $userId = $userFromApiKey->getId();
 
 		  $serverKeys = $app['predis']->lrange("user:{$userId}:servers", 0, -1);
 		  $servers = [];
