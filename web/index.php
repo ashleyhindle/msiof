@@ -39,7 +39,7 @@ $app->register($simpleUserProvider);
 $app->mount('/account', $simpleUserProvider);
 
 
-$app->get('/servers/{apiKey}', function(Application $app, Request $request) use($apiKeys, $latestWorkerVersion) {
+$app->get('/servers/{apiKey}', function(Application $app, Request $request) use($latestWorkerVersion) {
 		  $apiKey = $request->get('apiKey');
 		  if (empty($apiKey)) {
 					 return $app->json([
@@ -59,7 +59,7 @@ $app->get('/servers/{apiKey}', function(Application $app, Request $request) use(
 					 ], 403);
 		  }
 
-		  if(empty($userFromApiKey)) {
+		  if (empty($userFromApiKey)) {
 					 return $app->json([
 								'error' => 'Invalid apiKey'
 					 ], 403);
@@ -89,7 +89,7 @@ $app->get('/servers/{apiKey}', function(Application $app, Request $request) use(
 
 /** Get servers for user 100, and add some of them to the demo user too **/
 $app->get('/setdemo', function(Application $app) use ($apiKeys) {
-		  $serverKeys = $app['predis']->lrange("user:100:servers", 0, -1);
+		  $serverKeys = $app['predis']->lrange("user:1:servers", 0, -1);
 		  $servers = [];
 		  $app['predis']->del([
 					 'user:102:servers'
@@ -98,7 +98,7 @@ $app->get('/setdemo', function(Application $app) use ($apiKeys) {
 		  foreach ($serverKeys as $serverKey) {
 					 $server = json_decode($app['predis']->get("server:{$serverKey}"), true);
 					 if (substr($server['name'], 0, 2) == 'ww') {
-								$app['predis']->lpush('user:102:servers', $serverKey);
+								$app['predis']->lpush('user:8:servers', $serverKey);
 					 }
 		  }
 
@@ -155,7 +155,7 @@ $app->get('/demo', function(Application $app, Request $request) use($latestWorke
 
 		  return $app['twig']->render('dashboard.twig', [
 					 'installUrl' => "{$protocol}{$_SERVER['SERVER_NAME']}/install",
-					 'apiKey' => 'demo',
+					 'apiKey' => '62c3b53b-028b-4262-9a15-c167c31417cb',
 					 'latestWorkerVersion' => $latestWorkerVersion,
 		  ]);
 });
