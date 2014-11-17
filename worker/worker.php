@@ -252,11 +252,11 @@ function getDiskInfoSysCall()
 								'inodes' => $inodes,
 								'iused' => $iused,
 								'ifree' => $ifree,
-								'ipcent' => $ipcent,
+								'ipcent' => str_replace('%', '', $ipcent),
 								'total' => $size,
 								'used' => $used,
 								'free' => $avail,
-								'pcent' => $pcent,
+								'pcent' => str_replace('%', '', $pcent),
 								'target' => $target
 					 );
 		  }
