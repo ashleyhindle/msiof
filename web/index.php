@@ -31,6 +31,16 @@ $app->register(new Predis\Silex\ClientServiceProvider());
 
 $simpleUserProvider = new SimpleUser\UserServiceProvider();
 $app->register($simpleUserProvider);
+
+$app->get('/user', function(Application $app) {
+		  return $app->redirect('/dashboard');
+});
+
+$app->get('/user/{id}', function(Application $app) {
+		  return $app->redirect('/dashboard');
+});
+
+
 $app->mount('/account', $simpleUserProvider);
 
 
