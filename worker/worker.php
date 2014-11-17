@@ -1,5 +1,9 @@
 #!/usr/bin/php
 <?php
+function isEnabled($func) {
+		  return is_callable($func) && false === stripos(ini_get('disable_functions'), $func);
+}
+
 $configFile = '/etc/msiof/msiof.conf';
 if (!file_exists($configFile)) {
 		  echo "Config file doesn't exist: {$configFile}\n";
@@ -46,7 +50,9 @@ while ($run) {
 		  $server['cpu'] = getCpuInfo();
 		  $server['mem'] = getMemInfo();
 		  $server['disk'] = getDiskInfo();
-		  $server['disk'] = getDiskInfoSysCall();
+		  if(isEnabled('shell_exec')) {
+					 $server['disk'] = getDiskInfoSysCall();
+		  }
 		  $server['network'] = getNetworkInfo();
 		  $server['system'] = getSystemInfo();
 		  $server['time'] = date('Y-m-d H:i:s');
