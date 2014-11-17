@@ -15,6 +15,7 @@ $userId = 100;
 $latestWorkerVersion = 1.1;
 
 $app = new Application();
+$app['debug'] = true;
 
 $app->register(new Silex\Provider\TwigServiceProvider());
 $app->register(new Provider\DoctrineServiceProvider());
@@ -108,7 +109,6 @@ $app->get('/', function(Application $app, Request $request) {
 });
 
 //Add server
-
 $app->get('/install/{apiKey}', function(Application $app, Request $request) {
 		  return $app['twig']->render('worker/install.twig', [
 					 'baseUrl' => $app['msiof']['baseUrl'],
