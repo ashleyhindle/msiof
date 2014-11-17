@@ -109,8 +109,15 @@ $app->get('/', function(Application $app, Request $request) {
 
 //Add server
 
-$app->get('/install', function(Application $app) {
-		  return $app->sendFile('../worker/install');
+$app->get('/server-add', function() {
+		  return 'Hi, one moment please';
+})->bind('server-add');
+
+$app->get('/install/{apiKey}', function(Application $app, Request $request) {
+		  return $app['twig']->render('worker/install.twig', [
+					 'baseUrl' => $app['msiof']['baseUrl'],
+					 'apiKey' => $request->get('apiKey')
+		  ]);
 });
 
 $app->get('/init', function(Application $app) {
@@ -121,13 +128,35 @@ $app->get('/worker-php', function(Application $app) {
 		  return $app->sendFile('../worker/worker.php');
 });
 
-$app->get('/key', function(Application $app, Request $request) use($userId) {
-		  $nextServerId = $app['predis']->incr('next_server_id');
-		  $key = sha1($nextServerId.$userId);
-		  $app['predis']->lpush("user:{$userId}:servers", $key);
-		  $app['predis']->set('server:'.$key, true);
+$app->get('/key/{apiKey}', function(Application $app, Request $request) {
+		  $apiKey = $request->get('apiKey');
+		  try {
+					 $userFromApiKey = $app['user.manager']->findOneBy([
+								'customFields' => [
+										  'apikey' => $apiKey
+								]
+					 ]);
+		  } catch (Exception $e) {
+					 return $app->json([
+								'error' => 'Invalid apiKey'
+					 ], 403);
+		  }
 
-		  return "key={$key}";
+		  if (empty($userFromApiKey)) {
+					 return $app->json([
+								'error' => 'Invalid apiKey'
+					 ], 403);
+		  }
+
+		  $nextServerId = $app['predis']->incr('next_server_id');
+		  $serverKey = sha1($nextServerId.$userId);
+
+		  $userId = $userFromApiKey->getId();
+
+		  $app['predis']->lpush("user:{$userId}:servers", $serverKey);
+		  $app['predis']->set('server:'.$serverKey, true);
+
+		  return "key={$serverKey}";
 });
 
 $app->get('/dashboard', function(Application $app, Request $request) use($latestWorkerVersion) {
@@ -265,32 +294,6 @@ $app->post('/server', function(Application $app, Request $request) {
 					 'success' => 'Updated your server and stuff'
 		  ]);
 });
-
-
-$app['user.options'] = [
-		  'templates' => [
-					 'layout' => 'layout.twig',
-					 'register' => '/account/register.twig',
-					 'register-confirmation-sent' => '/account/register-confirmation-sent.twig',
-					 'login' => '/account/login.twig',
-					 'login-confirmation-needed' => '/account/login-confirmation-needed.twig',
-					 'forgot-password' => '/account/forgot-password.twig',
-					 'reset-password' => '/account/reset-password.twig',
-					 'view' => '/account/view.twig',
-					 'edit' => '/account/edit.twig',
-					 'list' => '/account/list.twig',
-		  ],
-		  'mailer' => [
-					 'enabled' => true,
-					 'fromEmail' => [
-								'address' => 'noreply@myserverisonfire.com',
-								'name' => null,
-					 ]
-		  ],
-		  'emailConfirmation' => [
-					 'required' => true,
-		  ]
-];
 
 $app['security.firewalls'] = [
 		  'login' => [
