@@ -1,6 +1,16 @@
 var msiofApp = angular.module('msiofApp', ['ui.bootstrap', 'angularMoment']).config(function($interpolateProvider){
 		  $interpolateProvider.startSymbol('{[{').endSymbol('}]}');
 });
+msiofApp.directive('selectOnClick', function () {
+		  return {
+					 restrict: 'A',
+					 link: function (scope, element, attrs) {
+								element.on('click', function () {
+										  this.select();
+								});
+					 }
+		  };
+});
 
 msiofApp.controller('HomeCtrl', function ($scope, $http, $interval) {
 		  $scope.servers = {};
