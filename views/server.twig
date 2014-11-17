@@ -5,7 +5,7 @@
 								<span tooltip-animation="false" tooltip-placement="right" tooltip="Worker out of date ({[{server.workerversion}]} < {{latestWorkerVersion}}), run install again to update" ng-show='server.outOfDate'><small>Worker out of date</small></span>
 					 </h3>
 		  </div>
-		  <div class='panel-body' ng-show="expandAll">
+		  <div class='panel-body' ng-show="expandAll || servers.length == 1">
 					 <table class='table table-condensed table-no-border'>
 
 								<tr ng-class="{'danger': server.issues.loadavg}">
