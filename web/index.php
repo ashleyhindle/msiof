@@ -36,6 +36,10 @@ $app->get('/account', function(Application $app) {
 		  return $app->redirect('/no');
 });
 
+$app->get('/account/{id}', function(Application $app) {
+		  return $app->redirect('/no2');
+})->assert('id', '\d+');
+
 
 $app->mount('/account', $simpleUserProvider);
 
