@@ -24,6 +24,7 @@
     </style>
 </head>
 <body>
+{% block nav %}
 <nav class="navbar navbar-default" role="navigation">
 		  <div class="container-fluid">
 					 <!-- Brand and toggle get grouped for better mobile display -->
@@ -69,6 +70,8 @@
 					 </div><!-- /.navbar-collapse -->
 		  </div><!-- /.container-fluid -->
 </nav>
+{% endblock %}
+
 <div class='container-fluid'>
 {% if app.session.flashbag.has('alert') %}
 {% for flashMessage in app.session.flashbag.get('alert') %}
