@@ -220,7 +220,7 @@ function getDiskInfoSysCall()
 		  $result = preg_match_all($regex, shell_exec($command), $matches);
 
 		  array_shift($matches);
-		  $disks = [];
+		  $disks = array();
 		  for ($i=0; $i < count($matches[0]); $i++) {
 					 list(
 								$filesystem,
@@ -229,7 +229,7 @@ function getDiskInfoSysCall()
 								$used,
 								$avail,
 								$pcent,
-								$target) = [
+								$target) = array(
 										  $matches[0][$i],
 										  $matches[1][$i],
 										  $matches[2][$i],
@@ -237,7 +237,7 @@ function getDiskInfoSysCall()
 										  $matches[4][$i],
 										  $matches[5][$i],
 										  $matches[6][$i],
-								];
+								);
 
 					 $disks[$target] = array(
 								'filesystem' => $filesystem,
@@ -249,7 +249,6 @@ function getDiskInfoSysCall()
 								'target' => $target
 					 );
 		  }
-		  print_r($disks);
 
 		  return $disks;
 }
