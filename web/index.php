@@ -12,7 +12,7 @@ require_once __DIR__.'/../vendor/autoload.php';
 
 $env = getenv('APP_ENV') ?: 'prod';
 $userId = 100;
-$latestWorkerVersion = 1.1;
+$latestWorkerVersion = 1.2;
 
 $app = new Application();
 $app['debug'] = true;
