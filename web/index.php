@@ -109,16 +109,12 @@ $app->get('/', function(Application $app, Request $request) {
 
 //Add server
 
-$app->get('/server-add', function() {
-		  return 'Hi, one moment please';
-})->bind('server-add');
-
 $app->get('/install/{apiKey}', function(Application $app, Request $request) {
 		  return $app['twig']->render('worker/install.twig', [
 					 'baseUrl' => $app['msiof']['baseUrl'],
 					 'apiKey' => $request->get('apiKey')
 		  ]);
-});
+})->bind('install-script');
 
 $app->get('/init', function(Application $app) {
 		  return $app->sendFile('../worker/init');
