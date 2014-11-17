@@ -33,11 +33,7 @@ $simpleUserProvider = new SimpleUser\UserServiceProvider();
 $app->register($simpleUserProvider);
 
 $app->get('/account', function(Application $app) {
-		  return $app->redirect('/dashboard');
-});
-
-$app->get('/account/{id}', function(Application $app) {
-		  return $app->redirect('/dashboard');
+		  return $app->redirect('/no');
 });
 
 
