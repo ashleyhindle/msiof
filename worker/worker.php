@@ -212,8 +212,13 @@ function getDiskInfoSysCall()
 {
 		  $disks = array();
 		  $command = "df -l --output='source,fstype,itotal,iused,iavail,ipcent,size,used,avail,pcent,target'";
+		  $regex = "/([\w\/]+)\s+(\w+)\s+([0-9]+)\s+([0-9]+)\s+([0-9]+)\s+([0-9%]+)\s+([0-9]+)\s+([0-9]+)\s+([0-9]+)\s+([0-9%]+)\s+(.*)/";
+
+		  $command = "df -lTP";
+		  $regex = "/([\w\/]+)\s+(\w+)\s+([0-9]+)\s+([0-9]+)\s+([0-9]+)\s+([0-9%]+)\s+([0-9]+)\s+([0-9]+)\s+([0-9]+)\s+([0-9%]+)\s+(.*)/";
+
 		  $result = preg_match_all(
-					 '/([\w\/]+)\s+(\w+)\s+([0-9]+)\s+([0-9]+)\s+([0-9]+)\s+([0-9%]+)\s+([0-9]+)\s+([0-9]+)\s+([0-9]+)\s+([0-9%]+)\s+(.*)/',
+					 $regex,
 					 shell_exec($command),
 					 $matches
 		  );
@@ -224,10 +229,6 @@ function getDiskInfoSysCall()
 					 list(
 								$filesystem,
 								$type,
-								$inodes,
-								$iused,
-								$ifree,
-								$ipcent,
 								$size,
 								$used,
 								$avail,
@@ -240,10 +241,6 @@ function getDiskInfoSysCall()
 										  $matches[4][$i],
 										  $matches[5][$i],
 										  $matches[6][$i],
-										  $matches[7][$i],
-										  $matches[8][$i],
-										  $matches[9][$i],
-										  $matches[10][$i],
 								];
 
 					 $disks[$target] = array(
