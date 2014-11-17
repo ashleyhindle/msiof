@@ -111,7 +111,7 @@ $app->get('/', function(Application $app, Request $request) {
 //Add server
 $app->get('/install/{apiKey}', function(Application $app, Request $request) {
 		  return $app['twig']->render('worker/install.twig', [
-					 'baseUrl' => $app['msiof']['baseUrl'],
+					 'baseUrl' => trim($app['msiof']['baseUrl'], '/'),
 					 'apiKey' => $request->get('apiKey')
 		  ]);
 })->bind('install-script');
