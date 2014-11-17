@@ -1,4 +1,7 @@
 {% extends "layout.twig" %}
+{% block nav %}
+{% endblock %}
+
 {% block content %}
 <div class="container-fluid" ng-app='msiofApp' ng-controller='HomeCtrl' ng-init='apiKey="{{apiKey}}";'>
 		  <div ng-hide='loaded' class="alert alert-info" role="alert">Loading server fires...</div>
