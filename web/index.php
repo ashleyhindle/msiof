@@ -318,7 +318,7 @@ $app['security.firewalls'] = [
 					 'pattern' => '^/servers/.*$',
 		  ],
 		  'install' => [
-					 'pattern' => '^/install$',
+					 'pattern' => '^/install/.*$',
 		  ],
 		  'init' => [
 					 'pattern' => '^/init$',
