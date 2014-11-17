@@ -3,7 +3,7 @@
 <div class="container-fluid" ng-app='msiofApp' ng-controller='HomeCtrl' ng-init='apiKey="{{apiKey}}";'>
 		  <div ng-show="showInstallInstructions" class='jumbotron'>
 					 <h1>Install as root: </h1>
-					 <p>curl -s {{ installUrl }} | bash</p>
+					 <p>curl -s {{ url('server-add', {'apiKey': apiKey}) }} | bash</p>
 
 					 <button ng-click="showInstallInstructions = false" class='btn btn-primary'>Close install instructions</button>
 					 <a href='/install'>View Install Source</a>
