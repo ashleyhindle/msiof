@@ -324,7 +324,7 @@ $app['security.firewalls'] = [
 					 'pattern' => '^/init$',
 		  ],
 		  'key' => [
-					 'pattern' => '^/key$',
+					 'pattern' => '^/key/.*$',
 		  ],
 		  'workerphp' => [
 					 'pattern' => '^/worker-php$',
