@@ -335,6 +335,9 @@ $app['security.firewalls'] = [
 		  'demo' => [
 					 'pattern' => '^/demo$',
 		  ],
+		  'shared' => [
+					 'pattern' => '^/shared/.*$',
+		  ],
 		  'api' => [
 					 'pattern' => '^/servers/.*$',
 		  ],
