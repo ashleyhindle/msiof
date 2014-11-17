@@ -215,13 +215,9 @@ function getDiskInfoSysCall()
 		  $regex = "/([\w\/]+)\s+(\w+)\s+([0-9]+)\s+([0-9]+)\s+([0-9]+)\s+([0-9%]+)\s+([0-9]+)\s+([0-9]+)\s+([0-9]+)\s+([0-9%]+)\s+(.*)/";
 
 		  $command = "df -lTP";
-		  $regex = "/([\w\/]+)\s+(\w+)\s+([0-9]+)\s+([0-9]+)\s+([0-9]+)\s+([0-9%]+)\s+([0-9]+)\s+([0-9]+)\s+([0-9]+)\s+([0-9%]+)\s+(.*)/";
+		  $regex = "/([\w\/]+)\s+(\w+)\s+([0-9]+)\s+([0-9]+)\s+([0-9]+)\s+([0-9%]+)\s+(.*)/";
 
-		  $result = preg_match_all(
-					 $regex,
-					 shell_exec($command),
-					 $matches
-		  );
+		  $result = preg_match_all($regex, shell_exec($command), $matches);
 
 		  array_shift($matches);
 		  $disks = [];
@@ -246,10 +242,6 @@ function getDiskInfoSysCall()
 					 $disks[$target] = array(
 								'filesystem' => $filesystem,
 								'type' => $type,
-								'inodes' => $inodes,
-								'iused' => $iused,
-								'ifree' => $ifree,
-								'ipcent' => str_replace('%', '', $ipcent),
 								'total' => $size,
 								'used' => $used,
 								'free' => $avail,
@@ -257,6 +249,8 @@ function getDiskInfoSysCall()
 								'target' => $target
 					 );
 		  }
+		  print_r($disks);
+
 		  return $disks;
 }
 
