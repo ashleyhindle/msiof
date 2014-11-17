@@ -165,16 +165,16 @@ $app->get('/key/{apiKey}', function(Application $app, Request $request) {
 		  return "key={$serverKey}";
 });
 
-$app->get('/fullscreen/{apiKey}', function(Application $app, Request $request) use($latestWorkerVersion) {
+$app->get('/shared/{apiKey}', function(Application $app, Request $request) use($latestWorkerVersion) {
 		  $protocol = (!empty($_SERVER['HTTPS'])) ? 'https://' : 'http://';
 		  $apiKey = $request->get('apiKey');
 
-		  return $app['twig']->render('fullscreen.twig', [
+		  return $app['twig']->render('dashboard_shared.twig', [
 					 'installUrl' => "{$protocol}{$_SERVER['SERVER_NAME']}/install/{$apiKey}",
 					 'latestWorkerVersion' => $latestWorkerVersion,
 					 'apiKey' => $apiKey,
 		  ]);
-})->bind('fullscreen');
+})->bind('shared');
 
 $app->get('/dashboard', function(Application $app, Request $request) use($latestWorkerVersion) {
 		  $protocol = (!empty($_SERVER['HTTPS'])) ? 'https://' : 'http://';
