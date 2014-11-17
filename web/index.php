@@ -161,11 +161,12 @@ $app->get('/key/{apiKey}', function(Application $app, Request $request) {
 
 $app->get('/dashboard', function(Application $app, Request $request) use($latestWorkerVersion) {
 		  $protocol = (!empty($_SERVER['HTTPS'])) ? 'https://' : 'http://';
+		  $apiKey = $app['user']->getCustomField('apikey');
 
 		  return $app['twig']->render('dashboard.twig', [
-					 'installUrl' => "{$protocol}{$_SERVER['SERVER_NAME']}/install",
+					 'installUrl' => "{$protocol}{$_SERVER['SERVER_NAME']}/install/{$apiKey}",
 					 'latestWorkerVersion' => $latestWorkerVersion,
-					 'apiKey' => (!empty($app['user']) && !empty($app['user']->getCustomField('apikey'))) ? $app['user']->getCustomField('apikey') : ''
+					 'apiKey' => $apiKey
 		  ]);
 })->bind('dashboard');
 
@@ -173,7 +174,7 @@ $app->get('/demo', function(Application $app, Request $request) use($latestWorke
 		  $protocol = (!empty($_SERVER['HTTPS'])) ? 'https://' : 'http://';
 
 		  return $app['twig']->render('dashboard.twig', [
-					 'installUrl' => "{$protocol}{$_SERVER['SERVER_NAME']}/install",
+					 'installUrl' => "Create an account and you will have your very own secret install URL",
 					 'apiKey' => '62c3b53b-028b-4262-9a15-c167c31417cb',
 					 'latestWorkerVersion' => $latestWorkerVersion,
 		  ]);
