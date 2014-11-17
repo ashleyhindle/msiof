@@ -54,8 +54,8 @@ if [ ! -f /etc/rc2.d/S99msiof-worker ]; then
 		  ln -s /etc/init.d/msiof-worker /etc/rc2.d/S99msiof-worker
 fi
 
-service msiof-worker stop
-service msiof-worker start
+/etc/init.d/msiof-worker stop
+/etc/init.d/msiof-worker start
 
 echo
 echo "=== Done ==="
