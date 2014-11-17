@@ -17,7 +17,7 @@
 										  {[{ sort.display }]}
 								</label>
 					 </div>
-					 <button ng-click="expandAll = (!expandAll)" class='btn btn-default btn-xs'>Toggle Expansion</button>
+					 <button ng-show="servers.length > 1" ng-click="expandAll = (!expandAll)" class='btn btn-default btn-xs'>Toggle Expansion</button>
 					 <input ng-model='filter' type='text' placeholder='Filter...'>
 					 <button ng-click="showInstallInstructions = (!showInstallInstructions)" class='pull-right btn btn-success btn-xs'><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add new server</button>
 		  </h5>
