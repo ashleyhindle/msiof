@@ -46,6 +46,7 @@ while ($run) {
 		  $server['cpu'] = getCpuInfo();
 		  $server['mem'] = getMemInfo();
 		  $server['disk'] = getDiskInfo();
+		  $server['disk'] = getDiskInfoSysCall();
 		  $server['network'] = getNetworkInfo();
 		  $server['system'] = getSystemInfo();
 		  $server['time'] = date('Y-m-d H:i:s');
@@ -205,6 +206,61 @@ function getDiskInfo()
 		  );
 
 		  return $disk;
+}
+
+function getDiskInfoSysCall()
+{
+		  $disks = array();
+		  $command = "df -l --output='source,fstype,itotal,iused,iavail,ipcent,size,used,avail,pcent,target'";
+		  $result = preg_match_all(
+					 '/([\w\/]+)\s+(\w+)\s+([0-9]+)\s+([0-9]+)\s+([0-9]+)\s+([0-9%]+)\s+([0-9]+)\s+([0-9]+)\s+([0-9]+)\s+([0-9%]+)\s+(.*)/',
+					 shell_exec($command),
+					 $matches
+		  );
+
+		  array_shift($matches);
+		  $disks = [];
+		  for ($i=0; $i < count($matches[0]); $i++) {
+					 list(
+								$filesystem,
+								$type,
+								$inodes,
+								$iused,
+								$ifree,
+								$ipcent,
+								$size,
+								$used,
+								$avail,
+								$pcent,
+								$target) = [
+										  $matches[0][$i],
+										  $matches[1][$i],
+										  $matches[2][$i],
+										  $matches[3][$i],
+										  $matches[4][$i],
+										  $matches[5][$i],
+										  $matches[6][$i],
+										  $matches[7][$i],
+										  $matches[8][$i],
+										  $matches[9][$i],
+										  $matches[10][$i],
+								];
+
+					 $disks[$target] = array(
+								'filesystem' => $filesystem,
+								'type' => $type,
+								'inodes' => $inodes,
+								'iused' => $iused,
+								'ifree' => $ifree,
+								'ipcent' => $ipcent,
+								'total' => $size,
+								'used' => $used,
+								'free' => $avail,
+								'pcent' => $pcent,
+								'target' => $target
+					 );
+		  }
+		  return $disks;
 }
 
 /**
