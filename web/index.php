@@ -179,7 +179,6 @@ $app->post('/add-shared-server-key', function(Application $app, Request $request
 		  }
 
 		  $app['predis']->lpush("user:{$userId}:servers", $serverKey);
-		  $app['predis']->set('server:'.$serverKey, true);
 
 		  return $app->redirect('/dashboard');
 });
