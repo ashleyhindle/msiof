@@ -65,7 +65,7 @@ msiofApp.controller('DashboardCtrl', function ($scope, $http, $interval) {
 
 		  $scope.shareServer = function(serverKey) {
 					 //@TODO: View stuff shouldn't be in JS
-					 $scope.addAlert('Share this key: ' + serverKey, 'primary');
+					 $scope.addAlert('Share this key: ' + serverKey, 'info');
 		  };
 
 		  $scope.sortOptions = [
