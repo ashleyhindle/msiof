@@ -31,7 +31,7 @@
 					 </div>
 					 <button ng-show="servers.length > 1" ng-click="expandAll = (!expandAll)" class='btn btn-default btn-xs'>Toggle Expansion</button>
 					 <input ng-model='filter' type='search' placeholder='Filter...'>
-					 <a href='{{ url('shared', {'apiKey': apiKey}) }}'>Public URL</a>
+					 <a href='{{ url('shared', {'apiKey': apiKey}) }}' title='Read only public access'>Public URL</a>
 
 					 <div class='btn-group pull-right'>
 								<button ng-click="showInstallInstructions = (!showInstallInstructions)" class='btn btn-success btn-xs'><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add new server</button>
