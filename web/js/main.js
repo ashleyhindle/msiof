@@ -14,12 +14,22 @@ msiofApp.directive('selectOnClick', function () {
 
 msiofApp.controller('HomeCtrl', function ($scope, $http, $interval) {
 		  $scope.servers = {};
+		  $scope.alerts = {};
 		  $scope.filter = '';
 		  $scope.loaded = false;
 		  $scope.showInstallInstructions = false;
 		  $scope.sortBy = '+name';
 		  $scope.expandAll = false;
 		  $scope.deletedServerKeys = [];
+
+		  $scope.addAlert = function(msg, type) {
+					 type = typeof type !== 'undefined' ? type : 'success';
+					 $scope.alerts.push({'msg': msg, 'type': type});
+		  };
+
+		  $scope.closeAlert = function(index) {
+					 $scope.alerts.splice(index, 1);
+		  };
 
 		  $scope.sortOptions = [
 					 { 
@@ -59,8 +69,7 @@ msiofApp.controller('HomeCtrl', function ($scope, $http, $interval) {
 								url: '/server/' + serverKey,
 					 }).then(function(response) {
 								if(response.success == false) {
-										  alert('Failed to remove');
-										  // @TODO: Better alert
+										  $scope.addAlert('Failed to remove server', 'danger');
 								} else {
 										  $scope.updateServers();
 								}
