@@ -1,15 +1,16 @@
 <div class='panel' ng-class="{'panel-danger': server.hasIssues, 'panel-success': (!server.hasIssues && !server.outOfDate), 'panel-warning' : server.outOfDate}">
 		  <div class="panel-heading">
 					 <h3 class="panel-title">
-								<div class="dropdown btn-group pull-right">
-										  <a type="button" class="btn btn-xs btn-default" dropdown-toggle><span class="caret"></span></a>
-										  <ul class="dropdown-menu">
-													 <li><a href="#" ng-click="shareServer(server.serverKey)">Share server info</a></li>
-													 <!-- @TODO: The link above should show the server key -->
-													 <li class="divider"></li>
-													 <li class='bg-danger'><a href="#" ng-click="deleteServer(server.serverKey);">Delete</a></li>
-										  </ul>
-								</div>
+								{% if public == false %}
+										  <div class="dropdown btn-group pull-right">
+													 <a type="button" class="btn btn-xs btn-default" dropdown-toggle><span class="caret"></span></a>
+													 <ul class="dropdown-menu">
+																<li><a href="#" ng-click="shareServer(server.serverKey)">Share server info</a></li>
+																<li class="divider"></li>
+																<li class='bg-danger'><a href="#" ng-click="deleteServer(server.serverKey);">Delete</a></li>
+													 </ul>
+										  </div>
+								{% endif %}
 								<div style='overflow:hidden;'>
 										  {[{ server.name }]}
 								</div>

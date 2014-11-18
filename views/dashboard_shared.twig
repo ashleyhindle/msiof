@@ -18,7 +18,7 @@
 		  <div ng-hide='loaded' class="alert alert-info" role="alert">Loading server fires...</div>
 
 		  <div class='col-sm-6 col-md-3 col-lg-2' ng-repeat="server in servers | orderBy:sortBy | filter:filter">
-			  {% include "server.twig" %}
+			  {% include "server.twig" with {"public": true} %}
 		  </div>
 </div>
 {% endblock %}
