@@ -60,6 +60,7 @@ msiofApp.controller('HomeCtrl', function ($scope, $http, $interval) {
 					 }).then(function(response) {
 								if(response.success == false) {
 										  alert('Failed to remove');
+										  // @TODO: Better alert
 								} else {
 										  $scope.updateServers();
 								}
