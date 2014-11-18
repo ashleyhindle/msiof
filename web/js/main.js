@@ -27,6 +27,32 @@ msiofApp.controller('DashboardCtrl', function ($scope, $http, $interval) {
 		  $scope.sortBy = '+name';
 		  $scope.expandAll = false;
 		  $scope.deletedServerKeys = [];
+		  $scope.expandedDisks = [];
+		  $scope.expandedNets = [];
+
+		  $scope.toggleExpandDisk = function(serverKey) {
+					 if($scope.diskIsExpanded(serverKey)) {
+								$scope.expandedDisks.splice(serverKey, 1);
+					 } else {
+								$scope.expandedDisks.push(serverKey);
+					 }
+		  };
+		  
+		  $scope.diskIsExpanded = function(serverKey) {
+					 return ($scope.expandedDisks.indexOf(serverKey) !== -1);
+		  };
+
+		  $scope.toggleExpandNet = function(serverKey) {
+					 if($scope.netIsExpanded(serverKey)) {
+								$scope.expandedNets.splice(serverKey, 1);
+					 } else {
+								$scope.expandedNets.push(serverKey);
+					 }
+		  };
+		  
+		  $scope.netIsExpanded = function(serverKey) {
+					 return ($scope.expandedNets.indexOf(serverKey) !== -1);
+		  };
 
 		  $scope.addAlert = function(msg, type) {
 					 type = typeof type !== 'undefined' ? type : 'success';

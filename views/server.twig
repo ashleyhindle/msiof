@@ -47,11 +47,11 @@
 										  <td><strong tooltip-animation="false" tooltip-placement="right" tooltip="Size: {[{ ((server.disk['/'].total/1000)/1000)/1000 | number: 2}]}GB">Disk</strong></td>
 										  <td>
 										  {[{ server.disk['/'].pcent }]}%
-										  <span ng-click="server.showAllDisk = (!server.showAllDisk)" class="glyphicon glyphicon-collapse-down"></span>
+										  <span ng-click="toggleExpandDisk(server.serverKey)" class="glyphicon glyphicon-collapse-down"></span>
 										  </td>
 								</tr>
 
-								<tr ng-show='server.showAllDisk' ng-repeat='(partition, disk) in server.disk' ng-if="(partition != 'percentage') && (disk.filesystem != 'none') && (disk.used > 0)">
+								<tr ng-show='diskIsExpanded(server.serverKey)' ng-repeat='(partition, disk) in server.disk' ng-if="(partition != 'percentage') && (disk.filesystem != 'none') && (disk.used > 0)">
 										  <td>{[{ partition }]} </td><td>{[{ disk.pcent }]}%</td>
 								</tr>
 
@@ -63,8 +63,8 @@
 		  <div class="panel-footer">
 					 <strong><small>Net</small>:</strong> {[{ server.network.total.totalkbps/1000 | number: 2}]}Mb/s
 
-					 <span ng-click="server.showAllNetwork = (!server.showAllNetwork)" class="glyphicon glyphicon-collapse-down"></span>
-					 <div ng-show='server.showAllNetwork'>
+					 <span ng-click="toggleExpandNet(server.serverKey)" class="glyphicon glyphicon-collapse-down"></span>
+					 <div ng-show='netIsExpanded(server.serverKey)'>
 								<div ng-repeat='(interface, net) in server.network' ng-if="interface != 'total' && (net.rxkbps > 0 || net.txkbps > 0)">
 										  <strong>{[{ interface }]} </strong>: In: {[{ net.rxkbps/1000 | number:2 }]} / Out: {[{ net.txkbps/1000 | number:2 }]}
 								</div>
