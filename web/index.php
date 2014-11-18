@@ -111,6 +111,15 @@ $app->get('/setdemo', function(Application $app) {
 		 return 'Done';
 });
 
+$app->delete('/server/{serverKey}', function(Application $app, Request $request) {
+		  $serverKey = $request->get('serverKey');
+		  //@TODO: Validate serverKey and ownership
+
+		  return $app->json([
+					 'success' => $app['predis']->lrem('user:'.$app['user']->getId().':servers', 1, $serverKey)
+		  ]);
+});
+
 $app->get('/', function(Application $app, Request $request) {
 		  $protocol = (!empty($_SERVER['HTTPS'])) ? 'https://' : 'http://';
 
