@@ -37,7 +37,7 @@ $app->get('/account', function(Application $app) {
 });
 
 $app->get('/account/{id}', function(Application $app) {
-		  return $app->redirect('/no2');
+		  return $app->redirect('/dashboard');
 })->assert('id', '\d+');
 
 
@@ -163,6 +163,15 @@ $app->get('/key/{apiKey}', function(Application $app, Request $request) {
 		  $app['predis']->set('server:'.$serverKey, true);
 
 		  return "key={$serverKey}";
+});
+
+$app->post('/add-shared-server-key', function(Application $app, Request $request) {
+		  $serverKey = $request->get('serverKey');
+		  $userId = $app['user']->getId();
+		  $app['predis']->lpush("user:{$userId}:servers", $serverKey);
+		  $app['predis']->set('server:'.$serverKey, true);
+
+		  return $app->redirect('/dashboard');
 });
 
 $app->get('/shared/{apiKey}', function(Application $app, Request $request) use($latestWorkerVersion) {
@@ -314,53 +323,9 @@ $app->post('/server', function(Application $app, Request $request) {
 });
 
 $app['security.firewalls'] = [
-		  'login' => [
-					 'pattern' => '^/account/login$',
-		  ],
-		  'forgot' => [
-					 'pattern' => '^/account/forgot-password$',
-		  ],
-		  'register' => [
-					 'pattern' => '^/account/register$',
-		  ],
-		  'reset' => [
-					 'pattern' => '^/account/reset-password/.*$',
-		  ],
-		  'emailverify' => [
-					 'pattern' => '^/account/confirm-email/.*$',
-		  ],
-		  'index' => [
-					 'pattern' => '^/$',
-		  ],
-		  'demo' => [
-					 'pattern' => '^/demo$',
-		  ],
-		  'shared' => [
-					 'pattern' => '^/shared/.*$',
-		  ],
-		  'api' => [
-					 'pattern' => '^/servers/.*$',
-		  ],
-		  'install' => [
-					 'pattern' => '^/install/.*$',
-		  ],
-		  'init' => [
-					 'pattern' => '^/init$',
-		  ],
-		  'key' => [
-					 'pattern' => '^/key/.*$',
-		  ],
-		  'workerphp' => [
-					 'pattern' => '^/worker-php$',
-		  ],
-		  'workerapi' => [
-					 'pattern' => '^/server$',
-		  ],
-		  'setdemo' => [
-					 'pattern' => '^/setdemo$',
-		  ],
 		  'secured_area' => [
-					 'pattern' => '^.*$',
+					 'anonymous' => [],
+					 'pattern' => '^/',
 					 'remember_me' => [],
 					 'form' => [
 								'default_target_path' =>  'dashboard',
@@ -374,6 +339,11 @@ $app['security.firewalls'] = [
 								return $app['user.manager'];
 					 })
 		  ],
+];
+
+$app['security.access_rules'] = [
+		  ['^/account/logout$', 'ROLE_USER'],
+		  ['^/dashboard$', 'ROLE_USER'],
 ];
 
 $app['dispatcher']->addListener(UserEvents::BEFORE_INSERT, function(UserEvent $event) use ($app) {

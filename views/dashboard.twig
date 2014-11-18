@@ -9,6 +9,12 @@
 					 <a href='/install'>View Install Source</a>
 		  </div>
 
+		  <div ng-show="showAddSharedServerKey" class='jumbotron'>
+					 <form role="form" action="/add-shared-server-key" method="POST">
+								<input name='serverKey' placeholder='Enter server key...'>
+					 </form>
+		  </div>
+
 		  <h5>
 					 Servers: {[{servers.length}]} &bull; 
 					 Sort By:
@@ -21,6 +27,7 @@
 					 <input ng-model='filter' type='search' placeholder='Filter...'>
 					 <a href='{{ url('shared', {'apiKey': apiKey}) }}'>Full Screen (no login, ideal for TVs and big monitors for public access in an office for all people to keep an eye on, you know)</a>
 					 <button ng-click="showInstallInstructions = (!showInstallInstructions)" class='pull-right btn btn-success btn-xs'><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add new server</button>
+					 <button ng-click="showAddSharedServerKey = (!showAddSharedServerKey)" class='pull-right btn btn-primary btn-xs'><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add server key</button>
 		  </h5>
 
 		  <div ng-hide='loaded' class="alert alert-info" role="alert">Loading server fires...</div>
