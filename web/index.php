@@ -113,7 +113,12 @@ $app->get('/setdemo', function(Application $app) {
 
 $app->delete('/server/{serverKey}', function(Application $app, Request $request) {
 		  $serverKey = $request->get('serverKey');
-		  //@TODO: Validate serverKey and ownership
+		  if (empty($serverKey) || strlen($serverKey) < 40) {
+					 return $app->json([
+								'success' => false,
+								'message' => 'Invalid server key passed'
+					 ]);
+		  }
 
 		  return $app->json([
 					 'success' => $app['predis']->lrem('user:'.$app['user']->getId().':servers', 1, $serverKey)
