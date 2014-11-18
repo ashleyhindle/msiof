@@ -42,9 +42,8 @@
 
 		  <alert ng-repeat="alert in alerts" type="{[{alert.type}]}" close="closeAlert($index)">{[{alert.msg}]}</alert>
 
-
 		  <div class='col-sm-6 col-md-3 col-lg-2' ng-repeat="server in filteredServers = (servers | orderBy:sortBy | filter:filter)" ng-if="deletedServerKeys.indexOf(server.serverKey) == -1">
-			  {% include "server.twig" %}
+			  {% include "server.twig" with {"public": false} %}
 		  </div>
 </div>
 {% endblock %}
