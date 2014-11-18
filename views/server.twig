@@ -45,6 +45,10 @@
 										  <td>{[{ partition }]} </td><td>{[{ (disk.used / disk.total) * 100 | number:1 }]}%</td>
 								</tr>
 
+								<tr>
+										  <td colspan=2><small>Server Key: {[{server.serverKey}]}</small></td>
+								</tr>
+
 								<tr ng-class="{'danger': server.issues.lastupdated}">
 										  <td colspan=2><small>Last updated: <span am-time-ago="server.lastupdated" am-preprocess="unix"></span></small></td>
 								</tr>
