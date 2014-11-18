@@ -2,14 +2,14 @@
 {% block content %}
 <div class="container-fluid" ng-controller='DashboardCtrl' ng-init='apiKey="{{apiKey}}"; expandAll=true;'>
 		  <div ng-show="showInstallInstructions || (servers.length == 0 && loaded)" class='jumbotron'>
-					 <h1>Install as root: </h1>
+					 <h1>Install on new server as root: </h1>
 					 <p><input style='width:100%;' select-on-click value="curl -s {{ url('install-script', {'apiKey': apiKey}) }} | bash"></p>
 
 					 <button ng-click="showInstallInstructions = false" class='btn btn-primary'>Close install instructions</button>
 					 <a href='/install'>View Install Source</a>
-		  </div>
 
-		  <div ng-show="showAddSharedServerKey" class='jumbotron'>
+					 <hr>
+
 					 <h1>Add shared server</h1>
 					 <form role="form" action="/add-shared-server-key" method="POST">
 								<p>
@@ -17,7 +17,7 @@
 								</p>
 
 								<input type='submit' class='btn btn-primary' value='Submit'>
-								<div ng-click="showAddSharedServerKey=false; sharedKey=''" class='btn btn-default'>Cancel</div>
+								<div ng-click="showInstallInstructions=false; sharedKey=''" class='btn btn-default'>Cancel</div>
 					 </form>
 		  </div>
 
@@ -35,7 +35,6 @@
 
 					 <div class='btn-group pull-right'>
 								<button ng-click="showInstallInstructions = (!showInstallInstructions)" class='btn btn-success btn-xs'><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add new server</button>
-								<button ng-click="showAddSharedServerKey = (!showAddSharedServerKey)" class='btn btn-primary btn-xs'><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add server key</button>
 					 </div>
 		  </h5>
 
