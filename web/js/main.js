@@ -1,6 +1,11 @@
 var msiofApp = angular.module('msiofApp', ['ui.bootstrap', 'angularMoment']).config(function($interpolateProvider){
 		  $interpolateProvider.startSymbol('{[{').endSymbol('}]}');
 });
+
+msiofApp.controller('HomeCtrl', function ($scope) {
+
+});
+
 msiofApp.directive('selectOnClick', function () {
 		  return {
 					 restrict: 'A',
@@ -12,7 +17,7 @@ msiofApp.directive('selectOnClick', function () {
 		  };
 });
 
-msiofApp.controller('HomeCtrl', function ($scope, $http, $interval) {
+msiofApp.controller('DashboardCtrl', function ($scope, $http, $interval) {
 		  $scope.servers = {};
 		  $scope.alerts = [];
 		  $scope.filter = '';
