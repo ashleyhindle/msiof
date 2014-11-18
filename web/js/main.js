@@ -14,7 +14,7 @@ msiofApp.directive('selectOnClick', function () {
 
 msiofApp.controller('HomeCtrl', function ($scope, $http, $interval) {
 		  $scope.servers = {};
-		  $scope.alerts = {};
+		  $scope.alerts = [];
 		  $scope.filter = '';
 		  $scope.loaded = false;
 		  $scope.showInstallInstructions = false;
@@ -71,6 +71,7 @@ msiofApp.controller('HomeCtrl', function ($scope, $http, $interval) {
 								if(response.success == false) {
 										  $scope.addAlert('Failed to remove server', 'danger');
 								} else {
+										  $scope.addAlert('Successfully removed server', 'success');
 										  $scope.updateServers();
 								}
 					 });
