@@ -4,7 +4,8 @@
 								<div class="dropdown btn-group pull-right">
 										  <a type="button" class="btn btn-xs btn-default" dropdown-toggle><span class="caret"></span></a>
 										  <ul class="dropdown-menu">
-													 <li><a href="#">Something else here</a></li>
+													 <li><a href="#">Share server info</a></li>
+													 <!-- @TODO: The link above should show the server key -->
 													 <li class="divider"></li>
 													 <li class='bg-danger'><a href="#" ng-click="deleteServer(server.serverKey);">Delete</a></li>
 										  </ul>
@@ -52,10 +53,6 @@
 
 								<tr ng-show='server.showAllDisk' ng-repeat='(partition, disk) in server.disk' ng-if="(partition != 'percentage') && (disk.filesystem != 'none') && (disk.used > 0)">
 										  <td>{[{ partition }]} </td><td>{[{ disk.pcent }]}%</td>
-								</tr>
-
-								<tr>
-										  <td colspan=2><small>Server Key: {[{server.serverKey}]}</small></td>
 								</tr>
 
 								<tr ng-class="{'danger': server.issues.lastupdated}">
