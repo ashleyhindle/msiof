@@ -21,6 +21,7 @@ msiofApp.controller('DashboardCtrl', function ($scope, $http, $interval) {
 		  $scope.servers = {};
 		  $scope.alerts = [];
 		  $scope.filter = '';
+		  $scope.sharedKey = '';
 		  $scope.loaded = false;
 		  $scope.showInstallInstructions = false;
 		  $scope.sortBy = '+name';

@@ -10,8 +10,14 @@
 		  </div>
 
 		  <div ng-show="showAddSharedServerKey" class='jumbotron'>
+					 <h1>Add shared server</h1>
 					 <form role="form" action="/add-shared-server-key" method="POST">
-								<input name='serverKey' placeholder='Enter server key...'>
+								<p>
+										  <input style='width:50%;' name='serverKey' ng-model='sharedKey' placeholder='Enter server key...'>
+								</p>
+
+								<input type='submit' class='btn btn-primary' value='Submit'>
+								<div ng-click="showAddSharedServerKey=false; sharedKey=''" class='btn btn-default'>Cancel</div>
 					 </form>
 		  </div>
 
