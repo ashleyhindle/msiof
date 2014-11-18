@@ -85,6 +85,7 @@ $app->get('/servers/{apiKey}', function(Application $app, Request $request) use(
 					 ];
 					 $server['hasIssues'] = array_sum($server['issues']);
 					 $server['outOfDate'] = ($server['workerversion'] < $latestWorkerVersion);
+					 $server['serverKey'] = $serverKey;
 					 unset($server['conns']);
 					 $servers[] = $server;
 		  }
