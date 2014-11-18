@@ -4,6 +4,7 @@
 
 {% block content %}
 <div class="container-fluid" ng-app='msiofApp' ng-controller='HomeCtrl' ng-init='apiKey="{{apiKey}}";'>
+					 <h5>
 					 Servers: {[{servers.length}]} &bull; 
 					 Sort By:
 					 <div class="btn-group">
@@ -13,6 +14,7 @@
 					 </div>
 					 <button ng-show="servers.length > 1" ng-click="expandAll = (!expandAll)" class='btn btn-default btn-xs'>Toggle Expansion</button>
 					 <input ng-model='filter' type='search' placeholder='Filter...'>
+					 </h5>
 		  <div ng-hide='loaded' class="alert alert-info" role="alert">Loading server fires...</div>
 
 		  <div class='col-sm-6 col-md-3 col-lg-2' ng-repeat="server in servers | orderBy:sortBy | filter:filter">
