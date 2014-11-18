@@ -79,7 +79,7 @@ $app->get('/servers/{apiKey}', function(Application $app, Request $request) use(
 					 $server = json_decode($app['predis']->get("server:{$serverKey}"), true);
 					 $server['issues'] = [
 								'loadavg' => ( $server['system']['loadavg'] >= $server['system']['cpu']['cores'] ),
-								'disk' => ( $server['disk']['/']['free'] <= ($server['disk']['/']['total']*0.15) ),
+								'disk' => ( $server['disk']['/']['pcent'] >= 85 ),
 								'mem' => ( ( ( ($server['mem']['memtotal'] - $server['mem']['memfree'] - $server['mem']['cached'] - $server['mem']['buffers']) / $server['mem']['memtotal'] ) * 100 ) >= 85 ),
 								'lastupdated' => ( $server['lastupdated'] < (  time() - (60*5) ))
 					 ];
