@@ -31,12 +31,6 @@
 		  <div class="container-fluid">
 					 <!-- Brand and toggle get grouped for better mobile display -->
 					 <div class="navbar-header">
-								<button ng-click="expandNavMenu=!expandNavMenu" type="button" class="navbar-toggle collapsed">
-										  <span class="sr-only">Toggle navigation</span>
-										  <span class="icon-bar"></span>
-										  <span class="icon-bar"></span>
-										  <span class="icon-bar"></span>
-								</button>
 								<a class="navbar-brand" href="/">Home</a>
 								{% if (app.user) and (app.msiof.paymentEnabled) %}
 								<form action="" method="POST">
@@ -56,8 +50,7 @@
 								{% endif %}
 					 </div>
 
-					 <!-- Collect the nav links, forms, and other content for toggling -->
-					 <div class="collapse navbar-collapse" ng-show="expandNavMenu">
+					 <div>
 								<ul class="nav navbar-nav navbar-right">
 										  {% if app.user %}
 													 <li><a href="{{ path('dashboard') }}">Dashboard</a></li>
