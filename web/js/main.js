@@ -3,7 +3,7 @@ var msiofApp = angular.module('msiofApp', ['ui.bootstrap', 'angularMoment']).con
 });
 
 msiofApp.controller('HomeCtrl', function ($scope) {
-
+		  $scope.expandNavMenu = true;
 });
 
 msiofApp.directive('selectOnClick', function () {
