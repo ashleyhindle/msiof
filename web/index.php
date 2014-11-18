@@ -167,7 +167,17 @@ $app->get('/key/{apiKey}', function(Application $app, Request $request) {
 
 $app->post('/add-shared-server-key', function(Application $app, Request $request) {
 		  $serverKey = $request->get('serverKey');
+		  if ($app['user'] == null) {
+					 return $app->redirect('/dashboard');
+		  }
+
 		  $userId = $app['user']->getId();
+		  $serverKeys = $app['predis']->lrange("user:{$userId}:servers", 0, -1);
+		  if (in_array($serverKey, $serverKeys)) {
+					 //Already added
+					 return $app->redirect('/dashboard');
+		  }
+
 		  $app['predis']->lpush("user:{$userId}:servers", $serverKey);
 		  $app['predis']->set('server:'.$serverKey, true);
 
