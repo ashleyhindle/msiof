@@ -19,6 +19,8 @@ msiofApp.controller('HomeCtrl', function ($scope, $http, $interval) {
 		  $scope.showInstallInstructions = false;
 		  $scope.sortBy = '+name';
 		  $scope.expandAll = false;
+		  $scope.deletedServerKeys = [];
+
 		  $scope.sortOptions = [
 					 { 
 								'display': 'Name',
@@ -49,6 +51,20 @@ msiofApp.controller('HomeCtrl', function ($scope, $http, $interval) {
 								'value': '-system.loadavg'
 					 },
 		  ];
+
+		  $scope.deleteServer = function(serverKey) {
+					 $scope.deletedServerKeys.push(serverKey);
+					 $http({
+								method: 'DELETE',
+								url: '/server/' + serverKey,
+					 }).then(function(response) {
+								if(response.success == false) {
+										  alert('Failed to remove');
+								} else {
+										  $scope.updateServers();
+								}
+					 });
+		  }
 
 		  $scope.setSort = function(sortValue) {
 					 $scope.sortBy = sortValue;
