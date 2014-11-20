@@ -1,3 +1,23 @@
+moment.lang('en', {
+    relativeTime : {
+        future: "in %s",
+        past:   "%s ago",
+        s:  "< 1m",
+        m:  "1m",
+        mm: "%dm",
+        h:  "1h",
+        hh: "%h",
+        d:  "1d",
+        dd: "%dd",
+        M:  "1m",
+        MM: "%dm",
+        y:  "1y",
+        yy: "%dy"
+    }
+});
+
+
+
 var msiofApp = angular.module('msiofApp', ['ui.bootstrap', 'angularMoment']).config(function($interpolateProvider){
 		  $interpolateProvider.startSymbol('{[{').endSymbol('}]}');
 });
