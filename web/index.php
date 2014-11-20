@@ -15,7 +15,7 @@ $userId = 100;
 $latestWorkerVersion = 1.2;
 
 $app = new Application();
-$app['debug'] = true;
+//$app['debug'] = true;
 
 $app->register(new Silex\Provider\TwigServiceProvider());
 $app->register(new Provider\DoctrineServiceProvider());
@@ -135,10 +135,12 @@ $app->get('/', function(Application $app, Request $request) {
 
 //Add server
 $app->get('/install/{apiKey}', function(Application $app, Request $request) {
-		  return $app['twig']->render('worker/install.twig', [
+		  $twig = $app['twig']->render('worker/install.twig', [
 					 'baseUrl' => trim($app['msiof']['baseUrl'], '/'),
 					 'apiKey' => $request->get('apiKey')
 		  ]);
+
+		  return new Response($twig, 200, ['content-type' => 'text/plain']);
 })->bind('install-script');
 
 $app->get('/init', function(Application $app) {
