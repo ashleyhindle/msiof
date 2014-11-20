@@ -64,7 +64,7 @@ while ($run) {
 		  if ($r === false) {
 					 echo("FAILED");
 		  } else {
-					 echo "\n\n\n\n".$r."\n\n\n\n";
+					 echo $r."\n";
 		  }
 
 		  $loopEndTime = time();
