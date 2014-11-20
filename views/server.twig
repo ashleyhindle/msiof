@@ -72,7 +72,7 @@
 					 <span ng-click="toggleExpandNet(server.serverKey)" class="glyphicon glyphicon-collapse-down"></span>
 					 <div ng-show='netIsExpanded(server.serverKey)'>
 								<div ng-repeat='(interface, net) in server.network' ng-if="interface != 'total' && (net.rxkbps > 0 || net.txkbps > 0)">
-										  <strong>{[{ interface }]} </strong>: In: {[{ net.rxkbps/1000 | number:2 }]} / Out: {[{ net.txkbps/1000 | number:2 }]}
+										  <strong>{[{ interface }]} </strong>: <span class="glyphicon glyphicon-arrow-down" aria-hidden="true" title='Incoming' alt='Incoming'></span>{[{ net.rxkbps/1000 | number:2 }]} <span class="glyphicon glyphicon-arrow-up" aria-hidden="true" title='Outgoing' alt='Outgoing    '></span>{[{ net.txkbps/1000 | number:2 }]}
 								</div>
 					 </div>
 		  </div>
