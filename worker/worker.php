@@ -71,7 +71,9 @@ while ($run) {
 		  $loopTimeTook = $loopEndTime - $loopStartTime;
 		  if ($loopTimeTook < $loopLength) {
 					 echo "Sleeping so we hit every 60 seconds\n";
-					 sleep($loopLength - $loopTimeTook);
+					 $sleepLength = $loopLength - $loopTimeTook;
+					 $sleepLength = ($sleepLength < 0) ? 0 : $sleepLength;
+					 sleep($sleepLength);
 		  }
 }
 
