@@ -6,7 +6,7 @@
 					 <p><input style='width:100%;' select-on-click value="curl -s {{ url('install-script', {'apiKey': apiKey}) }} | bash"></p>
 
 					 <button ng-click="showInstallInstructions = false" class='btn btn-primary'>Close install instructions</button>
-					 <a href='/install'>View Install Source</a>
+					 <a href='{{ url('install-script', {'apiKey': apiKey}) }}'>View Install Source</a>
 
 					 <hr>
 
