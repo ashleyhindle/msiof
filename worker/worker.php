@@ -25,7 +25,7 @@ $hostname = php_uname('n');
 // @TODO: Get the server key from a config file, or pass it on, or get it from an environment variable
 $serverKey = trim($config['key']);
 echo "Key from configFile is {$serverKey}\n";
-$loopLength = 60;
+$loopLength = 30;
 
 $run = true;
 $loopStartTime = time();
