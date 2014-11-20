@@ -25,7 +25,7 @@ msiofApp.controller('DashboardCtrl', function ($scope, $http, $interval) {
 		  $scope.loaded = false;
 		  $scope.showInstallInstructions = false;
 		  $scope.sortBy = '+name';
-		  $scope.expandAll = false;
+		  $scope.expandAll = true;
 		  $scope.deletedServerKeys = [];
 		  $scope.expandedDisks = [];
 		  $scope.expandedNets = [];
