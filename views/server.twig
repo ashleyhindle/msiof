@@ -67,7 +67,7 @@
 					 </table>
 		  </div> <!-- panel-body -->
 		  <div class="panel-footer">
-					 <strong><small>Net</small>:</strong> {[{ server.network.total.totalkbps/1000 | number: 2}]}Mb/s
+					 <strong><small>Net</small>:</strong> In: {[{ server.network.total.rxkbps/1000 | number: 2}]}Mb/s / Out: {[{ server.network.total.txkbps/1000 | number: 2}]}Mb/s
 
 					 <span ng-click="toggleExpandNet(server.serverKey)" class="glyphicon glyphicon-collapse-down"></span>
 					 <div ng-show='netIsExpanded(server.serverKey)'>
