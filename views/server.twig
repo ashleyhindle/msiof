@@ -26,8 +26,8 @@
 
 								<tr>
 										  <td>
-													 <span tooltip-animation="false" tooltip-html-unsafe="CPU Type: {[{server.system.cpu.type}]}<hr>CPU Cores: {[{server.system.cpu.cores}]}" class="hidden-md hidden-lg glyphicon glyphicon-info-sign" aria-hidden="true"></span>
-													 <strong tooltip-animation="false" tooltip-placement="right" tooltip-html-unsafe="CPU Type: {[{server.system.cpu.type}]}<hr>CPU Cores: {[{server.system.cpu.cores}]}">
+													 <span tooltip-animation="false" tooltip-placement="right" tooltip-html-unsafe="CPU Type: {[{server.system.cpu.type}]}<hr>CPU Cores: {[{server.system.cpu.cores}]}" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+													 <strong>
 																CPU
 													 </strong>
 										  </td>
@@ -38,8 +38,8 @@
 
 								<tr ng-class="{'danger': server.issues.mem}">
 										  <td>
-													 <span tooltip-animation="false" tooltip="Total Memory: {[{ (server.mem.memtotal/1000)/1000 | number: 0}]}GB" class="hidden-md hidden-lg glyphicon glyphicon-info-sign" aria-hidden="true"></span>
-													 <strong tooltip-animation="false" tooltip-placement="right" tooltip="Total Memory: {[{(server.mem.memtotal/1000)/1000 | number:0}]}GB">RAM</strong>
+													 <span tooltip-animation="false" tooltip-placement="right" tooltip="Total Memory: {[{ (server.mem.memtotal/1000)/1000 | number: 0}]}GB" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+													 <strong>RAM</strong>
 										  </td>
 										  <td>
 													 {[{ server.mem.percentage.usage }]}%
@@ -48,8 +48,8 @@
 
 								<tr ng-class="{'danger': server.issues.disk}">
 										  <td>
-													 <span tooltip-animation="false" tooltip="Size: {[{ server.disk['/'].total/1048576 | number: 2}]}GB" class="hidden-md hidden-lg glyphicon glyphicon-info-sign" aria-hidden="true"></span>
-													 <strong tooltip-animation="false" tooltip-placement="right" tooltip="Size: {[{ server.disk['/'].total/1048576 | number: 2}]}GB">Disk</strong>
+													 <span tooltip-animation="false" tooltip-placement="right" tooltip="Size: {[{ server.disk['/'].total/1048576 | number: 2}]}GB" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+													 <strong>Disk</strong>
 										  </td>
 										  <td>
 										  {[{ server.disk['/'].pcent }]}%
