@@ -1,6 +1,6 @@
 {% extends "layout.twig" %}
 {% block content %}
-<div class="container-fluid" ng-controller='DashboardCtrl' ng-init='apiKey="{{apiKey}}"; expandAll=true;'>
+<div class="container-fluid" ng-app="msiofApp" ng-controller='DashboardCtrl' ng-init='apiKey="{{apiKey}}"; expandAll=true;'>
 		  <div ng-show="showInstallInstructions || (servers.length == 0 && loaded)" class='jumbotron'>
 					 <h1>Install on new server as root: </h1>
 					 <p><input style='width:100%;' select-on-click value="curl -s {{ url('install-script', {'apiKey': apiKey}) }} | bash"></p>
