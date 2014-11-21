@@ -18,7 +18,7 @@ moment.lang('en', {
 
 
 
-var msiofApp = angular.module('msiofApp', ['ui.bootstrap', 'angularMoment']).config(function($interpolateProvider){
+var msiofApp = angular.module('msiofApp', ['ui.bootstrap', 'angularMoment', 'ngCookies']).config(function($interpolateProvider){
 		  $interpolateProvider.startSymbol('{[{').endSymbol('}]}');
 });
 
@@ -37,14 +37,14 @@ msiofApp.directive('selectOnClick', function () {
 		  };
 });
 
-msiofApp.controller('DashboardCtrl', function ($scope, $http, $interval) {
+msiofApp.controller('DashboardCtrl', function ($scope, $http, $interval, $cookies) {
 		  $scope.servers = {};
 		  $scope.alerts = [];
 		  $scope.filter = '';
 		  $scope.sharedKey = '';
 		  $scope.loaded = false;
 		  $scope.showInstallInstructions = false;
-		  $scope.sortBy = '+name';
+		  $scope.sortBy = ($cookies.sortBy !== null) ? $cookies.sortBy : '+name';
 		  $scope.expandAll = true;
 		  $scope.deletedServerKeys = [];
 		  $scope.expandedDisks = [];
@@ -136,6 +136,7 @@ msiofApp.controller('DashboardCtrl', function ($scope, $http, $interval) {
 
 		  $scope.setSort = function(sortValue) {
 					 $scope.sortBy = sortValue;
+					 $cookies.sortBy = sortValue;
 		  }
 
 		  $scope.updateServers = function() {
