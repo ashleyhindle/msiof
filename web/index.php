@@ -7,6 +7,8 @@ use Rhumsaa\Uuid\Uuid;
 use Rhumsaa\Uuid\Exception\UnsatisfiedDependencyException;
 use SimpleUser\UserEvents;
 use SimpleUser\UserEvent;
+use Tah\MsiofStripe\MsiofStripeServiceProvider;
+use Tah\MsiofStripe\MsiofStripeControllerProvider;
 
 require_once __DIR__.'/../vendor/autoload.php';
 
@@ -26,8 +28,10 @@ $app->register(new Provider\ServiceControllerServiceProvider());
 $app->register(new Provider\UrlGeneratorServiceProvider());
 $app->register(new Provider\SwiftmailerServiceProvider());
 $app->register(new Predis\Silex\ClientServiceProvider());
-// Predis config should go in config/dev.json and config/prod.json
 
+//$app->register(new MsiofStripeServiceProvider());
+//$msiofStripe = new MsiofStripeControllerProvider();
+//$app->mount('/stripe', $msiofStripe);
 
 $simpleUserProvider = new SimpleUser\UserServiceProvider();
 $app->register($simpleUserProvider);
@@ -76,7 +80,7 @@ $app->get('/servers/{apiKey}', function(Application $app, Request $request) use(
 		  $servers = [];
 
 		  foreach ($serverKeys as $serverKey) {
-					 $server = json_decode($app['predis']->get("server:{$serverKey}"), true);
+					 $server = json_decode($app['predis']->get("serverlastupdate:{$serverKey}"), true);
 					 $server['issues'] = [
 								'loadavg' => ( $server['system']['loadavg'] >= $server['system']['cpu']['cores'] ),
 								'disk' => ( $server['disk']['/']['pcent'] >= $app['msiof']['issues']['diskPercentage'] ),
@@ -102,7 +106,7 @@ $app->get('/setdemo', function(Application $app) {
 		  ]);
 
 		  foreach ($serverKeys as $serverKey) {
-					 $server = json_decode($app['predis']->get("server:{$serverKey}"), true);
+					 $server = json_decode($app['predis']->get("serverlastupdate:{$serverKey}"), true);
 					 if (substr($server['name'], 0, 2) == 'ww') {
 								$app['predis']->lpush('user:8:servers', $serverKey);
 					 }
@@ -177,7 +181,10 @@ $app->get('/key/{apiKey}', function(Application $app, Request $request) {
 		  $userId = $userFromApiKey->getId();
 
 		  $app['predis']->lpush("user:{$userId}:servers", $serverKey);
-		  $app['predis']->set('server:'.$serverKey, true);
+		  $app['predis']->set('serverlastupdate:'.$serverKey, true);
+		  $app['predis']->set('serverinfo:'.$serverKey, json_encode([
+					 'ownerUserId' => $userId
+		  ]));
 
 		  return "key={$serverKey}";
 });
@@ -250,7 +257,7 @@ $app->post('/server', function(Application $app, Request $request) {
 					 'usage' => round(( ( $jsonDecoded['mem']['memtotal'] - $jsonDecoded['mem']['memfree'] - $jsonDecoded['mem']['cached'] - $jsonDecoded['mem']['buffers']) / $jsonDecoded['mem']['memtotal'] ) * 100, 1)
 		  ];
 
-		  $redisKey = "server:{$serverKey}";
+		  $redisKey = "serverlastupdate:{$serverKey}";
 		  $oldResult = $app['predis']->get($redisKey);
 		  if (!empty($oldResult)) {
 					 $oldResult = json_decode($oldResult, true);
