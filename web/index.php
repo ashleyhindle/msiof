@@ -30,8 +30,8 @@ $app->register(new Provider\SwiftmailerServiceProvider());
 $app->register(new Predis\Silex\ClientServiceProvider());
 
 //$app->register(new MsiofStripeServiceProvider());
-//$msiofStripe = new MsiofStripeControllerProvider();
-//$app->mount('/stripe', $msiofStripe);
+$msiofStripe = new MsiofStripeControllerProvider();
+$app->mount('/stripe', $msiofStripe);
 
 $simpleUserProvider = new SimpleUser\UserServiceProvider();
 $app->register($simpleUserProvider);
