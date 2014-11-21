@@ -1554,12 +1554,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/theahindle/msiof-stripe.git",
-                "reference": "a7f8995124359f9950c199792380e78641e184de"
+                "reference": "c64b0e66f11fbca390109e21301980a80c0e4b0e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/theahindle/msiof-stripe/zipball/a7f8995124359f9950c199792380e78641e184de",
-                "reference": "a7f8995124359f9950c199792380e78641e184de",
+                "url": "https://api.github.com/repos/theahindle/msiof-stripe/zipball/c64b0e66f11fbca390109e21301980a80c0e4b0e",
+                "reference": "c64b0e66f11fbca390109e21301980a80c0e4b0e",
                 "shasum": ""
             },
             "require": {
@@ -1590,7 +1590,7 @@
                 "msiof",
                 "stripe"
             ],
-            "time": "2014-11-21 15:09:37"
+            "time": "2014-11-21 22:53:19"
         },
         {
             "name": "twig/twig",
