@@ -6,7 +6,7 @@ moment.lang('en', {
         m:  "1m",
         mm: "%dm",
         h:  "1h",
-        hh: "%h",
+        hh: "%dh",
         d:  "1d",
         dd: "%dd",
         M:  "1m",
