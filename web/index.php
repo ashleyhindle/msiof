@@ -378,6 +378,7 @@ $app['security.access_rules'] = [
 		  ['^/account/logout$', 'ROLE_USER'],
 		  ['^/server/.*$', 'ROLE_USER'],
 		  ['^/dashboard$', 'ROLE_USER'],
+		  ['^/stripe/.*$', 'ROLE_USER']
 ];
 
 $app['dispatcher']->addListener(UserEvents::BEFORE_INSERT, function(UserEvent $event) use ($app) {
