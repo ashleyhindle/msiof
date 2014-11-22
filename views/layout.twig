@@ -85,9 +85,15 @@
 
 <div class='container-fluid'>
 {% if app.session.flashbag.has('alert') %}
-{% for flashMessage in app.session.flashbag.get('alert') %}
-	 <div class="alert alert-info">{{ flashMessage }}</div>
-{% endfor %}
+		  {% for flashMessage in app.session.flashbag.get('alert') %}
+				<div class="alert alert-info">{{ flashMessage }}</div>
+		  {% endfor %}
+{% endif %}
+
+{% if app.session.flashbag.has('alert-success') %}
+		  {% for flashMessage in app.session.flashbag.get('alert-success') %}
+				<div class="alert alert-success">{{ flashMessage }}</div>
+		  {% endfor %}
 {% endif %}
 
 {% block content %}{% endblock %}
