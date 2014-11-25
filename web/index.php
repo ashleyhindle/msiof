@@ -377,10 +377,9 @@ $app['security.firewalls'] = [
 $app['security.access_rules'] = [
 		  ['^/account/logout$', 'ROLE_USER'],
 		  ['^/server/.*$', 'ROLE_USER'],
-		  ['^/dashboard$', 'ROLE_USER'],
-		  ['^/stripe/webook$', 'IS_AUTHENTICATED_ANONYMOUSLY'],
-		  ['^/stripe/.*$', 'ROLE_USER']
+		  ['^/dashboard$', 'ROLE_USER']
 ];
+//@TODO: need to be logged in for /stripe/* but not stripe/webhook
 
 $app['dispatcher']->addListener(UserEvents::BEFORE_INSERT, function(UserEvent $event) use ($app) {
 		  $user = $event->getUser();
