@@ -378,6 +378,7 @@ $app['security.access_rules'] = [
 		  ['^/account/logout$', 'ROLE_USER'],
 		  ['^/server/.*$', 'ROLE_USER'],
 		  ['^/dashboard$', 'ROLE_USER'],
+		  ['^/stripe/webook$', 'IS_AUTHENTICATED_ANONYMOUSLY'],
 		  ['^/stripe/.*$', 'ROLE_USER']
 ];
 
