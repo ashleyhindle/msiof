@@ -61,8 +61,8 @@ Point domain to /var/www/msiof/web/
 					 "USD": 300
 		  },
 		  "keys": {
-					 "publishable": "pk_test_2bpghGfYvZb4cS2rYIhpcC31",
-					 "secret": "sk_test_26P4i0fynum9NZWXomS2wlTd"
+					 "publishable": "pk_test_notreal",
+					 "secret": "sk_test_notreal"
 		  }
 },
 "debug": false,
@@ -83,7 +83,7 @@ Point domain to /var/www/msiof/web/
 		  "host": "smtp.mandrillapp.com",
 		  "port": "465",
 		  "username": "ashley@smellynose.com",
-		  "password": "UTHbmYygpJu4L7yazGIufQ",
+		  "password": "notarealpassword",
 		  "encryption": "ssl",
 		  "auth_mode": null
 },
