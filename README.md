@@ -32,6 +32,28 @@ Edit config file
 Point domain to /var/www/msiof/web/
 ```
 
+#### Nginx Config:
+```
+server {
+    listen 80;
+    server_name is.myserverisonfire.com;
+    root /msiof/web/;
+
+    index index.php;
+
+    location / {
+        try_files $uri $uri/ /index.php?$args;
+    }
+
+    location ~* \.php$ {
+        fastcgi_pass   unix:/var/run/php5-fpm.sock;
+        fastcgi_param  SCRIPT_FILENAME $document_root/index.php;
+        include fastcgi_params;
+    }
+
+}
+```
+
 #### Example Config - config/dev.json and config/prod.json
 ```
 {
