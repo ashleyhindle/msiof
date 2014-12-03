@@ -36,47 +36,59 @@ Point domain to /var/www/msiof/web/
 ```
 {
 "msiof": {
-			"siteName": "MyServerIsOnFire.com",
-			"baseUrl": "https://myserverisonfire.com/",
-			"showEarlyAccessPage": false,
-			"registrationEnabled": true,
-			"paymentEnabled": false,
-			"issues": {
-										  "diskPercentage": 85,
-										  "memPercentage": 85,
-										  "notUpdatedMinutes": 5
-			},
-			"analytics": {
-										  "trackingId": "UA-XXXXXXX-1"
-			}
+		  "siteName": "MyServerIsOnFire.com",
+					 "baseUrl": "https://myserverisonfire.com/",
+					 "contactEmail": "hey@myserverisonfire.com",
+					 "showEarlyAccessPage": true,
+					 "registrationEnabled": true,
+					 "paymentEnabled": false,
+					 "issues": {
+								"diskPercentage": 85,
+								"memPercentage": 85,
+								"notUpdatedMinutes": 5
+					 },
+					 "analytics": {
+								"trackingId": "UA-46455757-1"
+					 }
 },
-"stripe": {
-			"key": "keygoeshere_only_needed_if_you_want_to_bill"
+"msiof.stripe": {
+		  "plans": {
+					 "free": "freeplan",
+					 "paid": "paidplan"
+		  },
+		  "freeServers": 3,
+		  "pricePerServer": {
+					 "USD": 300
+		  },
+		  "keys": {
+					 "publishable": "pk_test_2bpghGfYvZb4cS2rYIhpcC31",
+					 "secret": "sk_test_26P4i0fynum9NZWXomS2wlTd"
+		  }
 },
 "debug": false,
 "twig.path": "../views/",
 "predis.parameters": "tcp://127.0.0.1:6379",
 "predis.options": {
-			"prefix": "msiof:",
-			"profile": "3.0"
+		  "prefix": "msiof:",
+		  "profile": "3.0"
 },
 "db.options": {
-			"driver": "pdo_mysql",
-			"host": "localhost",
-			"dbname": "msiof",
-			"user": "msiof",
-			"password": "notarealpassword"
+		  "driver": "pdo_mysql",
+		  "host": "localhost",
+		  "dbname": "msiof",
+		  "user": "msiof",
+		  "password": "notarealpassword"
 },
 "swiftmailer.options": {
-			"host": "smtp.mandrillapp.com",
-			"port": "465",
-			"username": "mandrill@email.com",
-			"password": "mandrill_api_key",
-			"encryption": "ssl",
-			"auth_mode": null
+		  "host": "smtp.mandrillapp.com",
+		  "port": "465",
+		  "username": "ashley@smellynose.com",
+		  "password": "UTHbmYygpJu4L7yazGIufQ",
+		  "encryption": "ssl",
+		  "auth_mode": null
 },
 "user.options": {
-			"templates": {
+		  "templates": {
 					 "layout": "layout.twig",
 					 "register": "/account/register.twig",
 					 "register-confirmation-sent": "/account/register-confirmation-sent.twig",
@@ -87,17 +99,17 @@ Point domain to /var/www/msiof/web/
 					 "view": "/account/view.twig",
 					 "edit": "/account/edit.twig",
 					 "list": "/account/list.twig"
-			},
-			"mailer": {
+		  },
+		  "mailer": {
 					 "enabled": true,
 					 "fromEmail": {
-											 "address": "noreply@myserverisonfire.com",
-											 "name": null
+								"address": "noreply@myserverisonfire.com",
+								"name": null
 					 }
-			},
-			"emailConfirmation": {
+		  },
+		  "emailConfirmation": {
 					 "required": true
-			}
+		  }
 }
 }
 ```
