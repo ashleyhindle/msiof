@@ -195,6 +195,10 @@ $app->post('/add-shared-server-key', function(Application $app, Request $request
 					 return $app->redirect('/dashboard');
 		  }
 
+		  if (empty($serverKey) || strlen($serverKey) < 40) {
+					 return $app->redirect('/dashboard?invalidKey');
+		  }
+
 		  $userId = $app['user']->getId();
 		  $serverKeys = $app['predis']->lrange("user:{$userId}:servers", 0, -1);
 		  if (in_array($serverKey, $serverKeys)) {
