@@ -57,7 +57,7 @@
 										  </td>
 								</tr>
 
-								<tr ng-show='diskIsExpanded(server.serverKey)' ng-repeat='(partition, disk) in server.disk' ng-if="(partition != 'percentage') && (disk.filesystem != 'none') && (disk.used > 0)">
+								<tr ng-class="{'danger': disk.pcent >= {{app.msiof.issues.diskPercentage}} }" ng-show='diskIsExpanded(server.serverKey)' ng-repeat='(partition, disk) in server.disk' ng-if="(partition != 'percentage') && (disk.filesystem != 'none') && (disk.used > 0)">
 										  <td>{[{ partition }]} </td><td>{[{ disk.pcent }]}%</td>
 								</tr>
 
