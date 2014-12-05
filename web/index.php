@@ -89,10 +89,10 @@ $app->get('/servers/{apiKey}', function(Application $app, Request $request) use(
 
 					 // Check if any of the disks have issues
 					 $server['issues']['disk'] = (
-								array_filter($server['disk'], function($disk) {
+								count(array_filter($server['disk'], function($disk) use($app) {
 										  return ($disk['pcent'] >= $app['msiof']['issues']['diskPercentage']);
 								}
-				    ));
+				    )) > 0);
 
 					 $server['hasIssues'] = array_sum($server['issues']);
 					 $server['outOfDate'] = ($server['workerversion'] < $latestWorkerVersion);
