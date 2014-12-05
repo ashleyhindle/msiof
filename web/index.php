@@ -83,10 +83,17 @@ $app->get('/servers/{apiKey}', function(Application $app, Request $request) use(
 					 $server = json_decode($app['predis']->get("serverlastupdate:{$serverKey}"), true);
 					 $server['issues'] = [
 								'loadavg' => ( $server['system']['loadavg'] >= $server['system']['cpu']['cores'] ),
-								'disk' => ( $server['disk']['/']['pcent'] >= $app['msiof']['issues']['diskPercentage'] ),
 								'mem' => ( ( ( ($server['mem']['memtotal'] - $server['mem']['memfree'] - $server['mem']['cached'] - $server['mem']['buffers']) / $server['mem']['memtotal'] ) * 100 ) >= $app['msiof']['issues']['memPercentage'] ),
 								'lastupdated' => ( $server['lastupdated'] < (  time() - (60*$app['msiof']['issues']['notUpdatedMinutes']) ))
 					 ];
+
+					 // Check if any of the disks have issues
+					 $server['issues']['disk'] = (
+								array_filter($server['disk'], function($disk) {
+										  return ($disk['pcent'] >= $app['msiof']['issues']['diskPercentage']);
+								}
+				    ));
+
 					 $server['hasIssues'] = array_sum($server['issues']);
 					 $server['outOfDate'] = ($server['workerversion'] < $latestWorkerVersion);
 					 $server['serverKey'] = $serverKey;
