@@ -57,80 +57,80 @@ server {
 ```
 {
 "msiof": {
-		  "siteName": "MyServerIsOnFire.com",
-					 "baseUrl": "https://myserverisonfire.com/",
-					 "contactEmail": "hey@myserverisonfire.com",
-					 "showEarlyAccessPage": true,
-					 "registrationEnabled": true,
-					 "paymentEnabled": false,
-					 "issues": {
-								"diskPercentage": 85,
-								"memPercentage": 85,
-								"notUpdatedMinutes": 5
-					 },
-					 "analytics": {
-								"trackingId": "UA-46455757-1"
-					 }
+	"siteName": "MyServerIsOnFire.com",
+	"baseUrl": "https://myserverisonfire.com/",
+	"contactEmail": "hey@myserverisonfire.com",
+	"showEarlyAccessPage": true,
+	"registrationEnabled": true,
+	"paymentEnabled": false,
+	"issues": {
+		"diskPercentage": 85,
+		"memPercentage": 85,
+		"notUpdatedMinutes": 5
+	},
+	"analytics": {
+		"trackingId": "UA-46455757-1"
+	}
 },
 "msiof.stripe": {
-		  "plans": {
-					 "free": "freeplan",
-					 "paid": "paidplan"
-		  },
-		  "freeServers": 3,
-		  "pricePerServer": {
-					 "USD": 300
-		  },
-		  "keys": {
-					 "publishable": "pk_test_notreal",
-					 "secret": "sk_test_notreal"
-		  }
+		"plans": {
+			"free": "freeplan",
+			"paid": "paidplan"
+		},
+		"freeServers": 3,
+		"pricePerServer": {
+			"USD": 300
+		},
+		"keys": {
+			"publishable": "pk_test_notreal",
+			"secret": "sk_test_notreal"
+		}
 },
 "debug": false,
 "twig.path": "../views/",
 "predis.parameters": "tcp://127.0.0.1:6379",
 "predis.options": {
-		  "prefix": "msiof:",
-		  "profile": "3.0"
+		"prefix": "msiof:",
+		"profile": "3.0"
 },
 "db.options": {
-		  "driver": "pdo_mysql",
-		  "host": "localhost",
-		  "dbname": "msiof",
-		  "user": "msiof",
-		  "password": "notarealpassword"
+		"driver": "pdo_mysql",
+		"host": "localhost",
+		"dbname": "msiof",
+		"user": "msiof",
+		"password": "notarealpassword"
 },
 "swiftmailer.options": {
-		  "host": "smtp.mandrillapp.com",
-		  "port": "465",
-		  "username": "ashley@smellynose.com",
-		  "password": "notarealpassword",
-		  "encryption": "ssl",
-		  "auth_mode": null
+		"host": "smtp.mandrillapp.com",
+		"port": "465",
+		"username": "ashley@smellynose.com",
+		"password": "notarealpassword",
+		"encryption": "ssl",
+		"auth_mode": null
 },
 "user.options": {
-		  "templates": {
-					 "layout": "layout.twig",
-					 "register": "/account/register.twig",
-					 "register-confirmation-sent": "/account/register-confirmation-sent.twig",
-					 "login": "/account/login.twig",
-					 "login-confirmation-needed": "/account/login-confirmation-needed.twig",
-					 "forgot-password": "/account/forgot-password.twig",
-					 "reset-password": "/account/reset-password.twig",
-					 "view": "/account/view.twig",
-					 "edit": "/account/edit.twig",
-					 "list": "/account/list.twig"
-		  },
-		  "mailer": {
-					 "enabled": true,
-					 "fromEmail": {
-								"address": "noreply@myserverisonfire.com",
-								"name": null
-					 }
-		  },
-		  "emailConfirmation": {
-					 "required": true
-		  }
+	"templates": {
+		"layout": "layout.twig",
+		"register": "/account/register.twig",
+		"register-confirmation-sent": "/account/register-confirmation-sent.twig",
+		"login": "/account/login.twig",
+		"login-confirmation-needed": "/account/login-confirmation-needed.twig",
+		"forgot-password": "/account/forgot-password.twig",
+		"reset-password": "/account/reset-password.twig",
+		"view": "/account/view.twig",
+		"edit": "/account/edit.twig",
+		"list": "/account/list.twig"
+	},
+	"mailer": {
+		"enabled": true,
+		"fromEmail": {
+			"address": "noreply@myserverisonfire.com",
+			"name": null
+		}
+	},
+	"emailConfirmation": {
+		"required": true
+	}
 }
 }
 ```
@@ -139,5 +139,5 @@ server {
 Worker Changelog
 ----------------
 
-1.2 - Disk info via syscall
-1.3 - Process Info
+*1.2 - Disk info via syscall
+*1.3 - Process Info
