@@ -10,12 +10,12 @@ Server dashboard that gives an easy to read overview of your infrastructure
 
 
 ### Worker (ran on each server)
-* PHP5 CLI
+* PHP5.3+ CLI
 * PHP5 Curl
 
 ### API/Website 
 * NGINX/Apache/Lighttpd
-* PHP5
+* PHP5.4+
 * Redis
 * Composer
 
