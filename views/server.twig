@@ -1,83 +1,83 @@
 <div class='panel' ng-class="{'panel-danger': server.hasIssues, 'panel-success': (!server.hasIssues && !server.outOfDate), 'panel-warning' : server.outOfDate}">
-		  <div class="panel-heading">
-					 <h3 class="panel-title">
-								{% if public == false %}
-										  <div class="dropdown btn-group pull-right">
-													 <a type="button" class="btn btn-xs btn-default" dropdown-toggle><span class="caret"></span></a>
-													 <ul class="dropdown-menu">
-																<li><a href="#" ng-click="shareServer(server.serverKey)">Share server info</a></li>
-																<li class="divider"></li>
-																<li class='bg-danger'><a href="#" ng-click="deleteServer(server.serverKey);">Delete</a></li>
-													 </ul>
-										  </div>
-								{% endif %}
-								<div style='overflow:hidden;'>
-										  {[{ server.name }]}
-								</div>
-					 </h3>
-		  </div>
-		  <div class='panel-body' ng-show="expandAll || servers.length == 1">
-					 <table class='table table-condensed table-no-border'>
+	<div class="panel-heading">
+		<h3 class="panel-title">
+			{% if public == false %}
+			<div class="dropdown btn-group pull-right">
+				<a type="button" class="btn btn-xs btn-default" dropdown-toggle><span class="caret"></span></a>
+				<ul class="dropdown-menu">
+					<li><a href="#" ng-click="shareServer(server.serverKey)">Share server info</a></li>
+					<li class="divider"></li>
+					<li class='bg-danger'><a href="#" ng-click="deleteServer(server.serverKey);">Delete</a></li>
+				</ul>
+			</div>
+			{% endif %}
+			<div style='overflow:hidden;'>
+				{[{ server.name }]}
+			</div>
+		</h3>
+	</div>
+	<div class='panel-body' ng-show="expandAll || servers.length == 1">
+		<table class='table table-condensed table-no-border'>
 
-								<tr ng-class="{'danger': server.issues.loadavg}">
-										  <td><strong>Load</strong></td>
-										  <td>{[{ server.system.loadavg }]}</td>
-								</tr>
+			<tr ng-class="{'danger': server.issues.loadavg}">
+				<td><strong>Load</strong></td>
+				<td>{[{ server.system.loadavg }]}</td>
+			</tr>
 
-								<tr>
-										  <td>
-													 <span tooltip-animation="false" tooltip-placement="right" tooltip-html-unsafe="CPU Type: {[{server.system.cpu.type}]}<hr>CPU Cores: {[{server.system.cpu.cores}]}" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
-													 <strong>
-																CPU
-													 </strong>
-										  </td>
-										  <td>
-													 {[{ server.cpu.percentage.usage }]}%
-										  </td>
-								</tr>
+			<tr>
+				<td>
+					<span tooltip-animation="false" tooltip-placement="right" tooltip-html-unsafe="CPU Type: {[{server.system.cpu.type}]}<hr>CPU Cores: {[{server.system.cpu.cores}]}" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+					<strong>
+						CPU
+					</strong>
+				</td>
+				<td>
+					{[{ server.cpu.percentage.usage }]}%
+				</td>
+			</tr>
 
-								<tr ng-class="{'danger': server.issues.mem}">
-										  <td>
-													 <span tooltip-animation="false" tooltip-placement="right" tooltip="Total Memory: {[{ (server.mem.memtotal/1000)/1000 | number: 0}]}GB" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
-													 <strong>RAM</strong>
-										  </td>
-										  <td>
-													 {[{ server.mem.percentage.usage }]}%
-										  </td>
-								</tr>
+			<tr ng-class="{'danger': server.issues.mem}">
+				<td>
+					<span tooltip-animation="false" tooltip-placement="right" tooltip="Total Memory: {[{ (server.mem.memtotal/1000)/1000 | number: 0}]}GB" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+					<strong>RAM</strong>
+				</td>
+				<td>
+					{[{ server.mem.percentage.usage }]}%
+				</td>
+			</tr>
 
-								<tr ng-class="{'danger': server.issues.disk}">
-										  <td>
-													 <span tooltip-animation="false" tooltip-placement="right" tooltip="Size: {[{ server.disk['/'].total/1048576 | number: 2}]}GB" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
-													 <strong>Disk</strong>
-										  </td>
-										  <td>
-										  {[{ server.disk['/'].pcent }]}%
-										  <span ng-click="toggleExpandDisk(server.serverKey)" class="glyphicon glyphicon-collapse-down"></span>
-										  </td>
-								</tr>
+			<tr ng-class="{'danger': server.issues.disk}">
+				<td>
+					<span tooltip-animation="false" tooltip-placement="right" tooltip="Size: {[{ server.disk['/'].total/1048576 | number: 2}]}GB" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+					<strong>Disk</strong>
+				</td>
+				<td>
+					{[{ server.disk['/'].pcent }]}%
+					<span ng-click="toggleExpandDisk(server.serverKey)" class="glyphicon glyphicon-collapse-down"></span>
+				</td>
+			</tr>
 
-								<tr ng-class="{'danger': disk.pcent >= {{app.msiof.issues.diskPercentage}} }" ng-show='diskIsExpanded(server.serverKey)' ng-repeat='(partition, disk) in server.disk' ng-if="(partition != 'percentage') && (disk.filesystem != 'none') && (disk.used > 0)">
-										  <td>{[{ partition }]} </td><td>{[{ disk.pcent }]}%</td>
-								</tr>
+			<tr ng-class="{'danger': disk.pcent >= {{app.msiof.issues.diskPercentage}} }" ng-show='diskIsExpanded(server.serverKey)' ng-repeat='(partition, disk) in server.disk' ng-if="(partition != 'percentage') && (disk.filesystem != 'none') && (disk.used > 0)">
+				<td>{[{ partition }]} </td><td>{[{ disk.pcent }]}%</td>
+			</tr>
 
-								<tr ng-class="{'danger': server.issues.lastupdated}">
-										  <td colspan=2><small>Last updated: <span am-time-ago="server.lastupdated" am-preprocess="unix"></span></small></td>
-								</tr>
+			<tr ng-class="{'danger': server.issues.lastupdated}">
+				<td colspan=2><small>Last updated: <span am-time-ago="server.lastupdated" am-preprocess="unix"></span></small></td>
+			</tr>
 
-								<tr ng-show="server.outOfDate" ng-class="{'warning': server.outOfDate}">
-									<td colspan=2><small>Worker out of date - reinstall to upgrade</small></td>
-								</tr>
-					 </table>
-		  </div> <!-- panel-body -->
-		  <div class="panel-footer">
-					 <small><strong>Net</strong> (Mb/s): </small><span class="glyphicon glyphicon-arrow-down" aria-hidden="true" title='Incoming' alt='Incoming'></span>{[{ server.network.total.rxkbps/1000 | number: 2}]} <span class="glyphicon glyphicon-arrow-up" aria-hidden="true" title='Outgoing' alt='Outgoing'></span>{[{ server.network.total.txkbps/1000 | number: 2}]}
+			<tr ng-show="server.outOfDate" ng-class="{'warning': server.outOfDate}">
+				<td colspan=2><small>Worker out of date - reinstall to upgrade</small></td>
+			</tr>
+		</table>
+	</div> <!-- panel-body -->
+	<div class="panel-footer">
+		<small><strong>Net</strong> (Mb/s): </small><span class="glyphicon glyphicon-arrow-down" aria-hidden="true" title='Incoming' alt='Incoming'></span>{[{ server.network.total.rxkbps/1000 | number: 2}]} <span class="glyphicon glyphicon-arrow-up" aria-hidden="true" title='Outgoing' alt='Outgoing'></span>{[{ server.network.total.txkbps/1000 | number: 2}]}
 
-					 <span ng-click="toggleExpandNet(server.serverKey)" class="glyphicon glyphicon-collapse-down"></span>
-					 <div ng-show='netIsExpanded(server.serverKey)'>
-								<div ng-repeat='(interface, net) in server.network' ng-if="interface != 'total' && (net.rxkbps > 0 || net.txkbps > 0)">
-										  <strong>{[{ interface }]} </strong>: <span class="glyphicon glyphicon-arrow-down" aria-hidden="true" title='Incoming' alt='Incoming'></span>{[{ net.rxkbps/1000 | number:2 }]} <span class="glyphicon glyphicon-arrow-up" aria-hidden="true" title='Outgoing' alt='Outgoing    '></span>{[{ net.txkbps/1000 | number:2 }]}
-								</div>
-					 </div>
-		  </div>
+		<span ng-click="toggleExpandNet(server.serverKey)" class="glyphicon glyphicon-collapse-down"></span>
+		<div ng-show='netIsExpanded(server.serverKey)'>
+			<div ng-repeat='(interface, net) in server.network' ng-if="interface != 'total' && (net.rxkbps > 0 || net.txkbps > 0)">
+				<strong>{[{ interface }]} </strong>: <span class="glyphicon glyphicon-arrow-down" aria-hidden="true" title='Incoming' alt='Incoming'></span>{[{ net.rxkbps/1000 | number:2 }]} <span class="glyphicon glyphicon-arrow-up" aria-hidden="true" title='Outgoing' alt='Outgoing    '></span>{[{ net.txkbps/1000 | number:2 }]}
+			</div>
+		</div>
+	</div>
 </div> <!-- panel -->
