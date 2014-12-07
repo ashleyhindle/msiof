@@ -367,28 +367,28 @@ $app->post('/server', function(Application $app, Request $request) {
 });
 
 $app['security.firewalls'] = [
-'secured_area' => [
-'anonymous' => [],
-'pattern' => '^/',
-'remember_me' => [],
-'form' => [
-'default_target_path' =>  'dashboard',
-'login_path' => '/account/login',
-'check_path' => '/account/login_check',
-],
-'logout' => [
-'logout_path' => '/account/logout',
-],
-'users' => $app->share(function($app) {
-    return $app['user.manager'];
-})
-],
+    'secured_area' => [
+        'anonymous' => [],
+        'pattern' => '^/',
+        'remember_me' => [],
+        'form' => [
+            'default_target_path' =>  'dashboard',
+            'login_path' => '/account/login',
+            'check_path' => '/account/login_check',
+        ],
+        'logout' => [
+            'logout_path' => '/account/logout',
+        ],
+        'users' => $app->share(function($app) {
+            return $app['user.manager'];
+        })
+    ],
 ];
 
 $app['security.access_rules'] = [
-['^/account/logout$', 'ROLE_USER'],
-['^/server/.*$', 'ROLE_USER'],
-['^/dashboard$', 'ROLE_USER']
+    ['^/account/logout$', 'ROLE_USER'],
+    ['^/server/.*$', 'ROLE_USER'],
+    ['^/dashboard$', 'ROLE_USER']
 ];
 //@TODO: need to be logged in for /stripe/* but not stripe/webhook
 
