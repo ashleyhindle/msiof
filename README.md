@@ -140,4 +140,4 @@ Worker Changelog
 ----------------
 
 * 1.2 - Disk info via syscall
-* 1.3 - Process Info
+* 1.3 - Process Info and microtime
