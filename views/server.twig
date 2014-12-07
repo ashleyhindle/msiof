@@ -64,6 +64,10 @@
 								<tr ng-class="{'danger': server.issues.lastupdated}">
 										  <td colspan=2><small>Last updated: <span am-time-ago="server.lastupdated" am-preprocess="unix"></span></small></td>
 								</tr>
+
+								<tr ng-show="server.outOfDate" ng-class="{'warning': server.outOfDate}">
+									<td colspan=2><small>Worker out of date - reinstall to upgrade</small></td>
+								</tr>
 					 </table>
 		  </div> <!-- panel-body -->
 		  <div class="panel-footer">
