@@ -57,6 +57,7 @@ while ($run) {
     $server['network'] = getNetworkInfo();
     $server['system'] = getSystemInfo();
     $server['time'] = date('Y-m-d H:i:s');
+    $server['microtime'] = microtime(true);
 
     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($server));
 
