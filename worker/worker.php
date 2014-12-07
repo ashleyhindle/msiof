@@ -297,6 +297,11 @@ function getNetworkInfo()
     return $network;
 }
 
+/**
+* getProcessInfo
+*
+* @return array
+*/
 function getProcessInfo()
 {
     $dir = new DirectoryIterator('/proc/');
@@ -309,10 +314,10 @@ function getProcessInfo()
         $statFile = file_get_contents($process->getPathname() . '/stat');
         $cmdlineFile = file_get_contents($process->getPathname() . '/cmdline');
         $ioFile = false;
-        $io = [
+        $io = array(
             'read_bytes' => 0,
             'write_bytes' => 0
-        ];
+        );
 
         if (file_exists($process->getPathname() . '/io')) {
             $ioFile = file($process->getPathname() . '/io', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
@@ -351,7 +356,7 @@ function getProcessInfo()
             'user' => $user,
             'processid' => $processId,
             'mem' => trim(preg_replace('/[^0-9]/', '', $status['vmrss'])) * 1024, // Store memory in bytes
-            'cpu' => [
+            'cpu' => array(
                 'user' => $stat[13], //includes guest time http://man7.org/linux/man-pages/man5/proc.5.html
                 'system' => $stat[14],
                 'total' => $stat[13] + $stat[14],
@@ -361,7 +366,7 @@ function getProcessInfo()
                         in jiffies.  Since Linux 2.6, the value is expressed
                         in clock ticks (divide by sysconf(_SC_CLK_TCK)).
                         */
-            ],
+            ),
             'io' => $io
         ];
     }
@@ -369,9 +374,10 @@ function getProcessInfo()
     $overview = [];
 
     foreach ($processes as $process) {
-        $process['program'] = trim(explode(' ', $process['program'])[0], ':');
+        $exploded = explode(' ', $process['program']);
+        $process['program'] = trim($exploded[0], ':');
         if (!array_key_exists($process['program'], $overview)) {
-            $overview[$process['program']] = [];
+            $overview[$process['program']] = array();
         }
 
         $overview[$process['program']]['count']++;
