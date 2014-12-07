@@ -306,7 +306,7 @@ function getProcessInfo()
 {
     $dir = new DirectoryIterator('/proc/');
     $dir = new RegexIterator($dir, '/^([0-9]*)$/');
-    $processes = [];
+    $processes = array();
 
     foreach ($dir as $process) {
         $processId = $process->getFilename();
@@ -339,7 +339,7 @@ function getProcessInfo()
         $program = $command[0];
         $args = explode("\0", $command[1]);
 
-        $status = [];
+        $status = array();
         
         foreach ($statusFile as $line) {
             list($key, $value) = explode(':', $line);
@@ -348,10 +348,11 @@ function getProcessInfo()
             $status[$key] = $value;
         }
 
-        $user = posix_getpwuid($status['uid'])['name'];
+        $user = posix_getpwuid($status['uid']);
+        $user = $user['name'];
         $stat = preg_split('/\s+/', trim($statFile));
 
-        $processes[$processId] = [
+        $processes[$processId] = array(
             'program' => $program,
             'user' => $user,
             'processid' => $processId,
@@ -368,16 +369,22 @@ function getProcessInfo()
                         */
             ),
             'io' => $io
-        ];
+        );
     }
 
-    $overview = [];
+    $overview = array();
 
     foreach ($processes as $process) {
         $exploded = explode(' ', $process['program']);
         $process['program'] = trim($exploded[0], ':');
         if (!array_key_exists($process['program'], $overview)) {
-            $overview[$process['program']] = array();
+            $overview[$process['program']] = array(
+                'count' => 0,
+                'mem' => 0,
+                'cpu' => 0,
+                'readbytes' => 0,
+                'writebytes' => 0
+                );
         }
 
         $overview[$process['program']]['count']++;
