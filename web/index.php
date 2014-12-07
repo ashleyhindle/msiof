@@ -47,18 +47,32 @@ $app->get('/account/{id}', function(Application $app) {
 
 $app->mount('/account', $simpleUserProvider);
 
-$app->get('/test-processes', function() {
+$app->get('/test-processes', function(Application $app) {
     $dir = new DirectoryIterator('/proc/');
-    $processes = new RegexIterator($dir, '/^([0-9]*)$/');
-    foreach ($processes as $process) {
+    $dir = new RegexIterator($dir, '/^([0-9]*)$/');
+    $processes = [];
+
+    foreach ($dir as $process) {
         $processId = $process->getFilename();
-        $statusFile = file_get_contents($process->getPathname() . '/status');
-        $statFile = file($process->getPathname() . '/stat', FILE_IGNORE_NEW_LINES);
+        $statusFile = file($process->getPathname() . '/status', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        $statFile = file_get_contents($process->getPathname() . '/stat');
         $cmdlineFile = file_get_contents($process->getPathname() . '/cmdline');
-        $ioFile = file($process->getPathname() . '/io', FILE_IGNORE_NEW_LINES);
+        $ioFile = false;
+        $io = [];
+
+        if (file_exists($process->getPathname() . '/io')) {
+            $ioFile = file($process->getPathname() . '/io', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+
+            foreach ($ioFile as $line) {
+                list($key, $value) = explode(':', $line);
+                $key = strtolower(trim($key)); //Standardise key
+                $value = trim($value);
+                $io[$key] = $value;
+            }
+        }
 
         if (empty($statusFile) || empty($statFile) || empty($cmdlineFile)) {
-            echo "Lost process during info retrieval\n";
+            // Lost process during info retrieval
             continue;
         }
 
@@ -66,20 +80,42 @@ $app->get('/test-processes', function() {
         $program = $command[0];
         $args = explode("\0", $command[1]);
 
-        echo "{$processId} - {$program}\n<hr>";
-        preg_match_all(
-            '/^(?<key>\w+):\s*(?<value>.*)$/m', 
-            $statusFile, 
-            $matches
-        );
+        $status = [];
+        
+        foreach ($statusFile as $line) {
+            list($key, $value) = explode(':', $line);
+            $key = strtolower(trim($key)); //Standardise key
+            $value = trim($value);
+            $status[$key] = $value;
+        }
 
-        $status = array_combine($matches['key'], $matches['value']);
-        echo '<pre>';
-        print_r($status);
-        return 'Cheers';
+        $user = posix_getpwuid($status['uid'])['name'];
+        $stat = preg_split('/\s+/', trim($statFile));
+
+        $processes[$processId] = [
+            'program' => $program,
+            'args' => $args,
+            'user' => $user,
+            'processid' => $processId,
+            'mem' => trim(preg_replace('/[^0-9]/', '', $status['vmrss'])) * 1024, // Store memory in bytes
+            'cpu' => [
+                'user' => $stat[13], //includes guest time http://man7.org/linux/man-pages/man5/proc.5.html
+                'system' => $stat[14],
+                'total' => $stat[13] + $stat[14],
+                'starttime' => $stat[21]
+                        /*
+                        In kernels before Linux 2.6, this value was expressed
+                        in jiffies.  Since Linux 2.6, the value is expressed
+                        in clock ticks (divide by sysconf(_SC_CLK_TCK)).
+                        */
+            ],
+            'io' => $io
+        ];
+
+        echo "{$user} - {$processId} - {$program} - MemUsed: " . bcdiv(bcdiv($processes[$processId]['mem'], 1024), 1024) . "MB\n";
     }
 
-    return 'Woo';
+    return $app->json($processes);
 });
 
 $app->get('/servers/{apiKey}', function(Application $app, Request $request) use($latestWorkerVersion) {
