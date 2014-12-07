@@ -43,12 +43,13 @@ while ($run) {
     curl_setopt($ch, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_HTTPHEADER, array('X-Server-Key: ' . $server['serverKey']));
 
-    $server['workerversion'] = 1.2;
+    $server['workerversion'] = 1.3;
     $server['name'] = $hostname;
     $server['entropy'] = trim(file_get_contents('/proc/sys/kernel/random/entropy_avail'));
     $server['conns'] = getConnectionsByPort();
     $server['cpu'] = getCpuInfo();
     $server['mem'] = getMemInfo();
+    $server['process'] = getProcessInfo();
     $server['disk'] = getDiskInfo();
     if(isEnabled('shell_exec')) {
         $server['disk'] = getDiskInfoSysCall();
@@ -133,16 +134,16 @@ function getCpuInfo()
 
         $cpu = preg_split('/\s+/', trim($l));
         $cpus[$cpu[0]] = array(
-        'user' => $cpu[1],
-        'nice' => $cpu[2],
-        'system' => $cpu[3],
-        'idle' => $cpu[4],
-        'wait' => $cpu[5],
-        'iowait' => $cpu[6],
-        'irq' => $cpu[7],
-        'softirq' => $cpu[8],
-        'steal' => $cpu[9],
-        'guest' => $cpu[10],
+            'user' => $cpu[1],
+            'nice' => $cpu[2],
+            'system' => $cpu[3],
+            'idle' => $cpu[4],
+            'wait' => $cpu[5],
+            'iowait' => $cpu[6],
+            'irq' => $cpu[7],
+            'softirq' => $cpu[8],
+            'steal' => $cpu[9],
+            'guest' => $cpu[10],
         );
     }
 
@@ -293,4 +294,91 @@ function getNetworkInfo()
     }
 
     return $network;
+}
+
+function getProcessInfo()
+{
+    $dir = new DirectoryIterator('/proc/');
+    $dir = new RegexIterator($dir, '/^([0-9]*)$/');
+    $processes = [];
+
+    foreach ($dir as $process) {
+        $processId = $process->getFilename();
+        $statusFile = file($process->getPathname() . '/status', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        $statFile = file_get_contents($process->getPathname() . '/stat');
+        $cmdlineFile = file_get_contents($process->getPathname() . '/cmdline');
+        $ioFile = false;
+        $io = [
+            'read_bytes' => 0,
+            'write_bytes' => 0
+        ];
+
+        if (file_exists($process->getPathname() . '/io')) {
+            $ioFile = file($process->getPathname() . '/io', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+
+            foreach ($ioFile as $line) {
+                list($key, $value) = explode(':', $line);
+                $key = strtolower(trim($key)); //Standardise key
+                $value = trim($value);
+                $io[$key] = $value;
+            }
+        }
+
+        if (empty($statusFile) || empty($statFile) || empty($cmdlineFile)) {
+            // Lost process during info retrieval
+            continue;
+        }
+
+        $command = explode("\0", $cmdlineFile, 2);
+        $program = $command[0];
+        $args = explode("\0", $command[1]);
+
+        $status = [];
+        
+        foreach ($statusFile as $line) {
+            list($key, $value) = explode(':', $line);
+            $key = strtolower(trim($key)); //Standardise key
+            $value = trim($value);
+            $status[$key] = $value;
+        }
+
+        $user = posix_getpwuid($status['uid'])['name'];
+        $stat = preg_split('/\s+/', trim($statFile));
+
+        $processes[$processId] = [
+            'program' => $program,
+            'user' => $user,
+            'processid' => $processId,
+            'mem' => trim(preg_replace('/[^0-9]/', '', $status['vmrss'])) * 1024, // Store memory in bytes
+            'cpu' => [
+                'user' => $stat[13], //includes guest time http://man7.org/linux/man-pages/man5/proc.5.html
+                'system' => $stat[14],
+                'total' => $stat[13] + $stat[14],
+                'starttime' => $stat[21]
+                        /*
+                        In kernels before Linux 2.6, this value was expressed
+                        in jiffies.  Since Linux 2.6, the value is expressed
+                        in clock ticks (divide by sysconf(_SC_CLK_TCK)).
+                        */
+            ],
+            'io' => $io
+        ];
+    }
+
+    $overview = [];
+
+    foreach ($processes as $process) {
+        $process['program'] = trim(explode(' ', $process['program'])[0], ':');
+        if (!array_key_exists($process['program'], $overview)) {
+            $overview[$process['program']] = [];
+        }
+
+        $overview[$process['program']]['count']++;
+        $overview[$process['program']]['mem'] += $process['mem']; //bytes
+        $overview[$process['program']]['cpu'] += $process['cpu']['total'];
+        $overview[$process['program']]['readbytes'] += $process['io']['read_bytes'];
+        $overview[$process['program']]['writebytes'] += $process['io']['write_bytes'];
+    }
+
+    return $overview;
 }
