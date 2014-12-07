@@ -47,6 +47,40 @@ $app->get('/account/{id}', function(Application $app) {
 
 $app->mount('/account', $simpleUserProvider);
 
+$app->get('/test-processes', function() {
+    $dir = new DirectoryIterator('/proc/');
+    $processes = new RegexIterator($dir, '/^([0-9]*)$/');
+    foreach ($processes as $process) {
+        $processId = $process->getFilename();
+        $statusFile = file_get_contents($process->getPathname() . '/status');
+        $statFile = file($process->getPathname() . '/stat', FILE_IGNORE_NEW_LINES);
+        $cmdlineFile = file_get_contents($process->getPathname() . '/cmdline');
+        $ioFile = file($process->getPathname() . '/io', FILE_IGNORE_NEW_LINES);
+
+        if (empty($statusFile) || empty($statFile) || empty($cmdlineFile)) {
+            echo "Lost process during info retrieval\n";
+            continue;
+        }
+
+        $command = explode("\0", $cmdlineFile, 2);
+        $program = $command[0];
+        $args = explode("\0", $command[1]);
+
+        echo "{$processId} - {$program}\n<hr>";
+        preg_match_all(
+            '/^(?<key>\w+):\s*(?<value>.*)$/m', 
+            $statusFile, 
+            $matches
+        );
+
+        $status = array_combine($matches['key'], $matches['value']);
+        echo '<pre>';
+        print_r($status);
+        return 'Cheers';
+    }
+
+    return 'Woo';
+});
 
 $app->get('/servers/{apiKey}', function(Application $app, Request $request) use($latestWorkerVersion) {
     $apiKey = $request->get('apiKey');
