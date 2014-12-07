@@ -1,24 +1,24 @@
 #!/usr/bin/php
 <?php
 function isEnabled($func) {
-		  return is_callable($func) && false === stripos(ini_get('disable_functions'), $func);
+    return is_callable($func) && false === stripos(ini_get('disable_functions'), $func);
 }
 
 $configFile = '/etc/msiof/msiof.conf';
 if (!file_exists($configFile)) {
-		  echo "Config file doesn't exist: {$configFile}\n";
-		  exit(1);
+    echo "Config file doesn't exist: {$configFile}\n";
+    exit(1);
 }
 
 $config = parse_ini_file($configFile);
 if (empty($config)) {
-		  echo "Config file can't be read, or is empty or invalid: {$configFile}\n";
-		  exit(1);
+    echo "Config file can't be read, or is empty or invalid: {$configFile}\n";
+    exit(1);
 }
 
 if (empty($config['key'])) {
-		  echo "key isn't set in config file: {$configFile}\n";
-		  exit(1);
+    echo "key isn't set in config file: {$configFile}\n";
+    exit(1);
 }
 
 $hostname = php_uname('n');
@@ -33,263 +33,264 @@ $server = Array();
 $server['serverKey'] = $serverKey;
 
 while ($run) {
-		  $loopStartTime = time();
+    $loopStartTime = time();
 
-		  $hostname = php_uname('n');
+    $hostname = php_uname('n');
 
-		  $ch = curl_init();
-		  curl_setopt($ch, CURLOPT_URL, (empty($config['api_url'])) ? "http://msiof.smellynose.com/server" : $config['api_url']);
-		  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		  curl_setopt($ch, CURLOPT_POST, true);
-		  curl_setopt($ch, CURLOPT_HTTPHEADER, array('X-Server-Key: ' . $server['serverKey']));
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, (empty($config['api_url'])) ? "http://msiof.smellynose.com/server" : $config['api_url']);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array('X-Server-Key: ' . $server['serverKey']));
 
-		  $server['workerversion'] = 1.2;
-		  $server['name'] = $hostname;
-		  $server['entropy'] = trim(file_get_contents('/proc/sys/kernel/random/entropy_avail'));
-		  $server['conns'] = getConnectionsByPort();
-		  $server['cpu'] = getCpuInfo();
-		  $server['mem'] = getMemInfo();
-		  $server['disk'] = getDiskInfo();
-		  if(isEnabled('shell_exec')) {
-					 $server['disk'] = getDiskInfoSysCall();
-		  }
-		  $server['network'] = getNetworkInfo();
-		  $server['system'] = getSystemInfo();
-		  $server['time'] = date('Y-m-d H:i:s');
+    $server['workerversion'] = 1.2;
+    $server['name'] = $hostname;
+    $server['entropy'] = trim(file_get_contents('/proc/sys/kernel/random/entropy_avail'));
+    $server['conns'] = getConnectionsByPort();
+    $server['cpu'] = getCpuInfo();
+    $server['mem'] = getMemInfo();
+    $server['disk'] = getDiskInfo();
+    if(isEnabled('shell_exec')) {
+        $server['disk'] = getDiskInfoSysCall();
+    }
+    $server['network'] = getNetworkInfo();
+    $server['system'] = getSystemInfo();
+    $server['time'] = date('Y-m-d H:i:s');
 
-		  curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($server));
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($server));
 
-		  $r = curl_exec($ch);
+    $r = curl_exec($ch);
 
-		  if ($r === false) {
-					 echo("FAILED");
-		  } else {
-					 echo $r."\n";
-		  }
+    if ($r === false) {
+        echo("FAILED");
+    } else {
+        echo $r."\n";
+    }
 
-		  $loopEndTime = time();
-		  $loopTimeTook = $loopEndTime - $loopStartTime;
-		  if ($loopTimeTook < $loopLength) {
-					 echo "Sleeping so we hit every 60 seconds\n";
-					 $sleepLength = $loopLength - $loopTimeTook;
-					 $sleepLength = ($sleepLength < 0) ? 0 : $sleepLength;
-					 sleep($sleepLength);
-		  }
+    $loopEndTime = time();
+    $loopTimeTook = $loopEndTime - $loopStartTime;
+    if ($loopTimeTook < $loopLength) {
+        echo "Sleeping so we hit every 60 seconds\n";
+        $sleepLength = $loopLength - $loopTimeTook;
+        $sleepLength = ($sleepLength < 0) ? 0 : $sleepLength;
+        sleep($sleepLength);
+    }
 }
 
 /**
- * Only supports TCP for now
- * TODO: Support UDP and IPV6
- *
- * @return array
- **/
+* Only supports TCP for now
+* TODO: Support UDP and IPV6
+*
+* @return array
+**/
 function getConnectionsByPort()
 {
-		  $lines = file('/proc/net/tcp');
-		  array_shift($lines);
-		  $connections = array();
-		  foreach ($lines as $l) {
-					 $exploded = preg_split('/\s+/', trim($l));
+    $lines = file('/proc/net/tcp');
+    array_shift($lines);
 
-					 $localExploded = explode(':', $exploded[1]);
-					 $localAddr = long2ip(hexdec(implode('', array_reverse(str_split($localExploded[0], 2)))));
-					 $localPort = hexdec($localExploded[1]);
+    $connections = array();
+    foreach ($lines as $l) {
+        $exploded = preg_split('/\s+/', trim($l));
 
-					 $remoteExploded = explode(':', $exploded[2]);
-					 $remoteAddr = long2ip(hexdec(implode('', array_reverse(str_split($remoteExploded[0], 2)))));
-					 $remotePort = hexdec($remoteExploded[1]);
+        $localExploded = explode(':', $exploded[1]);
+        $localAddr = long2ip(hexdec(implode('', array_reverse(str_split($localExploded[0], 2)))));
+        $localPort = hexdec($localExploded[1]);
 
-					 $socketStatus = $exploded[3];
+        $remoteExploded = explode(':', $exploded[2]);
+        $remoteAddr = long2ip(hexdec(implode('', array_reverse(str_split($remoteExploded[0], 2)))));
+        $remotePort = hexdec($remoteExploded[1]);
 
-					 if ($socketStatus != '01') {
-								continue;
-					 }
+        $socketStatus = $exploded[3];
+
+        if ($socketStatus != '01') {
+            continue;
+        }
 
 
-					 if (!array_key_exists($localPort, $connections)) {
-								$connections[$localPort] = 0;
-					 }
-					 $connections[$localPort]++;
-		  }
+        if (!array_key_exists($localPort, $connections)) {
+            $connections[$localPort] = 0;
+        }
+        $connections[$localPort]++;
+    }
 
-		  return $connections;
+return $connections;
 }
 
 /**
- * getCpuInfo
- *
- * @return array
- */
+* getCpuInfo
+*
+* @return array
+*/
 function getCpuInfo()
 {
-		  $lines = file('/proc/stat');
-		  $cpus = array();
+    $lines = file('/proc/stat');
+    $cpus = array();
 
-		  foreach ($lines as $l) {
-					 if (strpos($l, 'cpu') === false) {
-								continue;
-					 }
+    foreach ($lines as $l) {
+        if (strpos($l, 'cpu') === false) {
+        continue;
+        }
 
-					 $cpu = preg_split('/\s+/', trim($l));
-					 $cpus[$cpu[0]] = array(
-								'user' => $cpu[1],
-								'nice' => $cpu[2],
-								'system' => $cpu[3],
-								'idle' => $cpu[4],
-								'wait' => $cpu[5],
-								'iowait' => $cpu[6],
-								'irq' => $cpu[7],
-								'softirq' => $cpu[8],
-								'steal' => $cpu[9],
-								'guest' => $cpu[10],
-					 );
-		  }
+        $cpu = preg_split('/\s+/', trim($l));
+        $cpus[$cpu[0]] = array(
+        'user' => $cpu[1],
+        'nice' => $cpu[2],
+        'system' => $cpu[3],
+        'idle' => $cpu[4],
+        'wait' => $cpu[5],
+        'iowait' => $cpu[6],
+        'irq' => $cpu[7],
+        'softirq' => $cpu[8],
+        'steal' => $cpu[9],
+        'guest' => $cpu[10],
+        );
+    }
 
-		  return $cpus;
+    return $cpus;
 }
 
 function arrayWalkStrToLower(&$value) {
-		  $value = strtolower($value);
+    $value = strtolower($value);
 }
 /**
- * getMemInfo
- *
- * @return array
- */
+* getMemInfo
+*
+* @return array
+*/
 function getMemInfo()
 {
-		  $lines = file_get_contents('/proc/meminfo');
-		  preg_match_all('/([a-zA-Z0-9]+):\s+([0-9]+) kB/', $lines, $matches);
-		  array_walk(
-					 $matches[1],
-					 'arrayWalkStrToLower'
-		  );
-		  $mem = array_combine($matches[1], $matches[2]);
+    $lines = file_get_contents('/proc/meminfo');
+    preg_match_all('/([a-zA-Z0-9]+):\s+([0-9]+) kB/', $lines, $matches);
+    array_walk(
+        $matches[1],
+        'arrayWalkStrToLower'
+    );
+    $mem = array_combine($matches[1], $matches[2]);
 
-		  return $mem;
+    return $mem;
 }
 
 /**
- * getSystemInfo
- *
- * @return array
- */
+* getSystemInfo
+*
+* @return array
+*/
 function getSystemInfo()
 {
-		  $uname = php_uname();
-		  list($sysname, $hostname, $release, $version, $machine) = explode(' ', $uname);
+    $uname = php_uname();
+    list($sysname, $hostname, $release, $version, $machine) = explode(' ', $uname);
 
-		  $system = array();
-		  $system['cpu'] = array(
-					 'cores' => count(preg_grep('/^(processor)/', file('/proc/cpuinfo'))),
-					 'type' => trim(end(explode(':', trim(current(preg_grep('/model name/', file('/proc/cpuinfo')))))))
-		  );
+    $system = array();
+    $system['cpu'] = array(
+        'cores' => count(preg_grep('/^(processor)/', file('/proc/cpuinfo'))),
+        'type' => trim(end(explode(':', trim(current(preg_grep('/model name/', file('/proc/cpuinfo')))))))
+    );
 
-		  $system['loadavg'] = current(explode(' ', trim(file_get_contents('/proc/loadavg'))));
-		  $system['sysname'] = $sysname;
-		  $system['hostname'] = $hostname;
-		  $system['release'] = $release;
-		  $system['version'] = $version;
-		  $system['machine'] = $machine;
-		  $system['uptime'] = current(explode(' ', current(file('/proc/uptime'))));
+    $system['loadavg'] = current(explode(' ', trim(file_get_contents('/proc/loadavg'))));
+    $system['sysname'] = $sysname;
+    $system['hostname'] = $hostname;
+    $system['release'] = $release;
+    $system['version'] = $version;
+    $system['machine'] = $machine;
+    $system['uptime'] = current(explode(' ', current(file('/proc/uptime'))));
 
-		  return $system;
+    return $system;
 }
 
 /**
- * getDiskInfo
- *
- * @return array
- */
+* getDiskInfo
+*
+* @return array
+*/
 function getDiskInfo()
 {
-		  $disk = array();
-		  $rootTotal = disk_total_space('/');
-		  $rootFree = disk_free_space('/');
-		  $rootUsed = $rootTotal - $rootFree;
-		  $disk['/'] = array(
-					 'total' => $rootTotal,
-					 'free' => $rootFree,
-					 'used' => $rootUsed
-		  );
+    $disk = array();
+    $rootTotal = disk_total_space('/');
+    $rootFree = disk_free_space('/');
+    $rootUsed = $rootTotal - $rootFree;
+    $disk['/'] = array(
+    'total' => $rootTotal,
+    'free' => $rootFree,
+    'used' => $rootUsed
+    );
 
-		  return $disk;
+    return $disk;
 }
 
 function getDiskInfoSysCall()
 {
-		  $disks = array();
-		  $command = "df -l --output='source,fstype,itotal,iused,iavail,ipcent,size,used,avail,pcent,target'";
-		  $regex = "/([\w\/]+)\s+(\w+)\s+([0-9]+)\s+([0-9]+)\s+([0-9]+)\s+([0-9%]+)\s+([0-9]+)\s+([0-9]+)\s+([0-9]+)\s+([0-9%]+)\s+(.*)/";
+    $disks = array();
+    $command = "df -l --output='source,fstype,itotal,iused,iavail,ipcent,size,used,avail,pcent,target'";
+    $regex = "/([\w\/]+)\s+(\w+)\s+([0-9]+)\s+([0-9]+)\s+([0-9]+)\s+([0-9%]+)\s+([0-9]+)\s+([0-9]+)\s+([0-9]+)\s+([0-9%]+)\s+(.*)/";
 
-		  $command = "df -lTP";
-		  $regex = "/([\w\/]+)\s+(\w+)\s+([0-9]+)\s+([0-9]+)\s+([0-9]+)\s+([0-9%]+)\s+(.*)/";
+    $command = "df -lTP";
+    $regex = "/([\w\/]+)\s+(\w+)\s+([0-9]+)\s+([0-9]+)\s+([0-9]+)\s+([0-9%]+)\s+(.*)/";
 
-		  $result = preg_match_all($regex, shell_exec($command), $matches);
+    $result = preg_match_all($regex, shell_exec($command), $matches);
 
-		  array_shift($matches);
-		  $disks = array();
-		  for ($i=0; $i < count($matches[0]); $i++) {
-					 list(
-								$filesystem,
-								$type,
-								$size,
-								$used,
-								$avail,
-								$pcent,
-								$target) = array(
-										  $matches[0][$i],
-										  $matches[1][$i],
-										  $matches[2][$i],
-										  $matches[3][$i],
-										  $matches[4][$i],
-										  $matches[5][$i],
-										  $matches[6][$i],
-								);
+    array_shift($matches);
+    $disks = array();
+    for ($i=0; $i < count($matches[0]); $i++) {
+        list(
+        $filesystem,
+        $type,
+        $size,
+        $used,
+        $avail,
+        $pcent,
+        $target) = array(
+        $matches[0][$i],
+        $matches[1][$i],
+        $matches[2][$i],
+        $matches[3][$i],
+        $matches[4][$i],
+        $matches[5][$i],
+        $matches[6][$i],
+        );
 
-					 $disks[$target] = array(
-								'filesystem' => $filesystem,
-								'type' => $type,
-								'total' => $size,
-								'used' => $used,
-								'free' => $avail,
-								'pcent' => str_replace('%', '', $pcent),
-								'target' => $target
-					 );
-		  }
+        $disks[$target] = array(
+            'filesystem' => $filesystem,
+            'type' => $type,
+            'total' => $size,
+            'used' => $used,
+            'free' => $avail,
+            'pcent' => str_replace('%', '', $pcent),
+            'target' => $target
+        );
+    }
 
-		  return $disks;
+    return $disks;
 }
 
 /**
- * getNetworkInfo
- *
- * @return array
- */
+* getNetworkInfo
+*
+* @return array
+*/
 function getNetworkInfo()
 {
-		  $network = array();
-		  $lines = file('/proc/net/dev');
-		  array_shift($lines);
-		  array_shift($lines);
+    $network = array();
+    $lines = file('/proc/net/dev');
+    array_shift($lines);
+    array_shift($lines);
 
-		  foreach ($lines as $l) {
-					 $exploded = explode(':', preg_replace('/\s+/', ' ', trim($l)), 2);
-					 $interface = trim($exploded[0]);
+    foreach ($lines as $l) {
+        $exploded = explode(':', preg_replace('/\s+/', ' ', trim($l)), 2);
+        $interface = trim($exploded[0]);
 
-					 $exploded = preg_split('/\s+/', trim($exploded[1]));
-					 $rxBytes = $exploded[0];
-					 $txBytes = $exploded[8];
-					 //Not received or sent any data, don't bother with it
-					 if (empty($rxBytes) && empty($txBytes)) {
-								continue;
-					 }
+        $exploded = preg_split('/\s+/', trim($exploded[1]));
+        $rxBytes = $exploded[0];
+        $txBytes = $exploded[8];
+        //Not received or sent any data, don't bother with it
+        if (empty($rxBytes) && empty($txBytes)) {
+            continue;
+        }
 
-					 $network[$interface] = array(
-								'rxbytes' => $rxBytes,
-								'txbytes' => $txBytes
-					 );
-		  }
+        $network[$interface] = array(
+            'rxbytes' => $rxBytes,
+            'txbytes' => $txBytes
+        );
+    }
 
-		  return $network;
+    return $network;
 }
