@@ -348,8 +348,13 @@ function getProcessInfo()
             $status[$key] = $value;
         }
 
-        $user = posix_getpwuid($status['uid']);
-        $user = $user['name'];
+		  if (function_exists('posix_getpwuid')) {
+		      $user = posix_getpwuid($status['uid']);
+            $user = $user['name'];
+		  } else {
+		      $user = $status['uid'];
+		  }
+
         $stat = preg_split('/\s+/', trim($statFile));
 
         $processes[$processId] = array(
