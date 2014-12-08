@@ -1,5 +1,6 @@
 #!/usr/bin/php
 <?php
+date_default_timezone_set('UTC');
 function isEnabled($func) {
     return is_callable($func) && false === stripos(ini_get('disable_functions'), $func);
 }
@@ -337,7 +338,7 @@ function getProcessInfo()
 
         $command = explode("\0", $cmdlineFile, 2);
         $program = $command[0];
-        $args = explode("\0", $command[1]);
+        $args = (count($command) > 1) ? explode("\0", $command[1]) : array();
 
         $status = array();
         
