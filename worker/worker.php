@@ -320,7 +320,7 @@ function getProcessInfo()
             'write_bytes' => 0
         );
 
-        if (file_exists($process->getPathname() . '/io')) {
+        if (file_exists($process->getPathname() . '/io') && is_readable($process->getPathname() . '/io')) {
             $ioFile = file($process->getPathname() . '/io', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 
             foreach ($ioFile as $line) {
