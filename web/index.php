@@ -80,6 +80,10 @@ $app->get('/servers/{apiKey}', function(Application $app, Request $request) use(
 
     foreach ($serverKeys as $serverKey) {
         $server = json_decode($app['predis']->get("serverlastupdate:{$serverKey}"), true);
+
+		  if (empty($server)) {
+		      continue;
+		  }
         $server['issues'] = [
         'loadavg' => ( $server['system']['loadavg'] >= $server['system']['cpu']['cores'] ),
         'mem' => ( ( ( ($server['mem']['memtotal'] - $server['mem']['memfree'] - $server['mem']['cached'] - $server['mem']['buffers']) / $server['mem']['memtotal'] ) * 100 ) >= $app['msiof']['issues']['memPercentage'] ),
@@ -264,7 +268,7 @@ $app->post('/server', function(Application $app, Request $request) {
     $jsonDecoded = json_decode($json, true);
 
     $jsonDecoded['mem']['percentage'] = [
-    'usage' => round(( ( $jsonDecoded['mem']['memtotal'] - $jsonDecoded['mem']['memfree'] - $jsonDecoded['mem']['cached'] - $jsonDecoded['mem']['buffers']) / $jsonDecoded['mem']['memtotal'] ) * 100, 1)
+        'usage' => round(( ( $jsonDecoded['mem']['memtotal'] - $jsonDecoded['mem']['memfree'] - $jsonDecoded['mem']['cached'] - $jsonDecoded['mem']['buffers']) / $jsonDecoded['mem']['memtotal'] ) * 100, 1)
     ];
 
     $redisKey = "serverlastupdate:{$serverKey}";
@@ -303,8 +307,26 @@ $app->post('/server', function(Application $app, Request $request) {
             $jsonDecoded['cpu']['percentage']['usage'] = round((($cpuDiff['user'] + $cpuDiff['nice'] + $cpuDiff['system']) / $total) * 100, 1);
         }
 
+
+        if (array_key_exists('process', $jsonDecoded) && array_key_exists('process', $oldResult)) {
+            // Their worker is 1.3 or more and they have process information
+            // We're going to take this opportunity to set CPU percentage, per process
+            $total = array_sum($cpuDiff);
+            $oldProcess = $oldResult['process'];
+            foreach ($jsonDecoded['process'] as $program => $process) {
+                if (!array_key_exists($program, $oldProcess) || $process['cpu'] == 0) {
+                    $jsonDecoded['process'][$program]['cpupercentage'] = 0;
+                    continue;
+                }
+
+                $diff = $process['cpu'] - $oldProcess[$program]['cpu'];
+                $jsonDecoded['process'][$program]['cpupercentage'] = round(($diff / $total) * 100, 1);
+            }
+        }
+
+
         $jsonDecoded['disk']['percentage'] = [
-        'usage' => round((($jsonDecoded['disk']['/']['total'] - $jsonDecoded['disk']['/']['free']) / $jsonDecoded['disk']['/']['total'] ) * 100, 1)
+            'usage' => round((($jsonDecoded['disk']['/']['total'] - $jsonDecoded['disk']['/']['free']) / $jsonDecoded['disk']['/']['total'] ) * 100, 1)
         ];
 
         foreach ($jsonDecoded['network'] as $interface => $info) {
