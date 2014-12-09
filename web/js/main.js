@@ -52,7 +52,7 @@ msiofApp.controller('DashboardCtrl', function ($scope, $http, $interval, $cookie
 
 		  $scope.toggleExpandDisk = function(serverKey) {
 					 if($scope.diskIsExpanded(serverKey)) {
-								$scope.expandedDisks.splice(serverKey, 1);
+								$scope.expandedDisks.splice($scope.expandedDisks.indexOf(serverKey), 1);
 					 } else {
 								$scope.expandedDisks.push(serverKey);
 					 }
@@ -64,7 +64,7 @@ msiofApp.controller('DashboardCtrl', function ($scope, $http, $interval, $cookie
 
 		  $scope.toggleExpandNet = function(serverKey) {
 					 if($scope.netIsExpanded(serverKey)) {
-								$scope.expandedNets.splice(serverKey, 1);
+								$scope.expandedNets.splice($scope.expandedNets.indexOf(serverKey), 1);
 					 } else {
 								$scope.expandedNets.push(serverKey);
 					 }
