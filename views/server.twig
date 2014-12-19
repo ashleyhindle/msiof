@@ -71,7 +71,7 @@
 		</table>
 	</div> <!-- panel-body -->
 	<div class="panel-footer">
-		<small><strong>Net</strong> (Mb/s): </small><span class="glyphicon glyphicon-arrow-down" aria-hidden="true" title='Incoming' alt='Incoming'></span>{[{ server.network.total.rxkbps/1000 | number: 2}]} <span class="glyphicon glyphicon-arrow-up" aria-hidden="true" title='Outgoing' alt='Outgoing'></span>{[{ server.network.total.txkbps/1000 | number: 2}]}
+		<small><strong>Net</strong> (Mb/s): </small><span class="glyphicon glyphicon-arrow-down" aria-hidden="true" title='Incoming' alt='Incoming'></span>{[{ server.network.total.rxkbps/1000 | number: 1}]} <span class="glyphicon glyphicon-arrow-up" aria-hidden="true" title='Outgoing' alt='Outgoing'></span>{[{ server.network.total.txkbps/1000 | number: 2}]}
 
 		<span ng-click="toggleExpandNet(server.serverKey)" class="glyphicon glyphicon-collapse-down"></span>
 		<div ng-show='netIsExpanded(server.serverKey)'>
