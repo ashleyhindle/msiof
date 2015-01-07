@@ -10,9 +10,7 @@ angular.module('bytesToNiceFilter', []).filter('bytesToNice', function() {
 
 					 var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
 					 var i = Math.floor(Math.log(bytes) / Math.log(unitsize));
-					 var nice = (bytes / Math.pow(unitsize, i)).toFixed(precision);
-					 console.log(typeof nice);
-					 nice += ' ' + sizes[i];
+					 var nice = (bytes / Math.pow(unitsize, i)).toFixed(precision) + ' ' + sizes[i];
 					  
 					 return nice;
 		  };
