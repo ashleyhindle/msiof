@@ -18,7 +18,7 @@ moment.lang('en', {
 
 
 
-var msiofApp = angular.module('msiofApp', ['ui.bootstrap', 'angularMoment', 'ngCookies']).config(function($interpolateProvider){
+var msiofApp = angular.module('msiofApp', ['ui.bootstrap', 'angularMoment', 'ngCookies', 'bytesToNiceFilter']).config(function($interpolateProvider){
 		  $interpolateProvider.startSymbol('{[{').endSymbol('}]}');
 });
 
@@ -49,6 +49,7 @@ msiofApp.controller('DashboardCtrl', function ($scope, $http, $interval, $cookie
 		  $scope.deletedServerKeys = [];
 		  $scope.expandedDisks = [];
 		  $scope.expandedNets = [];
+		  $scope.expandedProcess = [];
 
 		  $scope.toggleExpandDisk = function(serverKey) {
 					 if($scope.diskIsExpanded(serverKey)) {
@@ -73,6 +74,22 @@ msiofApp.controller('DashboardCtrl', function ($scope, $http, $interval, $cookie
 		  $scope.netIsExpanded = function(serverKey) {
 					 return ($scope.expandedNets.indexOf(serverKey) !== -1);
 		  };
+
+		  $scope.toggleExpandProcess = function(serverKey) {
+					 if($scope.processIsExpanded(serverKey)) {
+								$scope.expandedProcess.splice($scope.expandedProcess.indexOf(serverKey), 1);
+					 } else {
+								$scope.expandedProcess.push(serverKey);
+					 }
+		  };
+		  
+		  $scope.processIsExpanded = function(serverKey) {
+					 return ($scope.expandedProcess.indexOf(serverKey) !== -1);
+		  };
+
+		  $scope.getProcessCount = function(process) {
+					 return Object.keys(process).length;
+		  }
 
 		  $scope.addAlert = function(msg, type) {
 					 type = typeof type !== 'undefined' ? type : 'success';

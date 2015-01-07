@@ -61,6 +61,21 @@
 				<td>{[{ partition }]} </td><td>{[{ disk.pcent }]}%</td>
 			</tr>
 
+		   <tr>
+					 <td>
+								<strong>Processes</strong>
+					 </td>
+					 <td>
+								{[{ getProcessCount(server.process) }]}
+							  <span ng-click="toggleExpandProcess(server.serverKey)" class="glyphicon glyphicon-collapse-down"></span>
+					 </td>
+			</tr>
+
+			<tr ng-show='processIsExpanded(server.serverKey)' ng-repeat='(processName, process) in server.process'>
+		      <td>{[{ processName }]} x {[{ process.count }]}</td>
+				<td>Ram: {[{ process.mem * 1024 | bytesToNice }]}</td>
+			</tr>
+
 			<tr ng-class="{'danger': server.issues.lastupdated}">
 				<td colspan=2><small>Last updated: <span am-time-ago="server.lastupdated" am-preprocess="unix"></span></small></td>
 			</tr>
