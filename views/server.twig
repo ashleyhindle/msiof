@@ -73,7 +73,7 @@
 
 			<tr ng-show='processIsExpanded(server.serverKey)' ng-repeat='(processName, process) in server.process'>
 		      <td>{[{ processName }]} x {[{ process.count }]}</td>
-				<td>Ram: {[{ process.mem * 1024 | bytesToNice }]}</td>
+				<td>Ram: {[{ process.mem | bytesToNice }]}</td>
 			</tr>
 
 			<tr ng-class="{'danger': server.issues.lastupdated}">
