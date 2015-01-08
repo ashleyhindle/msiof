@@ -311,7 +311,6 @@ $app->post('/server', function(Application $app, Request $request) {
         if (array_key_exists('process', $jsonDecoded) && array_key_exists('process', $oldResult)) {
             // Their worker is 1.3 or more and they have process information
             // We're going to take this opportunity to set CPU percentage, per process
-            $total = $cpuDiff['user'] + $cpuDiff['nice'] + $cpuDiff['system'];
             $oldProcess = $oldResult['process'];
             foreach ($jsonDecoded['process'] as $program => $process) {
                 if (!array_key_exists($program, $oldProcess) || $process['cpu'] == 0) {
@@ -320,7 +319,7 @@ $app->post('/server', function(Application $app, Request $request) {
                 }
 
                 $diff = $process['cpu'] - $oldProcess[$program]['cpu'];
-                $jsonDecoded['process'][$program]['cpupercentage'] = round(($diff / $total) * 100, 1);
+                $jsonDecoded['process'][$program]['cpupercentage'] = round(($diff / $total) * 100, 2);
             }
         }
 

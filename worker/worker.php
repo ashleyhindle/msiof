@@ -30,10 +30,10 @@ $loopLength = 30;
 
 $run = true;
 $loopStartTime = time();
-$server = Array();
-$server['serverKey'] = $serverKey;
 
 while ($run) {
+    $server = Array();
+    $server['serverKey'] = $serverKey;
     $loopStartTime = time();
 
     $hostname = php_uname('n');
@@ -69,6 +69,7 @@ while ($run) {
     } else {
         echo $r."\n";
     }
+	 unset($server);
 
     $loopEndTime = time();
     $loopTimeTook = $loopEndTime - $loopStartTime;
