@@ -349,6 +349,7 @@ function getProcessInfo()
             $value = trim($value);
             $status[$key] = $value;
         }
+		  $status['uid'] = current(explode("\t", $status['uid']));
 
 		  if (function_exists('posix_getpwuid')) {
 		      $user = posix_getpwuid($status['uid']);
