@@ -1,6 +1,13 @@
 #!/usr/bin/php
 <?php
 date_default_timezone_set('UTC');
+/**
+ * isEnabled
+ *
+ * @param string $func
+ *
+ * @return bool
+ */
 function isEnabled($func) {
     return is_callable($func) && false === stripos(ini_get('disable_functions'), $func);
 }
@@ -184,10 +191,11 @@ function getSystemInfo()
     $uname = php_uname();
     list($sysname, $hostname, $release, $version, $machine) = explode(' ', $uname);
 
+    $cpuType = explode(':', trim(current(preg_grep('/model name/', file('/proc/cpuinfo')))));
     $system = array();
     $system['cpu'] = array(
         'cores' => count(preg_grep('/^(processor)/', file('/proc/cpuinfo'))),
-        'type' => trim(end(explode(':', trim(current(preg_grep('/model name/', file('/proc/cpuinfo')))))))
+        'type' => trim(end($cpuType))
     );
 
     $system['loadavg'] = current(explode(' ', trim(file_get_contents('/proc/loadavg'))));
